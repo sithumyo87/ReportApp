@@ -10,4 +10,5 @@ return [
     'permissions'               => 'permissions',
     'roles'                     => 'roles',
     'login_accounts'            => 'Accounts',
+    'quotations'                => 'Quotations',
 ];

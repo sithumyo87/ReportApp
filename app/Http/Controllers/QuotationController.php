@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Quotation;
+use Spatie\Permission\Models\Role;
 
 class QuotationController extends Controller
 {
@@ -11,7 +13,7 @@ class QuotationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $data = Quotation::where('id','>',0)->orderBy('id','DESC')->paginate(5);
         return view('quotation.index',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5);
@@ -24,7 +26,12 @@ class QuotationController extends Controller
      */
     public function create()
     {
-        //
+        $data['roles'] = [
+            '1' => 'Hello',
+            '2' => 'Hi',
+            '3' => 'Halo',
+        ];
+        return view('quotation.create',$data);
     }
 
     /**
