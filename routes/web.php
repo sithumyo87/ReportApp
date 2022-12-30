@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuotationController;
 
@@ -24,6 +25,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 //quotation
 Route::resource('quotation', QuotationController::class);
+Route::resource('customer', CustomerController::class);
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.'], function() {
     Route::resource('permission', PermissionController::class);

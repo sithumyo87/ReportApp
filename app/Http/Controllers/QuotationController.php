@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Models\Quotation;
 use Spatie\Permission\Models\Role;
@@ -26,12 +27,9 @@ class QuotationController extends Controller
      */
     public function create()
     {
-        $data['roles'] = [
-            '1' => 'Hello',
-            '2' => 'Hi',
-            '3' => 'Halo',
-        ];
-        return view('quotation.create',$data);
+        $companys = Customer::where('action',true)->get();
+        dd($companys);
+        return view('quotation.create',compact('companys'));
     }
 
     /**
