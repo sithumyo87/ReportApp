@@ -17,6 +17,10 @@ class PermissionSeeder extends Seeder
         $this->role = ['role-index', 'role-create','role-edit','role-delete','role-show'];
 
         $this->user = ['user-index', 'user-create','user-edit','user-delete','user-show'];
+
+        $this->quotation = ['quotation-index', 'quotation-create','quotation-edit','quotation-delete','quotation-show'];
+
+        $this->customer = ['customer-index', 'customer-create','customer-edit','customer-delete','customer-show'];
     }
     /**
      * Run the database seeds.
@@ -30,6 +34,8 @@ class PermissionSeeder extends Seeder
          $this->permission_create($this->permission);
          $this->permission_create($this->role);
          $this->permission_create($this->user);
+         $this->permission_create($this->quotation);
+         $this->permission_create($this->customer);
  
          // create role and give permission to this role
          $this->role_create('system', [Permission::all()]);

@@ -102,7 +102,7 @@
                 @can('user-index')
                 <!-- Nav Item - Pages Collapse Menu -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.user.index') }}">
+                    <a class="nav-link" href="{{ route('setting.user.index') }}">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Users</span></a>
                 </li>
@@ -110,8 +110,11 @@
                 <!-- Divider -->
                 <hr class="sidebar-divider">
 
+                <div class="sidebar-heading">
+                    ]Office Management
+                </div>
                 <!-- Nav Item - Pages Collapse Menu -->
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                         aria-expanded="true" aria-controls="collapseTwo">
                         <i class="fas fa-fw fa-cog"></i>
@@ -119,15 +122,47 @@
                     </a>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="{{ route('quotation.index')}}">Quotation</a>
+                            <a class="collapse-item" href="{{ route('OfficeManagement.quotation.index')}}">Quotation</a>
                             <a class="collapse-item" href="buttons.html">Invoice</a>
                             <a class="collapse-item" href="cards.html">Receipt</a>
                         </div>
                     </div>
+                </li> -->
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('OfficeManagement.quotation.index')}}">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Quotation</span></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="charts.html">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Invoice</span></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="charts.html">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Receipt</span></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('OfficeManagement.customer.index')}}">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Customer</span></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('OfficeManagement.currency.index')}}">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Currency</span></a>
                 </li>
 
                 <!-- Divider -->
                 <hr class="sidebar-divider">
+
+                
 
                 <!-- Heading -->
                 <div class="sidebar-heading">

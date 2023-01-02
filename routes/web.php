@@ -1,8 +1,7 @@
 <?php
 
-use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\QuotationController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -23,12 +22,17 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-//quotation
-Route::resource('quotation', QuotationController::class);
-Route::resource('customer', CustomerController::class);
+    
+Route::group(['middleware' => ['auth'], 'prefix' => 'OfficeManagement', 'namespace' => 'App\Http\Controllers\OfficeManagement', 'as' => 'OfficeManagement.'], function() {
+    Route::resource('quotation', QuotationController::class);
+    Route::resource('customer', CustomerController::class);
+    Route::resource('currency', CurrencyController::class);
+});
+
+
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'setting', 'namespace' => 'App\Http\Controllers\Setting', 'as' => 'setting.'], function() {
-    Route::resource('permission', PermissionController::class);
+    // Route::resource('permission', PermissionController::class);
     Route::resource('role', RoleController::class);
     Route::resource('user', UserController::class);
 });

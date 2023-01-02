@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.setting')
 
 @section('content')
 <body id="page-top">
@@ -37,7 +37,7 @@
             @can('user-index')
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('admin.user.index') }}">
+                <a class="nav-link" href="{{ route('setting.user.index') }}">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Users</span></a>
             </li>
