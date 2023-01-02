@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Models\Quotation;
-use Spatie\Permission\Models\Role;
+use Carbon\Carbon;
 
 class QuotationController extends Controller
 {
@@ -27,9 +27,10 @@ class QuotationController extends Controller
      */
     public function create()
     {
-        $companys = Customer::where('action',true)->get();
-        dd($companys);
-        return view('quotation.create',compact('companys'));
+        $customers = Customer::where('action',true)->get(); 
+        $quotations = Quotation::all();
+        // dd($quotation);
+        return view('quotation.create',compact('customers','quotations'));
     }
 
     /**
@@ -40,7 +41,40 @@ class QuotationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+            'company' => 'required',
+        ]);
+
+        //get count from the quotation
+        $quoCount = Quotation::where('Refer_status',false)->count();
+
+        $Serial = 'QN-'.Carbon::now()->format('Ymd') . sprintf('%05d',$quoCount+1);
+
+        $refer_no = $request->refer_no;
+        $Refer = true;
+		if ($refer_no == '' || $refer_no == 'Refer No:') {
+			$refer_no = '';
+			$Refer = false;
+		};
+        $Date = date('Y-m-d', strtotime($request->Date));
+
+        $input = Quotation::create([
+            'customer_id'=>$request->customer_id,
+            'Attn'=>"Hello",
+	        'Company_name' => $request->company,
+	        'Contact_phone' => $request->phone,
+	        'Address' => $request->address,
+	        'Sub'=>$request->sub,
+	        'Date'=>$Date,
+	        'Serial_No'=> $Serial,
+	        'Refer_No'=>$refer_no,
+	        'Refer_status' => false,
+	        'Currency_type' => $request->currency,
+	        'SubmitStatus' => false
+        ]);
+        return redirect()->route('quotation.index')
+                        ->with('success','Customer created successfully');
     }
 
     /**

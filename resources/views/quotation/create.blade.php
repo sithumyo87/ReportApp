@@ -9,7 +9,8 @@
             <div class="d-flex justify-content-end align-items-center">
                 <ol class="breadcrumb">
                     @can('user-index')
-                    <li class="breadcrumb-item"><a href="{{ route('admin.user.index') }}">{{ __('navbar.login_accounts') }}</a></li>
+                    <li class="breadcrumb-item"><a
+                            href="{{ route('admin.user.index') }}">{{ __('navbar.login_accounts') }}</a></li>
                     @endcan
                     <li class="breadcrumb-item active">{{ __('label.create') }}</li>
                 </ol>
@@ -28,32 +29,51 @@
     @endif
     <div class="bg-white p-30">
         <h3 class="text-center m-b-20">{{ __('label.user') }}{{ __('label.create') }}</h3>
-        {!! Form::open(['route' => 'admin.user.store', 'method' => 'POST']) !!}
+        {!! Form::open(['route' => 'quotation.store', 'method' => 'POST']) !!}
         <div class="row justify-content-center">
             <div class="col-xs-12 col-sm-12 col-md-8">
                 <div class="form-group">
-                    <label for="">Refer No</label>
-                    {!! Form::select('roles[]', $roles, [], ['class' => 'form-control','placeholder' => 'Please Select' ]) !!}
+                    <label for="">Refer No:</label>
+                    <select name="refer_no" class="form-control">
+                        <option value="">Refer No:</option>
+                        <!-- @foreach($customers as $row)
+                        <option value="{{ $row->name }}">{{ $row->name}}</option>
+                        @endforeach -->
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="">ATT Name</label>
-                    {!! Form::select('roles[]', $roles, [], ['class' => 'form-control','placeholder' => 'Please Select' ]) !!}
+                    <select name="customer_id" class="form-control" required>
+                        <option value="">choose Customer</option>
+                        @foreach($customers as $row)
+                        <option value="{{ $row->id }}">{{ $row->name}}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="">Company Name</label>
-                    {!! Form::select('roles[]', $roles, [], ['class' => 'form-control','placeholder' => 'Please Select' ]) !!}
+                    <label for="company">Company Name</label>
+                    <select name="company" class="form-control" required>
+                        <option value="">Company Name</option>
+                        @foreach($customers as $row)
+                        <option value="{{ $row->company }}">{{ $row->company}}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="">Phone No</label>
-                    {!! Form::password('confirm-password', ['placeholder' => '', 'class' => 'form-control']) !!}
+                    {!! Form::text('phone', null, ['placeholder' => 'Phone Number', 'class' => 'form-control']) !!}
+                </div>
+                <div class="form-group">
+                    <label for="">Address</label>
+                    {!! Form::textarea('address', null, ['placeholder' => 'Address', 'class' => 'form-control']) !!}
                 </div>
                 <div class="form-group">
                     <label for="">Subject</label>
-                    {!! Form::text('name', null, ['placeholder' => '', 'class' => 'form-control']) !!}
+                    {!! Form::text('sub', null, ['placeholder' => '', 'class' => 'form-control']) !!}
                 </div>
                 <div class="form-group">
-                    <label for="">Date</label>
-                    {!! Form::text('name', null, ['placeholder' => '', 'class' => 'form-control']) !!}
+                    <label class="control-label" for="Date">Date</label>
+                    <input class="form-control" id="Date" name="date" placeholder="DD/MM/YYY" type="text" />
                 </div>
                 <div class="form-group">
                     {{ Form::label('currency', 'Currency') }}

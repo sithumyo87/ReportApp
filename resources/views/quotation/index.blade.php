@@ -23,35 +23,32 @@
         <table class="table table-bordered">
             <thead>
                 <tr class="text-center">
-                    <th width="50">{{ __('label.no') }}</th>
-                    <th>{{ __('label.name') }}</th>
-                    <th>{{ __('label.email') }}</th>
-                    <th>{{ __('label.role') }}</th>
+                    <th width="50">No</th>
+                    <th>Date</th>
+                    <th>Quotation No:</th>
+                    <th>Attn Name</th>
+                    <th>Company Name</th>
+                    <th>Sub</th>
+                    <th>Refer No:</th>   
                     <th width="200">{{ __('label.action') }}</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($data as $key => $user)
+                @foreach ($data as $key => $row)
                     <tr>
                         <td class="text-right">{{ ++$i }}</td>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>
-                            @if (!empty($user->getRoleNames()))
-                                @foreach ($user->getRoleNames() as $v)
-                                    <label class="badge badge-success">{{ $v }}</label>
-                                @endforeach
-                            @endif
-                        </td>
+                        <td>{{ $row->Date }}</td>
+                        <td>{{ $row->Company_name }}</td>
+                        <td>{{ $row->Contact_phone }}</td>
+                        <td>{{ $row->Company_name }}</td>
+                        <td>{{ $row->Sub }}</td>
+                        <td>{{ $row->Refer_No }}</td>
                         <td class="text-center">
-                            @can('user-show')
-                                <a class="btn btn-info" href="{{ route('admin.user.show', $user->id) }}"><i class="fa fa-eye"></i></a>
-                            @endcan
                             @can('user-edit')
-                                <a class="btn btn-primary" href="{{ route('admin.user.edit', $user->id) }}"><i class="fa fa-edit"></i></a>
+                                <a class="btn btn-primary" href="{{ route('quotation.edit', $row->id) }}"><i class="fa fa-edit"></i></a>
                             @endcan
                             @can('user-delete')
-                                {!! Form::open(['method' => 'DELETE', 'route' => ['admin.user.destroy', $user->id], 'style' => 'display:inline']) !!}
+                                {!! Form::open(['method' => 'DELETE', 'route' => ['quotation.destroy', $row->id], 'style' => 'display:inline']) !!}
                                     {!! Form::button('<i class="fa fa-trash"></i>', ['type'=>'submit','class' => 'btn btn-danger', 'id' => 'delete']) !!}
                                 {!! Form::close() !!}
                             @endcan
@@ -64,3 +61,5 @@
     </div>
 </div>
 @endsection
+
+
