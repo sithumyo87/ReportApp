@@ -21,6 +21,9 @@
         rel="stylesheet">
     <!-- <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet"> -->
+    <script
+src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
 
 
     <!-- Scripts -->
@@ -36,8 +39,7 @@
     <script src="{{ asset('js/dashboard.min.js') }}"></script>
 
     <!-- Page level plugins -->
-    <script src="{{ asset('vendor/chart-js/Chart.min.js') }}"></script>
-
+    <script src="{{ asset('vendor/chart.js/Chart.min.js') }}"></script>
     <!-- Page level custom scripts -->
     <script src="{{ asset('js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script>
@@ -64,6 +66,23 @@
         })
     })
     </script>
+
+    <!-- Date time picker end -->
+
+    <!-- for Ckeditor -->
+
+    <!-- ckeditor -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
+
+    <script>
+    ClassicEditor
+        .create( document.querySelector( '#ckeditor' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+    </script>
+
+    <!-- ckeditor end -->
 </head>
 
 <body>
@@ -151,6 +170,12 @@
                     <a class="nav-link" href="{{ route('OfficeManagement.customer.index')}}">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Customer</span></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('OfficeManagement.dealer.index')}}">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Dealer</span></a>
                 </li>
 
                 <li class="nav-item">

@@ -3,12 +3,12 @@
 <div class="container-fluid">
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h4 class="text-themecolor">Quotation</h4>
+            <h4 class="text-themecolor">Dealer</h4>
         </div>
         <div class="col-md-7 align-self-center text-right">
             <div class="d-flex justify-content-end align-items-center">
                 @can('role-create')
-                    <a href="{{ route('OfficeManagement.quotation.create') }}" class="btn btn-success d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i>  {{ __('button.create') }}
+                    <a href="{{ route('OfficeManagement.dealer.create') }}" class="btn btn-success d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i>  {{ __('button.create') }}
                     </a>
                 @endcan
             </div>
@@ -23,32 +23,33 @@
         <table class="table table-bordered">
             <thead>
                 <tr class="text-center">
-                    <th width="50">No</th>
-                    <th>Date</th>
-                    <th>Quotation No:</th>
-                    <th>Attn Name</th>
-                    <th>Company Name</th>
-                    <th>Sub</th>
-                    <th>Refer No:</th>   
-                    <th width="200">{{ __('label.action') }}</th>
+                    <th width="50">{{ __('label.no') }}</th>
+                    <th>Attn</th>
+                    <th>Position</th>
+                    <th>Company</th>
+                    <th>Phone No</th>
+                    <th>Email</th>
+                    <th width="200">Address</th>
+                    <th width="120">{{ __('label.action') }}</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($data as $key => $row)
                     <tr>
                         <td class="text-right">{{ ++$i }}</td>
-                        <td>{{ $row->Date }}</td>
-                        <td><a href="{{route('OfficeManagement.quotationDetail.show',$row->id)}}">{{ $row->Serial_No }}</a></td>
-                        <td>{{ $row->Contact_phone }}</td>
-                        <td>{{ $row->Company_name }}</td>
-                        <td>{{ $row->Sub }}</td>
-                        <td>{{ $row->Refer_No }}</td>
+                        <td>{{$row->name }}</td>
+                        <td>{{$row->position }}</td>
+                        <td>{{$row->company }}</td>
+                        <td>{{$row->phone }} / {{$row->phone_other }} </td>
+                        <td>{{$row->email }}</td>
+                        <td>{{$row->address }}</td>
+
                         <td class="text-center">
                             @can('user-edit')
-                                <a class="btn btn-primary" href="{{ route('OfficeManagement.quotation.edit', $row->id) }}"><i class="fa fa-edit"></i></a>
+                                <a class="btn btn-primary" href="{{ route('OfficeManagement.dealer.edit',$row->id) }}"><i class="fa fa-edit"></i></a>
                             @endcan
                             @can('user-delete')
-                                {!! Form::open(['method' => 'DELETE', 'route' => ['OfficeManagement.quotation.destroy', $row->id], 'style' => 'display:inline']) !!}
+                                {!! Form::open(['method' => 'DELETE', 'route' => ['OfficeManagement.dealer.destroy',$row->id], 'style' => 'display:inline']) !!}
                                     {!! Form::button('<i class="fa fa-trash"></i>', ['type'=>'submit','class' => 'btn btn-danger', 'id' => 'delete']) !!}
                                 {!! Form::close() !!}
                             @endcan
@@ -61,5 +62,3 @@
     </div>
 </div>
 @endsection
-
-

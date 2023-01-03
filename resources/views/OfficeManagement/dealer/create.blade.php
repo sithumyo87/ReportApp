@@ -3,13 +3,13 @@
 <div class="container-fluid">
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h4 class="text-themecolor">Customer Create</h4>
+            <h4 class="text-themecolor">Dealer Create</h4>
         </div>
         <div class="col-md-7 align-self-center text-right">
             <div class="d-flex justify-content-end align-items-center">
                 <ol class="breadcrumb">
                     @can('user-index')
-                    <li class="breadcrumb-item"><a href="{{ route('setting.user.index') }}">Customer</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('setting.user.index') }}">Dealer</a></li>
                     @endcan
                     <li class="breadcrumb-item active">Create</li>
                 </ol>
@@ -28,12 +28,12 @@
     @endif
     <div class="bg-white p-30">
         <!-- <h3 class="text-center m-b-20"></h3> -->
-        {!! Form::open(['route' => 'OfficeManagement.customer.store', 'method' => 'POST']) !!}
+        {!! Form::open(['route' => 'OfficeManagement.dealer.store', 'method' => 'POST']) !!}
         <div class="row justify-content-center">
             <div class="col-xs-12 col-sm-12 col-md-8 mt-3">
                 <div class="form-group">
                     <label for="">Name</label>
-                    {!! Form::text('name', null, ['placeholder' => 'Customer Name', 'class' => 'form-control']) !!}
+                    {!! Form::text('name', null, ['placeholder' => 'dealer Name', 'class' => 'form-control']) !!}
                 </div>
                 <div class="form-group">
                     <label for="">Position</label>
@@ -57,7 +57,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">Address</label>
-                    {!! Form::text('address', null, ['placeholder' => 'Address', 'class' => 'form-control', 'cols'=>5,'rows'=>5]) !!}
+                    {!! Form::textarea('address', null, ['placeholder' => 'Address', 'class' => 'form-control', 'cols'=>5,'rows'=>5]) !!}
                 </div>
                 <div class="text-center">
                     <a href="{{ route('setting.user.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>

@@ -57,7 +57,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">Address</label>
-                    {!! Form::text('address', null, ['placeholder' => 'Address', 'class' => 'form-control']) !!}
+                    {!! Form::text('address', null, ['placeholder' => 'Address', 'class' => 'form-control', 'cols'=>5,'rows'=>5]) !!}
                 </div>
                 <div class="text-center">
                     <a href="{{ route('setting.user.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>

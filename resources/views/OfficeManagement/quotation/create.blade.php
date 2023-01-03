@@ -10,7 +10,7 @@
                 <ol class="breadcrumb">
                     @can('user-index')
                     <li class="breadcrumb-item"><a
-                            href="{{ route('setting.user.index') }}">{{ __('navbar.login_accounts') }}</a></li>
+                            href="{{ route('OfficeManagement.quotation.index') }}">{{ __('quotations') }}</a></li>
                     @endcan
                     <li class="breadcrumb-item active">{{ __('label.create') }}</li>
                 </ol>
@@ -65,7 +65,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">Address</label>
-                    {!! Form::textarea('address', null, ['placeholder' => 'Address', 'class' => 'form-control']) !!}
+                    {!! Form::textarea('address', null, ['placeholder' => 'Address', 'class' => 'form-control','cols'=>5,'rows'=>5]) !!}
                 </div>
                 <div class="form-group">
                     <label for="">Subject</label>

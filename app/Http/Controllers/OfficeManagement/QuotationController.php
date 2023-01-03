@@ -54,6 +54,12 @@ class QuotationController extends Controller
         $this->validate($request, [
             // 'name' => 'required',
             'company' => 'required',
+            'Attn' => 'required',
+            'Company_name' => 'required',
+            'Contact_phone' => 'required',
+            'Sub' => 'required',
+            'Serial_No' => 'required',
+            'Date' => 'required',
         ]);
 
         //get count from the quotation
