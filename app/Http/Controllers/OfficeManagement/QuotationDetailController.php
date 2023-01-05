@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Quotation;
 use App\Models\Customer;
 use App\Models\QuotationDetail;
+use App\Models\QuotationNote;
 use App\Models\Dealer;
 
 class QuotationDetailController extends Controller
@@ -19,7 +20,7 @@ class QuotationDetailController extends Controller
     public function index($request,$id)
     {
         $data = Quotation::find($id);
-        print($data);
+        // print($data);
         return view('OfficeManagement.quotationDetail.index',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5);
     }
 
@@ -77,7 +78,9 @@ class QuotationDetailController extends Controller
     public function show(Request $request,$id)
     {
         $quotation = Quotation::find($id);
-        return view('OfficeManagement.quotationDetail.index',compact('quotation'));
+        $quoNotes = QuotationNote::where('QuotationId',$quotation->id)->where('Note','!=',"")->get();
+        $quoFiles = QuotationNote::where('QuotationId',$quotation->id)->where('list_file','!=',"")->get();
+        return view('OfficeManagement.quotationDetail.index',compact('quotation','quoNotes','quoFiles'));
     }
 
     /**
@@ -112,5 +115,12 @@ class QuotationDetailController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getNote(Request $request, $quoDetailId,$quoNoteId ){
+        $quotation = Quotation::find($quoDetailId);
+        $quoNote = QuotationNote::where('id',$quoNoteId)->first();
+        $quoNotes = QuotationNote::where('QuotationId',$quotation->id)->get();
+        return view('OfficeManagement.quotationDetail.index',compact('quotation','quoNotes','quoNote'));
     }
 }

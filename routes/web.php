@@ -25,10 +25,18 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
     
 Route::group(['middleware' => ['auth'], 'prefix' => 'OfficeManagement', 'namespace' => 'App\Http\Controllers\OfficeManagement', 'as' => 'OfficeManagement.'], function() {
     Route::resource('quotation', QuotationController::class);
+    Route::resource('quotationDetail.quotationNote', QuotationDetailController::class);
+
+    Route::get('/quotationDetail/{id?}/note/{noteId?}','QuotationDetailController@getNote')->name('quotationDetail.getNote');
+
     Route::resource('quotationDetail', QuotationDetailController::class);
     Route::resource('customer', CustomerController::class);
     Route::resource('currency', CurrencyController::class);
     Route::resource('dealer', DealerController::class);
+    Route::resource('quotationNote', QuotationNotesController::class);
+    Route::resource('quotationNote.quotationDetail', QuotationNotesController::class);
+
+    Route::resource('quotationFile',QuotationFileController::class);
 });
 
 

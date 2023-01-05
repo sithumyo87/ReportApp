@@ -39,10 +39,10 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
     <script src="{{ asset('js/dashboard.min.js') }}"></script>
 
     <!-- Page level plugins -->
-    <script src="{{ asset('vendor/chart.js/Chart.min.js') }}"></script>
+    <!-- <script src="{{ asset('vendor/chart.js/Chart.min.js') }}"></script> -->
     <!-- Page level custom scripts -->
-    <script src="{{ asset('js/demo/chart-area-demo.js') }}"></script>
-    <script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script>
+    <!-- <script src="{{ asset('js/demo/chart-area-demo.js') }}"></script>
+    <script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script> -->
 
     <!-- For Date-Picker -->
     <!-- Include jQuery -->
@@ -68,21 +68,6 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
     </script>
 
     <!-- Date time picker end -->
-
-    <!-- for Ckeditor -->
-
-    <!-- ckeditor -->
-    <script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
-
-    <script>
-    ClassicEditor
-        .create( document.querySelector( '#ckeditor' ) )
-        .catch( error => {
-            console.error( error );
-        } );
-    </script>
-
-    <!-- ckeditor end -->
 </head>
 
 <body>
