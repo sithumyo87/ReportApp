@@ -38,12 +38,23 @@ class QuotationFileController extends Controller
     public function store(Request $request)
     {
         $quoId = $request->quoId;
+        // dd($request);
+        if($request->hasFile('file')){
+            $request->validate([
+                'file' => 'required|mimes:png,jpg,jpeg,pdf|max:10240'
+              ]);
+            $fileNameToStore = $request->file->getClientOriginalName();
+            $request->file->move(public_path('attachments/'), $fileNameToStore);
+            $storedFileName= 'attachments/'.$fileNameToStore;
+        }else{
+            $storedFileName = null;
+        }
         $input = QuotationNote::create([
-            'QuotationId'=>$quoId,
-            'list_name'=>$request->list_name,
-            'list_file'=>$request->list_file,
-        ]);
-        return redirect()->route('OfficeManagement.quotationDetail.show',$quoId);
+                'QuotationId'=>$quoId,
+                'list_name'=>$request->list_name,
+                'list_file'=>$storedFileName,
+            ]);
+        return redirect()->route('OfficeManagement.quotationDetail.show',$quoId); 
     }
 
     /**
@@ -77,16 +88,7 @@ class QuotationFileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $quoId = Quotation::find($quoDetailId);
-        $quoNote = QuotationNote::where('id',$id)->first();
-        if($quoId){
-            $quotation = QuotationNote::findorfail($id);
-            $input =  $quoNote->update([
-                'Note'=>$request->Note,
-            ]);
-            // dd($input . 'Updated');
-            return redirect()->route('OfficeManagement.quotationDetail.show',$quoId); 
-        }
+
     }
 
     /**
@@ -97,6 +99,6 @@ class QuotationFileController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
     }
 }

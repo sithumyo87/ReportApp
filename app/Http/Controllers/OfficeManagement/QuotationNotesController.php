@@ -96,9 +96,8 @@ class QuotationNotesController extends Controller
      */
     public function destroy(Request $request,$id)
     {
-        $quoDetailId = $request->id;
+        $quoDetailId = $request->quoId;
         $quoNote = QuotationNote::find($id);
-        dd($quoNote);
         $quoNote->destroy();
         return redirect()->route('OfficeManagement.quotationDetail.index'.$quoDetailId)
                         ->with('success','quoNote deleted successfully');

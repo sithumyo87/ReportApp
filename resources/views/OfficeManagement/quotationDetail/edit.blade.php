@@ -9,7 +9,7 @@
             <div class="d-flex justify-content-end align-items-center">
                 <ol class="breadcrumb">
                     @can('user-index')
-                        <li class="breadcrumb-item"><a href="{{ route('setting.user.index') }}">{{ __('navbar.login_accounts') }}</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('OfficeManagement.quotationDetail.index') }}">{{ __('navbar.login_accounts') }}</a></li>
                     @endcan
                     <li class="breadcrumb-item active">{{ __('label.edit') }}</li>
                 </ol>
@@ -27,32 +27,45 @@
         </div>
     @endif
     <div class="bg-white p-30">
-        <h3 class="text-center m-b-20">{{ __('label.user') }}{{ __('label.edit') }}</h3>
-        {!! Form::model($user, ['method' => 'PATCH', 'route' => ['setting.user.update', $user->id]]) !!}
+    
+        {!! Form::model($quoDetail, ['method' => 'PATCH', 'route' => ['OfficeManagement.quotationDetail.update', $quoDetail->id]]) !!}
         <div class="row justify-content-center">
             <div class="col-xs-12 col-sm-12 col-md-8">
-                <div class="form-group">
-                    <label for="">{{ __('label.name') }}</label>
-                    {!! Form::text('name', null, ['placeholder' => 'Name', 'class' => 'form-control']) !!}
+            <div class="form-group">
+                    <label for="">Dealer Name</label>
+                    <select name="dealer_id" class="form-control" required>
+                        <option value="">choose Dealer Name</option>
+                        @foreach($dealers as $row)
+                        <option value="{{ $row->id }}">{{ $row->name}}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="">{{ __('label.email') }}</label>
-                    {!! Form::text('email', null, ['placeholder' => 'Email', 'class' => 'form-control']) !!}
+                    <label for="">Invoice Number</label>
+                    {!! Form::text('invoice_no', null, ['placeholder' => 'Invoice Number', 'class' => 'form-control']) !!}
                 </div>
                 <div class="form-group">
-                    <label for="">{{ __('label.password') }}</label>
-                    {!! Form::password('password', ['placeholder' => 'Password', 'class' => 'form-control']) !!}
+                    <label for="">Description</label>
+                    {!! Form::textarea('Description', null, ['placeholder' => 'Description', 'class' => 'form-control','id'=>'ckeditor','cols'=>5,'rows'=>5]) !!}
                 </div>
                 <div class="form-group">
-                    <label for="">{{ __('label.password_confirm') }}</label>
-                    {!! Form::password('confirm-password', ['placeholder' => 'Confirm Password', 'class' => 'form-control']) !!}
+                    <label for="">PRICE PER ITEM</label>
+                    {!! Form::text('Unit_Price', null, ['placeholder' => '', 'class' => 'form-control']) !!}
                 </div>
                 <div class="form-group">
-                    <label for="">{{ __('label.role') }} {{ __('label.choose') }}</label>
-                    {!! Form::select('roles[]', $roles, $userRole, ['class' => 'form-control', 'multiple']) !!}
+                    <label for="">Qty</label>
+                    {!! Form::text('Qty', null, ['placeholder' => '', 'class' => 'form-control']) !!}
+                </div>
+                <div class="form-group">
+                    <label for="">Percentage</label>
+                    {!! Form::number('percentage', null, ['placeholder' => '', 'class' => 'form-control']) !!}
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="tax" name="tax">
+                    <label class="form-check-label" for="tax">Tax(5%)</label>
                 </div>
                 <div class="text-center">
-                    <a href="{{ route('setting.user.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
+                    <a href="{{ route('OfficeManagement.quotationDetail.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
                     <button type="submit" class="btn btn-primary">{{ __('button.update') }}</button>
                 </div>
             </div>

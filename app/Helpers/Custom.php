@@ -16,3 +16,15 @@ function date_translate($date){
     $date = $date != '' ? date('d-m-Y', strtotime($date)) : null;
     return num_translate($date);
 }
+
+function percent_price($price, $percent) {
+    $float_num = $price;
+    if ($percent > 0) {
+        $value = $price * ($percent / 100);
+        $float_num = $price + $value;
+        if ($float_num > floor($float_num)){
+            $float_num = floor($float_num)+1;
+        } 
+    }
+    return $float_num;
+}

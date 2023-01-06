@@ -41,6 +41,7 @@
                         @endforeach
                     </select>
                 </div>
+                {{ Form::hidden('Quotation_Id', $quoId->id) }}
                 <div class="form-group">
                     <label for="">Invoice Number</label>
                     {!! Form::text('invoice_no', null, ['placeholder' => 'Invoice Number', 'class' => 'form-control']) !!}
@@ -59,7 +60,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">Percentage</label>
-                    {!! Form::number('percentage', null, ['placeholder' => '', 'class' => 'form-control']) !!}
+                    {!! Form::number('percent', null, ['placeholder' => '', 'class' => 'form-control']) !!}
                 </div>
                 <div class="form-group form-check">
                     <input type="checkbox" class="form-check-input" id="tax" name="tax">

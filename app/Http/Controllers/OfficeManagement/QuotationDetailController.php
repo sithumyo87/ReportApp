@@ -17,11 +17,9 @@ class QuotationDetailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($request,$id)
+    public function index(Request $request,$id)
     {
-        $data = Quotation::find($id);
-        // print($data);
-        return view('OfficeManagement.quotationDetail.index',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5);
+    
     }
 
     /**
@@ -29,11 +27,11 @@ class QuotationDetailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request,$id)
     {
+        $quoId = Quotation::find($id);
         $dealers = Dealer::where('action',true)->get(); 
-        $quotations = Quotation::all();
-        return view('OfficeManagement.quotationDetail.create',compact('dealers','quotations'));
+        return view('OfficeManagement.quotationDetail.create',compact('dealers','quoId'));
     }
 
     /**
@@ -44,6 +42,7 @@ class QuotationDetailController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
         $this->validate($request, [
             
         ]);
@@ -53,10 +52,10 @@ class QuotationDetailController extends Controller
         }else{
             $tax_amount = 0;
         }
-        $quoDetail = QuotationDetail::create($input);
-        $input = Quotation::create([
+        // $quoDetail = QuotationDetail::create($input);
+        $input = QuotationDetail::create([
             'Quotation_Id'=>$request->Quotation_Id,
-            'Description'=>$customerName->Description,
+            'Description'=>$request->Description,
 	        'Unit_Price' => $request->Unit_Price,
 	        'Qty' => $request->Qty,
 	        'percent' => $request->percent,
@@ -65,7 +64,7 @@ class QuotationDetailController extends Controller
 	        'tax'=> $request->tax,
 	        'tax_amount'=>$tax_amount,
         ]);
-        return redirect()->route('OfficeManagement.quotationDetail.index')
+        return redirect()->route('OfficeManagement.quotationDetail.show',$request->Quotation_Id)
                         ->with('success','Quotation Detail created successfully');
     }
 
@@ -78,9 +77,10 @@ class QuotationDetailController extends Controller
     public function show(Request $request,$id)
     {
         $quotation = Quotation::find($id);
+        $quoDetails = QuotationDetail::where('Quotation_Id',$id)->get();
         $quoNotes = QuotationNote::where('QuotationId',$quotation->id)->where('Note','!=',"")->get();
         $quoFiles = QuotationNote::where('QuotationId',$quotation->id)->where('list_file','!=',"")->get();
-        return view('OfficeManagement.quotationDetail.index',compact('quotation','quoNotes','quoFiles'));
+        return view('OfficeManagement.quotationDetail.index',compact('quotation','quoNotes','quoFiles','quoDetails'));
     }
 
     /**
@@ -91,7 +91,10 @@ class QuotationDetailController extends Controller
      */
     public function edit($id)
     {
-        //
+        $quoDetail = QuotationDetail::find($id);
+        // dd($quoDetail);
+        $dealers = Dealer::where('action',true)->get(); 
+        return view('OfficeManagement.quotationDetail.edit',compact('quoDetail','dealers'));
     }
 
     /**
@@ -120,7 +123,8 @@ class QuotationDetailController extends Controller
     public function getNote(Request $request, $quoDetailId,$quoNoteId ){
         $quotation = Quotation::find($quoDetailId);
         $quoNote = QuotationNote::where('id',$quoNoteId)->first();
-        $quoNotes = QuotationNote::where('QuotationId',$quotation->id)->get();
-        return view('OfficeManagement.quotationDetail.index',compact('quotation','quoNotes','quoNote'));
+        $quoNotes = QuotationNote::where('QuotationId',$quotation->id)->where('Note','!=',"")->get();
+        $quoFiles = QuotationNote::where('QuotationId',$quotation->id)->where('list_file','!=',"")->get();
+        return view('OfficeManagement.quotationDetail.index',compact('quotation','quoNotes','quoNote','quoFiles'));
     }
 }

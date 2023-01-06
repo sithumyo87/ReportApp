@@ -28,6 +28,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'OfficeManagement', 'namespa
     Route::resource('quotationDetail.quotationNote', QuotationDetailController::class);
 
     Route::get('/quotationDetail/{id?}/note/{noteId?}','QuotationDetailController@getNote')->name('quotationDetail.getNote');
+    Route::get('quotationDetail/quoId/{quoId}', 'QuotationDetailController@create')->name('quotationDetailCreate');
+    Route::post('quotationDetail/quoId/{quoId}', 'QuotationDetailController@store')->name('quotationDetailCreate');
+
+
 
     Route::resource('quotationDetail', QuotationDetailController::class);
     Route::resource('customer', CustomerController::class);

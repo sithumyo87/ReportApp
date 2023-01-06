@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('quotation_details', function (Blueprint $table) {
             $table->id();
             $table->integer('Quotation_Id');
-            $table->integer('Description')->nullable();
+            $table->text('Description')->nullable();
             $table->string('Unit_Price')->nullable();
             $table->integer('Qty')->nullable();
             $table->float('percent');
