@@ -17,6 +17,11 @@
         </div>
     </div>
     <hr>
+    @if ($message = Session::get('success'))
+        <div class="alert alert-success">
+            <p>{{ $message }}</p>
+        </div>
+    @endif
     <div class="row">
         <div class="col-md-7">
             <p><b>Sub: </b>
@@ -67,8 +72,8 @@
                     <td>{{ $row->percent }}</td>
                     <td>{{number_format(percent_price($row['Unit_Price'], $row['percent']),2)}} </td>
                     <td>{{ $row->Qty }}</td>
-                    <td>{{ number_format($row->Unit_Price * $row->Qty,2) }}</td>
-                    <td>{{ number_format(percent_price($row['Unit_Price'], $row['percent']) * $row['Qty'],2); }}</td>
+                    <td>{{ number_format($row->Unit_Price * $row->Qty,2) }} {{$currency->Currency_name}}</td>
+                    <td>{{ number_format(percent_price($row['Unit_Price'], $row['percent']) * $row['Qty'],2); }} {{$currency->Currency_name}}</td>
                     <td class="text-center">
                         @can('user-edit')
                         <a class="btn btn-primary"
@@ -87,8 +92,8 @@
                 @endforeach
                  <!-- <tr> -->
                  <td colspan="5" class="text-right"><b>Total</b></td>
-                <td><b><?= number_format($subTotal,2)?></b></td>
-                <td><b><?= number_format($subTotalWithPer,2)?></b></td>
+                <td><b>{{ number_format($subTotal,2) }} {{$currency->Currency_name}}</b></td>
+                <td><b>{{ number_format($subTotalWithPer,2)}} {{$currency->Currency_name}}</b></td>
                 <!-- </tr> -->
                 @endif
                 <tr>
@@ -116,6 +121,7 @@
                     </div>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
                       <p>
+                        {{number_format($subTotalWithPer,2)}} {{$currency->Currency_name}}
                         </p>
                     </div>
                 </div>
@@ -123,6 +129,13 @@
                 <div class="row" style="margin-bottom: 8px; padding: 3px 5px;">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right">
                         <p><strong>Tax (5%)</strong></p>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                        @if($quotation['Tax'] != 0)
+                        <label><input type="checkbox" class="minimal" id="taxcheck" data-id="{{ $quotation['Id']; }}" checked></label>
+                        @else
+                        <label><input type="checkbox" class="minimal" id="taxcheck" data-id="{{ $quotation['Id']; }}"></label>
+                        @endif
                     </div>
                 </div>
 
@@ -131,6 +144,7 @@
                         <p><strong>Tax Amount</strong></p>
                     </div>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                    <p>{{ number_format(($quotation['Tax'] * $subTotalWithPer)/100,2);}}{{$currency->Currency_name}}</p>
                     </div>
                 </div>
 
@@ -139,6 +153,7 @@
                         <p><strong>Grand Total</strong></p>
                     </div>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                    {{ number_format($subTotalWithPer,2)}} {{$currency->Currency_name}}
                     </div>
                 </div>
             </div>
@@ -147,29 +162,27 @@
         <!-- <div class="clearfix"></div> -->
 
         <!-- Note -->
-        @if(empty($quoNote))
-        {!! Form::open(['route' => 'OfficeManagement.quotationNote.store', 'method' => 'POST']) !!}
-        @else
-        {!! Form::model($quotation, ['method' => 'PATCH', 'route' =>
-        ['OfficeManagement.quotationNote.quotationDetail.update',
-        ['quotationNote'=>$quoNote->id,'quotationDetail'=>$quotation->id]]]) !!}
-        @endif
         <div class="col-md-6 m-4 float-left">
             <label for="note">Notes</label>
             @foreach($quoNotes as $row)
+            {!! Form::open(['method' => 'DELETE', 'route' => ['OfficeManagement.quotationNote.destroy', $row->id], ]) !!} 
             <p class="bg-dark text-white p-2">
                 {{$row->Note}}
-                {!! Form::open(['method' => 'DELETE', 'route' => ['OfficeManagement.quotationNote.destroy',$row->id ]])!!}
-                
-                {!! Form::button('<i class="fa fa-trash text-danger"></i>', ['type'=>'submit','class' => ' float-right me-2',
-                    'onclick'=>'return confirm("Are you sure?")']) !!}
+                {{ Form::hidden('Quotation_Id', $quotation->id) }}
+                {!! Form::button('<i class="fa fa-trash text-danger"></i>', ['type'=>'submit','class' => ' float-right',
+                    'onclick'=>'return confirm("Are you sure to delete?")','style' => 'background:none;border:none']) !!}    
                     <a href="{{route('OfficeManagement.quotationDetail.getNote',['id'=>$quotation->id,'noteId'=>$row->id])}}"
                         class="float-right me-2"><i class="fa fa-edit text-white"></i></a>
                 {!! Form::close() !!}
-        <!-- <a href="{{route('OfficeManagement.quotationDetail.getNote',['id'=>$quotation->id,'noteId'=>$row->id])}}"
-                    class="float-right me-2"><i class="fa fa-edit text-white"></i></a> -->
             </p>
             @endforeach
+            @if(empty($quoNote))
+            {!! Form::open(['route' => 'OfficeManagement.quotationNote.store', 'method' => 'POST']) !!}
+            @else
+            {!! Form::model($quotation, ['method' => 'PATCH', 'route' =>
+            ['OfficeManagement.quotationNote.quotationDetail.update',
+            ['quotationNote'=>$quoNote->id,'quotationDetail'=>$quotation->id]]]) !!}
+            @endif
             {{ Form::hidden('quoId', $quotation->id) }}
             <textarea name="Note" id="" cols="5" rows="5" class="form-control"
                 required>{{$quoNote->Note ?? null}} </textarea>
@@ -182,15 +195,19 @@
         <!-- Note ENd -->
 
         <!-- FIle -->
-        {!! Form::open(['route' => 'OfficeManagement.quotationFile.store', 'method' => 'POST', 'files' => true]) !!}
         <div class="col-md-6 form-group m-4 float-left">
             <label for="note">Files</label>
             @foreach($quoFiles as $row)
+            {!! Form::open(['method' => 'DELETE', 'route' => ['OfficeManagement.quotationFile.destroy', $row->id], ]) !!} 
             <p class="bg-dark text-white p-2">
+            {{ Form::hidden('Quotation_Id', $quotation->id) }}
                 <a href="{{asset($row->list_file)}}" class="text-white">{{ $row->list_name != "" ? $row->list_name  : str_replace('attachments/', '', $row->list_file)}}</a>
-                <a href="" class="float-right me-2"><i class="fa fa-trash text-danger"></i></a>
+                {!! Form::button('<i class="fa fa-trash text-danger"></i>', ['type'=>'submit','class' => ' float-right',
+                    'onclick'=>'return confirm("Are you sure to delete?")','style' => 'background:none;border:none']) !!} 
             </p>
+            {!! Form::close() !!}
             @endforeach
+            {!! Form::open(['route' => 'OfficeManagement.quotationFile.store', 'method' => 'POST', 'files' => true]) !!}
             {{ Form::hidden('quoId', $quotation->id) }}
             <input type="text" name="list_name" id="" placeholder="Add File Name(optional)" class="form-control"><br>
             <input type="file" name="file" class="form-control" accept="image/jpeg,image/png,application/pdf," required>

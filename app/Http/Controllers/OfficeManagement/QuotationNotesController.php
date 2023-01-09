@@ -42,7 +42,7 @@ class QuotationNotesController extends Controller
             'QuotationId'=>$quoId,
             'Note'=>$request->Note,
         ]);
-        return redirect()->route('OfficeManagement.quotationDetail.show',$quoId);
+        return redirect()->route('OfficeManagement.quotationDetail.show',$quoId)->with('success','quoNote Created successfully');
     }
 
     /**
@@ -84,7 +84,7 @@ class QuotationNotesController extends Controller
                 'Note'=>$request->Note,
             ]);
             // dd($input . 'Updated');
-            return redirect()->route('OfficeManagement.quotationDetail.show',$quoId); 
+            return redirect()->route('OfficeManagement.quotationDetail.show',$quoId)->with('success','quoNote Updated successfully'); 
         }
     }
 
@@ -96,10 +96,10 @@ class QuotationNotesController extends Controller
      */
     public function destroy(Request $request,$id)
     {
-        $quoDetailId = $request->quoId;
+        $quoDetailId = $request->Quotation_Id;
         $quoNote = QuotationNote::find($id);
-        $quoNote->destroy();
-        return redirect()->route('OfficeManagement.quotationDetail.index'.$quoDetailId)
+        $quoNote->destroy($id);
+        return redirect()->route('OfficeManagement.quotationDetail.show',$quoDetailId)
                         ->with('success','quoNote deleted successfully');
     }
 }

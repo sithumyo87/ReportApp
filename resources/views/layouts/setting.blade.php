@@ -110,6 +110,12 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Users</span></a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('setting.authorizer.index')}}">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Authorizer</span></a>
+                </li>
                 @endcan
                 <!-- Divider -->
                 <hr class="sidebar-divider">

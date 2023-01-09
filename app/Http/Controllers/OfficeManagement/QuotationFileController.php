@@ -54,7 +54,7 @@ class QuotationFileController extends Controller
                 'list_name'=>$request->list_name,
                 'list_file'=>$storedFileName,
             ]);
-        return redirect()->route('OfficeManagement.quotationDetail.show',$quoId); 
+        return redirect()->route('OfficeManagement.quotationDetail.show',$quoId)->with('success','quotation File Created successfully'); 
     }
 
     /**
@@ -97,8 +97,12 @@ class QuotationFileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
-        
+        $quoDetailId = $request->Quotation_Id;
+        $quoNote = QuotationNote::find($id);
+        $quoNote->destroy($id);
+        return redirect()->route('OfficeManagement.quotationDetail.show',$quoDetailId)
+                        ->with('success','quoNote deleted successfully');
     }
 }

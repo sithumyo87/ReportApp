@@ -3,13 +3,13 @@
 <div class="container-fluid">
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h4 class="text-themecolor">Currency Create</h4>
+            <h4 class="text-themecolor">Authorizer Create</h4>
         </div>
         <div class="col-md-7 align-self-center text-right">
             <div class="d-flex justify-content-end align-items-center">
                 <ol class="breadcrumb">
                     @can('user-index')
-                    <li class="breadcrumb-item"><a href="{{ route('setting.user.index') }}">Currency</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('setting.user.index') }}">Authorizer</a></li>
                     @endcan
                     <li class="breadcrumb-item active">Create</li>
                 </ol>
@@ -28,23 +28,19 @@
     @endif
     <div class="bg-white p-30">
         <!-- <h3 class="text-center m-b-20"></h3> -->
-        {!! Form::open(['route' => 'OfficeManagement.currency.store', 'method' => 'POST']) !!}
+        {!! Form::open(['route' => 'setting.authorizer.store', 'method' => 'POST','files' => true]) !!}
         <div class="row justify-content-center">
             <div class="col-xs-12 col-sm-12 col-md-8 mt-3">
                 <div class="form-group">
-                    <label for="">Currency Name</label>
-                    {!! Form::text('Currency_name', null, ['placeholder' => 'Currency Name', 'class' => 'form-control']) !!}
+                    <label for="">Authorizer Name</label>
+                    {!! Form::text('Authorizer Name', null, ['placeholder' => 'Authorizer Name', 'class' => 'form-control']) !!}
                 </div>
                 <div class="form-group">
-                    <label for="">Unit Price</label>
-                    {!! Form::text('UnitPrice', null, ['placeholder' => 'UnitPrice', 'class' => 'form-control']) !!}
-                </div>
-                <div class="form-group">
-                    <label for="">Symbol</label>
-                    {!! Form::text('symbol', null, ['placeholder' => 'Symbol', 'class' => 'form-control']) !!}
+                    <label for="">Sign</label>
+                    <input type="file" name="file" class="form-control" accept="image/jpeg,image/png" required>
                 </div>
                 <div class="text-center">
-                    <a href="{{ route('OfficeManagement.currency.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
+                    <a href="{{ route('setting.authorizer.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
                     <button type="submit" class="btn btn-primary">{{ __('button.save') }}</button>
                 </div>
             </div>

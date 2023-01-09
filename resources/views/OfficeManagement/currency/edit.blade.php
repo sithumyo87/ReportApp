@@ -44,7 +44,7 @@
                     {!! Form::text('symbol', null, ['placeholder' => 'Symbol', 'class' => 'form-control']) !!}
                 </div>
                 <div class="text-center">
-                    <a href="{{ route('setting.user.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
+                    <a href="{{ route('OfficeManagement.currency.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
                     <button type="submit" class="btn btn-primary">{{ __('button.update') }}</button>
                 </div>
             </div>

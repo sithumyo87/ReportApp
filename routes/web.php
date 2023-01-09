@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'OfficeManagement', 'namespa
     Route::resource('quotationDetail', QuotationDetailController::class);
     Route::resource('customer', CustomerController::class);
     Route::resource('currency', CurrencyController::class);
+    
     Route::resource('dealer', DealerController::class);
     Route::resource('quotationNote', QuotationNotesController::class);
     Route::resource('quotationNote.quotationDetail', QuotationNotesController::class);
@@ -49,4 +50,5 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'setting', 'namespace' => 'A
     // Route::resource('permission', PermissionController::class);
     Route::resource('role', RoleController::class);
     Route::resource('user', UserController::class);
+    Route::resource('authorizer', AuthorizedController::class);
 });

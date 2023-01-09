@@ -9,6 +9,7 @@ use App\Models\Customer;
 use App\Models\QuotationDetail;
 use App\Models\QuotationNote;
 use App\Models\Dealer;
+use App\Models\Currency;
 
 class QuotationDetailController extends Controller
 {
@@ -77,10 +78,11 @@ class QuotationDetailController extends Controller
     public function show(Request $request,$id)
     {
         $quotation = Quotation::find($id);
+        $currency = Currency::where('id',$quotation->Currency_type)->first();
         $quoDetails = QuotationDetail::where('Quotation_Id',$id)->get();
         $quoNotes = QuotationNote::where('QuotationId',$quotation->id)->where('Note','!=',"")->get();
         $quoFiles = QuotationNote::where('QuotationId',$quotation->id)->where('list_file','!=',"")->get();
-        return view('OfficeManagement.quotationDetail.index',compact('quotation','quoNotes','quoFiles','quoDetails'));
+        return view('OfficeManagement.quotationDetail.index',compact('quotation','quoNotes','quoFiles','quoDetails','currency'));
     }
 
     /**
