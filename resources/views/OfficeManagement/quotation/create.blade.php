@@ -28,7 +28,7 @@
     </div>
     @endif
     <div class="bg-white p-30">
-        <h3 class="text-center m-b-20">{{ __('label.user') }}{{ __('label.create') }}</h3>
+        <h3 class="text-center m-b-20">Quotation Create</h3>
         {!! Form::open(['route' => 'OfficeManagement.quotation.store', 'method' => 'POST']) !!}
         <div class="row justify-content-center">
             <div class="col-xs-12 col-sm-12 col-md-8">
@@ -52,7 +52,7 @@
                 </div>
                 <div class="form-group">
                     <label for="company">Company Name</label>
-                    <select name="company" class="form-control" required>
+                    <select name="Company_name" class="form-control" required>
                         <option value="">Company Name</option>
                         @foreach($customers as $row)
                         <option value="{{ $row->company }}">{{ $row->company}}</option>
@@ -61,19 +61,19 @@
                 </div>
                 <div class="form-group">
                     <label for="">Phone No</label>
-                    {!! Form::text('phone', null, ['placeholder' => 'Phone Number', 'class' => 'form-control']) !!}
+                    {!! Form::text('Contact_phone', null, ['placeholder' => 'Phone Number', 'class' => 'form-control']) !!}
                 </div>
                 <div class="form-group">
                     <label for="">Address</label>
-                    {!! Form::textarea('address', null, ['placeholder' => 'Address', 'class' => 'form-control','cols'=>5,'rows'=>5]) !!}
+                    {!! Form::textarea('Address', null, ['placeholder' => 'Address', 'class' => 'form-control','cols'=>5,'rows'=>5]) !!}
                 </div>
                 <div class="form-group">
                     <label for="">Subject</label>
-                    {!! Form::text('sub', null, ['placeholder' => '', 'class' => 'form-control']) !!}
+                    {!! Form::text('Sub', null, ['placeholder' => '', 'class' => 'form-control']) !!}
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="Date">Date</label>
-                    <input class="form-control" id="Date" name="date" placeholder="DD/MM/YYY" type="text" />
+                    <input class="form-control" id="Date" name="date" placeholder="YYY-MM-DD" type="text" />
                 </div>
                 <div class="form-group">
                     {{ Form::label('currency', 'Currency') }}

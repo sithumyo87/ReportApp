@@ -7,12 +7,14 @@
         </div>
         <div class="col-md-7 align-self-center text-right">
             <div class="d-flex justify-content-end align-items-center">
-                @can('role-create')
                 <a href="{{ route('OfficeManagement.quotationDetail.create') }}"
-                    class="btn btn-success d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i>
-                    {{ __('button.create') }}
+                    class="btn btn-success d-none d-lg-block m-l-15 mr-3"><i class="fa fa-print"></i>
+                    Print
                 </a>
-                @endcan
+                <a href="{{ route('OfficeManagement.quotation.index') }}"
+                    class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-back"></i>
+                    Back
+                </a>
             </div>
         </div>
     </div>
@@ -96,19 +98,16 @@
                 <td><b>{{ number_format($subTotalWithPer,2)}} {{$currency->Currency_name}}</b></td>
                 <!-- </tr> -->
                 @endif
+                @if($quotation->SubmitStatus == 0):
                 <tr>
                     <td class="text-right">
                         <a href="{{ route('OfficeManagement.quotationDetailCreate',$quotation->id) }}"
                             class="btn btn-success d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i>
                             {{ __('button.create') }}
                         </a>
-                    </td>
-                    
+                    </td> 
                 </tr>
-              
-
-               
-
+                @endif
             </tbody>
         </table>
     </div>
@@ -125,7 +124,8 @@
                         </p>
                     </div>
                 </div>
-
+                
+                @if($quotation->SubmitStatus == 0):
                 <div class="row" style="margin-bottom: 8px; padding: 3px 5px;">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right">
                         <p><strong>Tax (5%)</strong></p>
@@ -138,6 +138,7 @@
                         @endif
                     </div>
                 </div>
+                @endif
 
                 <div class="row" style="margin-bottom: 8px; padding: 3px 5px;">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right">
@@ -165,17 +166,23 @@
         <div class="col-md-6 m-4 float-left">
             <label for="note">Notes</label>
             @foreach($quoNotes as $row)
+            
             {!! Form::open(['method' => 'DELETE', 'route' => ['OfficeManagement.quotationNote.destroy', $row->id], ]) !!} 
-            <p class="bg-dark text-white p-2">
+            <p class="bg-dark text-white p-2 noteFont">
                 {{$row->Note}}
                 {{ Form::hidden('Quotation_Id', $quotation->id) }}
+                @if($quotation->SubmitStatus == 0):
                 {!! Form::button('<i class="fa fa-trash text-danger"></i>', ['type'=>'submit','class' => ' float-right',
                     'onclick'=>'return confirm("Are you sure to delete?")','style' => 'background:none;border:none']) !!}    
                     <a href="{{route('OfficeManagement.quotationDetail.getNote',['id'=>$quotation->id,'noteId'=>$row->id])}}"
                         class="float-right me-2"><i class="fa fa-edit text-white"></i></a>
+                        @endif
                 {!! Form::close() !!}
+                
             </p>
+            
             @endforeach
+            @if($quotation->SubmitStatus == 0):
             @if(empty($quoNote))
             {!! Form::open(['route' => 'OfficeManagement.quotationNote.store', 'method' => 'POST']) !!}
             @else
@@ -190,8 +197,10 @@
                 <button class="btn btn-sm btn-grey" type="reset">Reset</button>
                 <button class="btn btn-sm btn-primary" type="submit">Add</button>
             </div>
+            @endif
         </div>
         {!! Form::close() !!}
+       
         <!-- Note ENd -->
 
         <!-- FIle -->
@@ -199,14 +208,18 @@
             <label for="note">Files</label>
             @foreach($quoFiles as $row)
             {!! Form::open(['method' => 'DELETE', 'route' => ['OfficeManagement.quotationFile.destroy', $row->id], ]) !!} 
-            <p class="bg-dark text-white p-2">
+            <p class="bg-dark text-white p-2 noteFont">
             {{ Form::hidden('Quotation_Id', $quotation->id) }}
-                <a href="{{asset($row->list_file)}}" class="text-white">{{ $row->list_name != "" ? $row->list_name  : str_replace('attachments/', '', $row->list_file)}}</a>
+                <a href="{{asset($row->list_file)}}" class="text-white " >{{ $row->list_name != "" ? $row->list_name  : str_replace('attachments/', '', $row->list_file)}}</a>
+                @if($quotation->SubmitStatus == 0):
                 {!! Form::button('<i class="fa fa-trash text-danger"></i>', ['type'=>'submit','class' => ' float-right',
-                    'onclick'=>'return confirm("Are you sure to delete?")','style' => 'background:none;border:none']) !!} 
+                    'onclick'=>'return confirm("Are you sure to delete?")','style' => 'background:none;border:none']) !!}
+                @endif
             </p>
             {!! Form::close() !!}
             @endforeach
+            
+            @if($quotation->SubmitStatus == 0):
             {!! Form::open(['route' => 'OfficeManagement.quotationFile.store', 'method' => 'POST', 'files' => true]) !!}
             {{ Form::hidden('quoId', $quotation->id) }}
             <input type="text" name="list_name" id="" placeholder="Add File Name(optional)" class="form-control"><br>
@@ -217,6 +230,7 @@
             </div>
         </div>
         {!! Form::close() !!}
+        @endif
         <!-- FIle end -->
         
 
@@ -225,21 +239,36 @@
 
 
     <!-- authorized Person -->
+    @if($quotation->SubmitStatus == 0):
     <div class="col-md-3  float-right mb-3">
+    @if($quotation->file_name != ""):
+        <img src="{{ asset($quotation->file_name)}}" alt="" width=100 height=100 class="text-center">
+    @else
         <img src="{{ asset('img/author-icon.png')}}" alt="" width=100 height=100 class="text-center">
+    @endif
         <h6>Authorized Person</h6>
-        <div class="d-flex  align-items-center">
-            <select name="" id="" class="form-control form-select">
-                <option value="">Ko Naing Ko Ko</option>
-                <option value="">Ko Myat Ko Ko</option>
+        <div>
+        {!! Form::open(['route' => ['OfficeManagement.quotationAuthorizer',$quotation->id],'method' => 'POST']) !!}
+            <select name="authorizer" id="" class="form-control form-select">
+            @foreach($authorizers as $row)
+                <option value="{{$row->id}}" <?php if($row->sign_name == $quotation->authorized_name) echo "selected";?>>{{$row->authorized_name}}</option>
+                @endforeach
             </select>
-            <a href="" class="btn btn-primary"><i class="fa fa-plus-circle"></i></a>
+            <button class="btn btn-sm btn-primary float-right" type="submit">Add</button>
+            {!! Form::close() !!}
         </div>
     </div>
-
-
-
-    <div class="text-center ">
-        <p><button class="btn btn-primary btn-block w-80">Confirm</button></p>
+    @else
+    <div class="col-md-3  float-right mb-3">
+        <img src="{{ asset($quotation->file_name)}}" alt="" width=100 height=100 class="text-center">
+        <p><b>{{$quotation->sign_name}}</b></p>
     </div>
+    @endif
+
+
+    @if($quotation->SubmitStatus == 0):
+    <div class="text-center ">
+        <a href="{{route('OfficeManagement.quotationConfirm',$quotation->id)}}"><p><button class="btn btn-primary btn-block w-80">Confirm</button></p></a> 
+    </div>
+    @endif
     @endsection

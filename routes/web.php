@@ -30,6 +30,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'OfficeManagement', 'namespa
     Route::get('/quotationDetail/{id?}/note/{noteId?}','QuotationDetailController@getNote')->name('quotationDetail.getNote');
     Route::get('quotationDetail/quoId/{quoId}', 'QuotationDetailController@create')->name('quotationDetailCreate');
     Route::post('quotationDetail/quoId/{quoId}', 'QuotationDetailController@store')->name('quotationDetailCreate');
+    Route::post('/quotationAuthorizer/{id}','QuotationDetailController@quotationAuthorizer')->name('quotationAuthorizer');
+    Route::get('/quotationConfirm/{id}','QuotationDetailController@quotationConfirm')->name('quotationConfirm');
 
 
 
@@ -42,6 +44,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'OfficeManagement', 'namespa
     Route::resource('quotationNote.quotationDetail', QuotationNotesController::class);
 
     Route::resource('quotationFile',QuotationFileController::class);
+
+    //Invoice
+    Route::resource('invoice',InvoiceController::class);
+
+    //PaymentTerm
+    Route::resource('paymentTerm',PaymentTermController::class);
 });
 
 

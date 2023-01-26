@@ -80,7 +80,7 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        $customer = Customer::find($id);
+        $customer = Customer::findOrFail($id);
         return view('OfficeManagement.customer.edit',compact('customer'));
     }
 
@@ -105,7 +105,7 @@ class CustomerController extends Controller
     
         $input = $request->all();
 
-        $customer = Customer::find($id);
+        $customer = Customer::findOrFail($id);
         $customer->update($input);
     
         return redirect()->route('OfficeManagement.customer.index')
@@ -120,7 +120,7 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        $customer = Customer::find($id);
+        $customer = Customer::findOrFail($id);
         $customer->update(array('action'=> false));
         return redirect()->route('OfficeManagement.customer.index')
                         ->with('success','customer deleted successfully');

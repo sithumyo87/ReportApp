@@ -10,6 +10,7 @@ use App\Models\QuotationDetail;
 use App\Models\QuotationNote;
 use App\Models\Dealer;
 use App\Models\Currency;
+use App\Models\Authorizer;
 
 class QuotationDetailController extends Controller
 {
@@ -82,7 +83,8 @@ class QuotationDetailController extends Controller
         $quoDetails = QuotationDetail::where('Quotation_Id',$id)->get();
         $quoNotes = QuotationNote::where('QuotationId',$quotation->id)->where('Note','!=',"")->get();
         $quoFiles = QuotationNote::where('QuotationId',$quotation->id)->where('list_file','!=',"")->get();
-        return view('OfficeManagement.quotationDetail.index',compact('quotation','quoNotes','quoFiles','quoDetails','currency'));
+        $authorizers = Authorizer::get();
+        return view('OfficeManagement.quotationDetail.index',compact('quotation','quoNotes','quoFiles','quoDetails','currency','authorizers'));
     }
 
     /**
@@ -129,4 +131,29 @@ class QuotationDetailController extends Controller
         $quoFiles = QuotationNote::where('QuotationId',$quotation->id)->where('list_file','!=',"")->get();
         return view('OfficeManagement.quotationDetail.index',compact('quotation','quoNotes','quoNote','quoFiles'));
     }
+
+    //Quotation Sign Authorizer
+    public function quotationAuthorizer(Request $request,$id){
+        $quotation = Quotation::find($id);
+        $authorizer = Authorizer::find($request->authorizer);
+        $quotation->update([
+            'sign_name' =>  $authorizer->authorized_name,
+            'file_name' =>  $authorizer->file_name,
+        ]);
+        return redirect()->route('OfficeManagement.quotationDetail.show',$id)
+                        ->with('success','Successfully Authorized Updated');
+    }
+
+    public function quotationConfirm($id){
+        $quotation = Quotation::find($id);
+        // dd($quotation);
+        $quotation->update([
+            'SubmitStatus' => 1,
+        ]);
+        return redirect()->route('OfficeManagement.quotationDetail.show',$id)
+                        ->with('success','Successfully Submitted');
+
+    }
+
+
 }

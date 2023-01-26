@@ -33,14 +33,25 @@ class AuthorizedController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'Currency_name' => 'required',
-            'symbol' => 'required',
+            'authorized_name' => 'required',
         ]);
-        
-        $input = $request->all();
-        $authorizer = Authorizer::create($input);
+
+        if($request->hasFile('file')){
+            $request->validate([
+                'file' => 'required|mimes:png,jpg,jpeg|max:10240'
+              ]);
+            $fileNameToStore = $request->file->getClientOriginalName();
+            $request->file->move(public_path('authorizers/'), $fileNameToStore);
+            $storedFileName= 'authorizers/'.$fileNameToStore;
+        }else{
+            $storedFileName = null;
+        }
+        $input = Authorizer::create([
+                'authorized_name'=>$request->authorized_name,
+                'file_name'=>$storedFileName,
+            ]);
         return redirect()->route('setting.authorizer.index')
-                        ->with('success','Currency created successfully');
+                        ->with('success','Authorizer created successfully');
     }
 
     /**
@@ -62,8 +73,8 @@ class AuthorizedController extends Controller
      */
     public function edit($id)
     {
-        $authorizer = Authorizer::find($id);
-        return view('Setting.authorizer.edit',compact('currency'));
+        $authorizer = Authorizer::findOrFail($id);
+        return view('setting.authorizer.edit',compact('authorizer'));
     }
 
     /**
@@ -75,15 +86,25 @@ class AuthorizedController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $authorizer = Authorizer::findOrFail($id);
         $this->validate($request, [
-            'Currency_name' => 'required',
-            'symbol' => 'required',
+            'authorized_name' => 'required',
         ]);
-    
-        $input = $request->all();
 
-        $authorizer = Authorizer::find($id);
-        $authorizer->update($input);
+        if($request->hasFile('file')){
+            $this->validate($request, [
+                'file' => 'image|mimes:jpeg,png,jpg|max:10240',
+            ]);
+            $fileNameToStore = $request->file->getClientOriginalName();
+            $request->file->move(public_path('authorizers/'), $fileNameToStore);
+            $storedFileName= 'authorizers/'.$fileNameToStore;
+        }else{
+            $storedFileName = $authorizer->file_name;
+        }
+
+        $authorizer->authorized_name            = $request->input('authorized_name');
+        $authorizer->file_name            = $storedFileName;
+        $authorizer->save();
     
         return redirect()->route('setting.authorizer.index')
                         ->with('success','Authorizer updated successfully');
@@ -97,7 +118,8 @@ class AuthorizedController extends Controller
      */
     public function destroy($id)
     {
-        $authorizer = Authorizer::find($id);
+        $authorizer = Authorizer::findOrFail($id);
+        $authorizer->destroy($id);
         return redirect()->route('setting.authorizer.index')
                         ->with('success','Authorizer deleted successfully');
     }

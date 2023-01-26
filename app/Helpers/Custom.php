@@ -28,3 +28,26 @@ function percent_price($price, $percent) {
     }
     return $float_num;
 }
+
+function get_payment($type) {
+    switch ($type) {
+        case '50':
+            return '50/50';
+            break;
+        case '60':
+            return '60/40';
+            break;
+        case '80':
+            return '80/20';
+            break;
+        case '1':
+            return 'Cash';
+            break;
+        case '0':
+            return 'Credit';
+            break;
+        default:
+            return 'Other';
+            break;
+    }
+}

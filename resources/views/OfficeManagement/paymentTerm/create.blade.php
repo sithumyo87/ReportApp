@@ -3,13 +3,13 @@
 <div class="container-fluid">
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h4 class="text-themecolor">Authorizer Create</h4>
+            <h4 class="text-themecolor">PaymentTerm Create</h4>
         </div>
         <div class="col-md-7 align-self-center text-right">
             <div class="d-flex justify-content-end align-items-center">
                 <ol class="breadcrumb">
                     @can('user-index')
-                    <li class="breadcrumb-item"><a href="{{ route('setting.user.index') }}">Authorizer</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('setting.user.index') }}">PaymentTerm</a></li>
                     @endcan
                     <li class="breadcrumb-item active">Create</li>
                 </ol>
@@ -28,19 +28,19 @@
     @endif
     <div class="bg-white p-30">
         <!-- <h3 class="text-center m-b-20"></h3> -->
-        {!! Form::open(['route' => 'setting.authorizer.store', 'method' => 'POST','files' => true]) !!}
+        {!! Form::open(['route' => 'OfficeManagement.paymentTerm.store', 'method' => 'POST']) !!}
         <div class="row justify-content-center">
             <div class="col-xs-12 col-sm-12 col-md-8 mt-3">
                 <div class="form-group">
-                    <label for="">Authorizer Name</label>
-                    {!! Form::text('authorized_name', null, ['placeholder' => 'Authorizer Name', 'class' => 'form-control']) !!}
+                    <label for="">First Pay</label>
+                    {!! Form::text('FirstPay', null, ['placeholder' => 'First Pay', 'class' => 'form-control']) !!}
                 </div>
                 <div class="form-group">
-                    <label for="">Sign</label>
-                    <input type="file" name="file" class="form-control" accept="image/jpeg,image/png" required>
+                    <label for="">Second Pay</label>
+                    {!! Form::text('SecondPay', null, ['placeholder' => 'Second Pay', 'class' => 'form-control']) !!}
                 </div>
                 <div class="text-center">
-                    <a href="{{ route('setting.authorizer.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
+                    <a href="{{ route('OfficeManagement.paymentTerm.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
                     <button type="submit" class="btn btn-primary">{{ __('button.save') }}</button>
                 </div>
             </div>

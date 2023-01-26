@@ -75,7 +75,7 @@ class CurrencyController extends Controller
      */
     public function edit($id)
     {
-        $currency = Currency::find($id);
+        $currency = Currency::findOrFail($id);
         return view('OfficeManagement.currency.edit',compact('currency'));
     }
 
@@ -95,7 +95,7 @@ class CurrencyController extends Controller
     
         $input = $request->all();
 
-        $currency = Currency::find($id);
+        $currency = Currency::findOrFail($id);
         $currency->update($input);
     
         return redirect()->route('OfficeManagement.currency.index')
@@ -110,7 +110,8 @@ class CurrencyController extends Controller
      */
     public function destroy($id)
     {
-        $currency = Currency::find($id);
+        $currency = Currency::findOrFail($id);
+        $currency->destroy($id);
         return redirect()->route('OfficeManagement.currency.index')
                         ->with('success','currency deleted successfully');
     }
