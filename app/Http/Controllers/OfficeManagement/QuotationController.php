@@ -51,9 +51,15 @@ class QuotationController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
+       $this->validate($request, [
             // 'name' => 'required',
-            'company' => 'required',
+            // 'company' => 'required',
+            // 'Attn' => 'required',
+            // 'Company_name' => 'required',
+            // 'Contact_phone' => 'required',
+            // 'Sub' => 'required',
+            // 'Serial_No' => 'required',
+            // 'Date' => 'required',
         ]);
 
         //get count from the quotation
@@ -67,17 +73,17 @@ class QuotationController extends Controller
 			$refer_no = '';
 			$Refer = false;
 		};
-        $Date = date('Y-m-d', strtotime($request->Date));
-
+        $Date = date('Y-m-d',strtotime(str_replace('/', '-', $request->date)));
+        
         $customerName = Customer::find($request->customer_id);
 
         $input = Quotation::create([
             'customer_id'=>$request->customer_id,
             'Attn'=>$customerName->name,
-	        'Company_name' => $request->company,
-	        'Contact_phone' => $request->phone,
-	        'Address' => $request->address,
-	        'Sub'=>$request->sub,
+	        'Company_name' => $request->Company_name,
+	        'Contact_phone' => $request->Contact_phone,
+	        'Address' => $request->Address,
+	        'Sub'=>$request->Sub,
 	        'Date'=>$Date,
 	        'Serial_No'=> $Serial,
 	        'Refer_No'=>$refer_no,
@@ -108,8 +114,11 @@ class QuotationController extends Controller
      */
     public function edit($id)
     {
-        $quotation = Quotation::find($id);
-        return view('OfficeManagement.quotation.edit',compact('quotation'));
+        $quotation = Quotation::findOrFail($id);
+        $customers = Customer::where('action',true)->get(); 
+        $currency = Currency::all();
+        $quotations = Quotation::all();
+        return view('OfficeManagement.quotation.edit',compact('quotation','customers','currency','quotations'));
     }
 
     /**
@@ -122,31 +131,38 @@ class QuotationController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
-            'phone' => 'required',
-            'company' => 'required',
-            'address' => 'required',
-            'phone' => 'required',
+            // 'name' => 'required',
+            // 'email' => 'required',
+            // 'phone' => 'required',
+            // 'phone' => 'required',
+            // 'company' => 'required',
+            // 'address' => 'required',
+            // 'phone' => 'required',
         ]);
-    
-        $input = $request->all();
+        
+        $refer_no = $request->refer_no;
+        $Refer = true;
+		if ($refer_no == '' || $refer_no == 'Refer No:') {
+			$refer_no = '';
+			$Refer = false;
+		};
 
-        $quotation = Customer::find($id);
+        $Date = date('Y-m-d',strtotime(str_replace('/', '-', $request->date)));
+
+        $customerName = Customer::find($request->customer_id);
+
+        $quotation = Quotation::find($id);
         $quotation->update([
             'customer_id'=>$request->customer_id,
-            'Attn'=>"Hello",
-	        'Company_name' => $request->company,
-	        'Contact_phone' => $request->phone,
-	        'Address' => $request->address,
-	        'Sub'=>$request->sub,
+            'Attn'=>$customerName->name,
+	        'Company_name' => $request->Company_name,
+	        'Contact_phone' => $request->Contact_phone,
+	        'Address' => $request->Address,
+	        'Sub'=>$request->Sub,
 	        'Date'=>$Date,
-	        'Serial_No'=> $Serial,
 	        'Refer_No'=>$refer_no,
 	        'Refer_status' => false,
-	        'Currency_type' => $request->currency,
-	        'SubmitStatus' => false
+	        'Currency_type' => $request->Currency_type,
         ]);
     
         return redirect()->route('OfficeManagement.quotation.index')

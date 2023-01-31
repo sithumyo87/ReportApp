@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Report App') }}</title>
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.min.css') }}" rel="stylesheet">
@@ -21,6 +21,9 @@
         rel="stylesheet">
     <!-- <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet"> -->
+    <!-- <script
+src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script> -->
 
 
     <!-- Scripts -->
@@ -36,11 +39,10 @@
     <script src="{{ asset('js/dashboard.min.js') }}"></script>
 
     <!-- Page level plugins -->
-    <script src="{{ asset('vendor/chart-js/Chart.min.js') }}"></script>
-
+    <!-- <script src="{{ asset('vendor/chart.js/Chart.min.js') }}"></script> -->
     <!-- Page level custom scripts -->
-    <script src="{{ asset('js/demo/chart-area-demo.js') }}"></script>
-    <script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script>
+    <!-- <script src="{{ asset('js/demo/chart-area-demo.js') }}"></script>
+    <script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script> -->
 
     <!-- For Date-Picker -->
     <!-- Include jQuery -->
@@ -50,20 +52,24 @@
     <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
-
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />   
+        <!-- //Date Picker -->
     <script>
+    //Date Picker
     $(document).ready(function() {
         var date_input = $('input[name="date"]'); //our date input has the name "date"
         var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
         date_input.datepicker({
-            format: 'dd/mm/yyyy',
+            format: 'yyyy-mm-dd',
             container: container,
             todayHighlight: true,
-            autoclose: true,
-        })
+        autoclose: true,
     })
+})
     </script>
+    <!-- Date time picker end -->
+    <script type="text/javascript" src="{{asset('js/office.js')}}"></script>
+</script>
 </head>
 
 <body>
@@ -106,12 +112,18 @@
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Users</span></a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('setting.authorizer.index')}}">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Authorizer</span></a>
+                </li>
                 @endcan
                 <!-- Divider -->
                 <hr class="sidebar-divider">
 
                 <div class="sidebar-heading">
-                    ]Office Management
+                    Office Management
                 </div>
                 <!-- Nav Item - Pages Collapse Menu -->
                 <!-- <li class="nav-item">
@@ -136,13 +148,13 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="charts.html">
+                    <a class="nav-link" href="{{ route('OfficeManagement.invoice.index')}}">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Invoice</span></a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="charts.html">
+                    <a class="nav-link" href="{{ route('OfficeManagement.receipt.index')}}">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Receipt</span></a>
                 </li>
@@ -154,9 +166,21 @@
                 </li>
 
                 <li class="nav-item">
+                    <a class="nav-link" href="{{ route('OfficeManagement.dealer.index')}}">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Dealer</span></a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link" href="{{ route('OfficeManagement.currency.index')}}">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Currency</span></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('OfficeManagement.paymentTerm.index')}}">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Payment Term</span></a>
                 </li>
 
                 <!-- Divider -->

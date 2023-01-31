@@ -27,32 +27,67 @@
         </div>
     @endif
     <div class="bg-white p-30">
-        <h3 class="text-center m-b-20">{{ __('label.user') }}{{ __('label.edit') }}</h3>
-        {!! Form::model($user, ['method' => 'PATCH', 'route' => ['setting.user.update', $user->id]]) !!}
+        <h3 class="text-center m-b-20">Quotation Edit</h3>
+        {!! Form::model($quotation, ['method' => 'PATCH', 'route' => ['OfficeManagement.quotation.update', $quotation->id]]) !!}
         <div class="row justify-content-center">
             <div class="col-xs-12 col-sm-12 col-md-8">
-                <div class="form-group">
-                    <label for="">{{ __('label.name') }}</label>
-                    {!! Form::text('name', null, ['placeholder' => 'Name', 'class' => 'form-control']) !!}
+            <div class="form-group">
+                    <label for="">Refer No:</label>
+                    <select name="refer_no" class="form-control">
+                        <option value="">Refer No:</option>
+                        @foreach($quotations as $row)
+                        <option value="{{ $row->id }}" <?php if($row->id == $quotation->Refer_No) echo "selected" ?>>{{ $row->Serial_No}}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="">{{ __('label.email') }}</label>
-                    {!! Form::text('email', null, ['placeholder' => 'Email', 'class' => 'form-control']) !!}
+                    <label for="">ATT Name</label>
+                    <select name="customer_id" class="form-control" required>
+                        <option value="">choose Customer</option>
+                        @foreach($customers as $row)
+                        <option value="{{ $row->id }}" <?php if($row->id == $quotation->customer_id) echo "selected" ?>>{{ $row->name}}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="">{{ __('label.password') }}</label>
-                    {!! Form::password('password', ['placeholder' => 'Password', 'class' => 'form-control']) !!}
+                    <label for="company">Company Name</label>
+                    <select name="Company_name" class="form-control" required>
+                        <option value="">Company Name</option>
+                        @foreach($customers as $row)
+                        <option value="{{ $row->company }}" <?php if($row->company == $quotation->Company_name) echo "selected" ?>>{{ $row->company}}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="">{{ __('label.password_confirm') }}</label>
-                    {!! Form::password('confirm-password', ['placeholder' => 'Confirm Password', 'class' => 'form-control']) !!}
+                    <label for="">Phone No</label>
+                    {!! Form::text('Contact_phone', null, ['placeholder' => 'Phone Number', 'class' => 'form-control']) !!}
                 </div>
                 <div class="form-group">
-                    <label for="">{{ __('label.role') }} {{ __('label.choose') }}</label>
-                    {!! Form::select('roles[]', $roles, $userRole, ['class' => 'form-control', 'multiple']) !!}
+                    <label for="">Address</label>
+                    {!! Form::textarea('Address', null, ['placeholder' => 'Address', 'class' => 'form-control','cols'=>5,'rows'=>5]) !!}
                 </div>
+                <div class="form-group">
+                    <label for="">Subject</label>
+                    {!! Form::text('Sub', null, ['placeholder' => '', 'class' => 'form-control']) !!}
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="Date">Date</label>
+                    <input class="form-control" id="Date" name="date" placeholder="YYY-MM-DD" type="text" value="{{$quotation->Date}}"/>
+                </div>
+                <div class="form-group">
+                    {{ Form::label('currency', 'Currency') }}
+                    <div class="form-inline">
+                    @foreach($currency as $row)
+                        <div class="radio mr-4">
+                        <input type="radio" name="Currency_type" value="{{$row->id}}" <?php if($row->id == $quotation->Currency_type) echo "checked"?>> {{$row->Currency_name}}
+                        </div>
+                        @endforeach
+                    </div>
+                    
+                </div>
+                <hr>
                 <div class="text-center">
-                    <a href="{{ route('setting.user.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
+                    <a href="{{ route('OfficeManagement.quotation.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
                     <button type="submit" class="btn btn-primary">{{ __('button.update') }}</button>
                 </div>
             </div>

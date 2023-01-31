@@ -23,12 +23,40 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'OfficeManagement', 'namespace' => 'App\Http\Controllers\OfficeManagement', 'as' => 'OfficeManagement.'], function() {
     Route::resource('quotation', QuotationController::class);
+    Route::resource('quotationDetail.quotationNote', QuotationDetailController::class);
+
+    Route::get('/quotationDetail/{id?}/note/{noteId?}','QuotationDetailController@getNote')->name('quotationDetail.getNote');
+    Route::get('quotationDetail/quoId/{quoId}', 'QuotationDetailController@create')->name('quotationDetailCreate');
+    Route::post('quotationDetail/quoId/{quoId}', 'QuotationDetailController@store')->name('quotationDetailCreate');
+    Route::post('/quotationAuthorizer/{id}','QuotationDetailController@quotationAuthorizer')->name('quotationAuthorizer');
+    Route::get('/quotationConfirm/{id}','QuotationDetailController@quotationConfirm')->name('quotationConfirm');
+
+
+
+    Route::resource('quotationDetail', QuotationDetailController::class);
     Route::resource('customer', CustomerController::class);
     Route::resource('currency', CurrencyController::class);
+    
+    Route::resource('dealer', DealerController::class);
+    Route::resource('quotationNote', QuotationNotesController::class);
+    Route::resource('quotationNote.quotationDetail', QuotationNotesController::class);
+
+    Route::resource('quotationFile',QuotationFileController::class);
+
+    //Invoice
+    Route::resource('invoice',InvoiceController::class);
+
+    //Receipt
+    Route::resource('receipt',ReceiptController::class);
+
+    //PaymentTerm
+    Route::resource('paymentTerm',PaymentTermController::class);
+
 });
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'setting', 'namespace' => 'App\Http\Controllers\Setting', 'as' => 'setting.'], function() {
     // Route::resource('permission', PermissionController::class);
     Route::resource('role', RoleController::class);
     Route::resource('user', UserController::class);
+    Route::resource('authorizer', AuthorizedController::class);
 });

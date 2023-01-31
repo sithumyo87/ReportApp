@@ -3,13 +3,13 @@
 <div class="container-fluid">
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h4 class="text-themecolor">Customer Create</h4>
+            <h4 class="text-themecolor">Currency Create</h4>
         </div>
         <div class="col-md-7 align-self-center text-right">
             <div class="d-flex justify-content-end align-items-center">
                 <ol class="breadcrumb">
                     @can('user-index')
-                    <li class="breadcrumb-item"><a href="{{ route('setting.user.index') }}">Customer</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('setting.user.index') }}">Currency</a></li>
                     @endcan
                     <li class="breadcrumb-item active">Create</li>
                 </ol>
@@ -44,7 +44,7 @@
                     {!! Form::text('symbol', null, ['placeholder' => 'Symbol', 'class' => 'form-control']) !!}
                 </div>
                 <div class="text-center">
-                    <a href="{{ route('setting.user.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
+                    <a href="{{ route('OfficeManagement.currency.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
                     <button type="submit" class="btn btn-primary">{{ __('button.save') }}</button>
                 </div>
             </div>

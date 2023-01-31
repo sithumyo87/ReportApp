@@ -38,8 +38,8 @@
                     <tr>
                         <td class="text-right">{{ ++$i }}</td>
                         <td>{{ $row->Date }}</td>
-                        <td>{{ $row->Company_name }}</td>
-                        <td>{{ $row->Contact_phone }}</td>
+                        <td><a href="{{route('OfficeManagement.quotationDetail.show',$row->id)}}">{{ $row->Serial_No }}</a></td>
+                        <td>{{ $row->Attn }}</td>
                         <td>{{ $row->Company_name }}</td>
                         <td>{{ $row->Sub }}</td>
                         <td>{{ $row->Refer_No }}</td>

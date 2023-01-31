@@ -28,8 +28,12 @@
     </div>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
-    <script src="https://energy.gov.mm/ckeditor/ckeditor.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    
+    <!-- <script src="~/Scripts/ckeditor/ckeditor.js"></script> -->
+    <!-- <script src="https://energy.gov.mm/ckeditor/ckeditor.js"></script> -->
+</script>
     
 </body>
 </html>
