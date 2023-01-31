@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('Attn')->nullable();
             $table->string('Sub');
             $table->string('Invoice_No');
-            $table->string('Date');
+            $table->date('Date');
             $table->integer('Discount')->default(0);
             $table->integer('Refer_status')->nullable();
             $table->integer('Advance')->nullable();

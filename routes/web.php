@@ -48,8 +48,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'OfficeManagement', 'namespa
     //Invoice
     Route::resource('invoice',InvoiceController::class);
 
+    //Receipt
+    Route::resource('receipt',ReceiptController::class);
+
     //PaymentTerm
     Route::resource('paymentTerm',PaymentTermController::class);
+
 });
 
 

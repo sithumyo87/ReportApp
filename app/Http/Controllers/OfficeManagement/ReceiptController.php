@@ -4,35 +4,18 @@ namespace App\Http\Controllers\OfficeManagement;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Invoice;
-use App\Models\Quotation;
+use App\Models\Receipt;
 use App\Models\Customer;
 use App\Models\Currency;
-use Carbon\Carbon;
-use  App\Models\PaymentTerm;
-use  App\Models\QuotationDetail;
+use App\Models\Invoice;
+use App\Models\PaymentTerm;
 
-class InvoiceController extends Controller
+class ReceiptController extends Controller
 {
-    function __construct()
-    {
-        // $this->middleware('permission:Invoice-index|Invoice-create|Invoice-edit|Invoice-delete', ['only' => ['index','store']]);
-        // $this->middleware('permission:Invoice-show', ['only' => ['show']]);
-        // $this->middleware('permission:Invoice-create', ['only' => ['create','store']]);
-        // $this->middleware('permission:Invoice-edit', ['only' => ['edit','update']]);
-        // $this->middleware('permission:Invoice-delete', ['only' => ['destroy']]);
-    }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
-        $data = Invoice::where('id','>',0)->orderBy('id','DESC')->paginate(15);
-        $invoice = Invoice::where('id','>',0)->first();
-        $quotation = Quotation::where('Id',$invoice['Quotation_Id'])->first();
-        return view('OfficeManagement.invoice.index',compact('data','invoice','quotation'))->with('i', ($request->input('page', 1) - 1) * 15);
+        $data = Receipt::where('id','>',0)->orderBy('id','DESC')->paginate(5);
+        return view('OfficeManagement.receipt.index',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -44,9 +27,9 @@ class InvoiceController extends Controller
     {
         $customers = Customer::where('action',true)->get(); 
         $currency = Currency::all();
-        $quotations = Quotation::where('SubmitStatus',true)->get();
-        $paymentTerms = PaymentTerm::get();
-        return view('OfficeManagement.invoice.create',compact('customers','quotations','currency','paymentTerms'));
+        $invoices = Invoice::all();
+        $paymentTerms = PaymentTerm::all();
+        return view('OfficeManagement.receipt.create',compact('customers','currency','invoices','paymentTerms'));
     }
 
     /**
@@ -57,27 +40,6 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->all();
-        
-        $quo_Id = $request->Quotation_Id;
-        if($request->hasFile('file')){
-            $request->validate([
-                'file' => 'required|mimes:png,jpg,jpeg,pdf|max:10240'
-              ]);
-            $fileNameToStore = $request->file->getClientOriginalName();
-            $request->file->move(public_path('attachments/officeManagement/'), $fileNameToStore);
-            $storedFileName= 'attachments/officeManagement/'.$fileNameToStore;
-        }else{
-            $storedFileName = null;
-        }
-
-        $input['Invoice_No'] = 'IV-'.strtotime($input['Date'].' '.date('H:i:s'));
-        $input['Date'] =date('Y-m-d',strtotime(str_replace('/', '-', $input['Date'])));
-        
-        $input['file_name'] = $storedFileName;
-        $input['submit_status'] = false;
-
-        // dd($input);
        $this->validate($request, [
             // 'name' => 'required',
             // 'company' => 'required',
@@ -88,16 +50,15 @@ class InvoiceController extends Controller
             // 'Serial_No' => 'required',
             // 'Date' => 'required',
         ]);
-        $invoice = Invoice::create($input);
-        if ($quo_Id != "") {
-            $quo_Detail = QuotationDetail::find($quo_Id);
-            $quo_Detail->update([
-                'invoice_no' => $invoice->id,
-                'Quotation_Id' => $quo_Id,
-            ]);
-        }
-        return redirect()->route('OfficeManagement.invoice.index')
-                        ->with('success','Invoice created successfully');
+        $input =$request->all();
+        
+        $input['Receipt_No'] = 'RN-'.strtotime($input['Date'].' '.date('H:i:s'));
+        $input['Date'] =date('Y-m-d',strtotime(str_replace('/', '-', $input['Date'])));
+        
+        $receipt = Receipt::create($input);
+
+        return redirect()->route('OfficeManagement.receipt.index')
+                        ->with('success','Receipt created successfully');
     }
 
     /**
@@ -119,11 +80,11 @@ class InvoiceController extends Controller
      */
     public function edit($id)
     {
-        $Invoice = Invoice::findOrFail($id);
+        $Receipt = Receipt::findOrFail($id);
         $customers = Customer::where('action',true)->get(); 
         $currency = Currency::all();
-        $Invoices = Invoice::all();
-        return view('OfficeManagement.invoice.edit',compact('Invoice','customers','currency','Invoices'));
+        $quotations = Receipt::all();
+        return view('OfficeManagement.receipt.edit',compact('Receipt','customers','currency','quotations'));
     }
 
     /**
@@ -156,8 +117,8 @@ class InvoiceController extends Controller
 
         $customerName = Customer::find($request->customer_id);
 
-        $Invoice = Invoice::find($id);
-        $Invoice->update([
+        $Receipt = Receipt::find($id);
+        $Receipt->update([
             'customer_id'=>$request->customer_id,
             'Attn'=>$customerName->name,
 	        'Company_name' => $request->Company_name,
@@ -170,8 +131,8 @@ class InvoiceController extends Controller
 	        'Currency_type' => $request->Currency_type,
         ]);
     
-        return redirect()->route('OfficeManagement.invoice.index')
-                        ->with('success','Invoice updated successfully');
+        return redirect()->route('OfficeManagement.receipt.index')
+                        ->with('success','Receipt updated successfully');
     }
 
     /**
@@ -184,4 +145,36 @@ class InvoiceController extends Controller
     {
         //
     }
+
+    //JS function
+	public function get_data_from_quo_name() {
+		$id = $this->uri->segment(3);
+		$data = $this->db->get_where('customers_tbl', array('action' => true, 'id' => $id))->row_array();
+		echo '<input type="hidden" name="name" value="'.$data['name'].'">
+		<div class="form-group">
+				<label class="col-sm-3 control-label text-right text-uppercase">company name</label>
+				<div class="col-sm-9" id="quo-company-data">';
+					echo form_input('company', $data['company'], 'class="form-control" readonly=""');
+				echo '</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label text-right text-uppercase">phone no:</label>
+				<div class="col-sm-9">';
+				if ($data['phone_other'] == "") {
+					echo form_input('phone', $data['phone'], 'class="form-control" readonly=""');
+				} else {
+					echo '<select name="phone" class="form-control">
+						<option value="'.$data['phone'].'">'.$data['phone'].'</option>
+						<option value="'.$data['phone_other'].'">'.$data['phone_other'].'</option>
+					</select>';
+				}
+				echo '</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label text-right text-uppercase">address</label>
+				<div class="col-sm-9">';
+					echo form_textarea('address', $data['address'], 'class="form-control" readonly=""');
+				echo '</div>
+			</div>';
+	}
 }

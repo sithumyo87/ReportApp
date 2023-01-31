@@ -42,8 +42,5 @@ class Invoice extends Model
     'form31_no',
     'form31_issue_date',
    'form31_files'
-    ];
-
-
-    
+    ];  
 }

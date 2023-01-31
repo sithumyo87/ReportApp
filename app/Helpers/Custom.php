@@ -51,3 +51,26 @@ function get_payment($type) {
             break;
     }
 }
+
+function get_pay_term($id) {
+    switch ($id) {
+        case '1':
+            return '50/50';
+            break;
+        case '2':
+            return '60/40';
+            break;
+        case '3':
+            return '80/20';
+            break;
+        case '4':
+            return 'CASH';
+            break;
+        case '5':
+            return 'CREDIT';
+            break;
+        default:
+            return 'OTHER';
+            break;
+    }
+}

@@ -53,7 +53,20 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
         src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />   
-
+        <!-- //Date Picker -->
+    <script>
+    //Date Picker
+    $(document).ready(function() {
+        var date_input = $('input[name="date"]'); //our date input has the name "date"
+        var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'yyyy-mm-dd',
+            container: container,
+            todayHighlight: true,
+        autoclose: true,
+    })
+})
+    </script>
     <!-- Date time picker end -->
     <script type="text/javascript" src="{{asset('js/office.js')}}"></script>
 </script>
@@ -141,7 +154,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="charts.html">
+                    <a class="nav-link" href="{{ route('OfficeManagement.receipt.index')}}">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Receipt</span></a>
                 </li>

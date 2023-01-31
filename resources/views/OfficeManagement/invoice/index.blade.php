@@ -39,17 +39,7 @@
                         <td>{{ $quotation->Attn }}</td>
                         <td>{{ $row->Company_name }}</td>
                         <td>{{ $row->Sub }}</td>
-                        <td>{{ $row->Refer_No }}</td>
-                        <td class="text-center">
-                            @can('user-edit')
-                                <a class="btn btn-primary" href="{{ route('OfficeManagement.invoice.edit', $row->id) }}"><i class="fa fa-edit"></i></a>
-                            @endcan
-                            @can('user-delete')
-                                {!! Form::open(['method' => 'DELETE', 'route' => ['OfficeManagement.invoice.destroy', $row->id], 'style' => 'display:inline']) !!}
-                                    {!! Form::button('<i class="fa fa-trash"></i>', ['type'=>'submit','class' => 'btn btn-danger', 'id' => 'delete']) !!}
-                                {!! Form::close() !!}
-                            @endcan
-                        </td>
+                        <td>{{ get_pay_term($row->Advance)}}</td>
                     </tr>
                 @endforeach
             </tbody>

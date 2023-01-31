@@ -103,7 +103,7 @@
                     {!! Form::text('form31_no', null, ['placeholder' => 'form31 No', 'class' => 'form-control']) !!}
                 </div>
                 <div class="form-group">
-                    <label for="">Form31 Issue Date</label>
+                    <label for="Date">Form31 Issue Date</label>
                     {!! Form::text('form31_issue_date', null, ['placeholder' => 'Form31 Issue Date', 'class' => 'form-control','id'=>'Date','cols'=>5,'rows'=>5]) !!}
                 </div>
                 <div class="form-group">
