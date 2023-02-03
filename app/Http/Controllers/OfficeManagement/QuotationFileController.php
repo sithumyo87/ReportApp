@@ -42,8 +42,14 @@ class QuotationFileController extends Controller
         if($request->hasFile('file')){
             $request->validate([
                 'file' => 'required|mimes:png,jpg,jpeg,pdf|max:10240'
-              ]);
-            $fileNameToStore = $request->file->getClientOriginalName();
+            ]);
+            $fileNameWithExtension = $request->file->getClientOriginalName();
+            $fileName = pathinfo($fileNameWithExtension, PATHINFO_FILENAME);
+            $fileExtension = $request->file->getClientOriginalExtension();
+
+            $datetime = strtotime(date('Y-m-d H:i:s'));
+
+            $fileNameToStore = $fileName.$datetime.$fileExtension;
             $request->file->move(public_path('attachments/'), $fileNameToStore);
             $storedFileName= 'attachments/'.$fileNameToStore;
         }else{

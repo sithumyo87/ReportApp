@@ -36,7 +36,7 @@
                 @foreach ($data as $key => $row)
                     <tr>
                         <td>{{ $row->Date }}</td>
-                        <td>{{ $row->Receipt_No }}</td>
+                        <td><a href="{{route('OfficeManagement.receiptDetail.show',$row->id)}}">{{ $row->Receipt_No }}</a></td>
                         <td>{{ $row->Attn }}</td>
                         <td>{{ $row->Company_name }}</td>
                         <td>{{ $row->Sub }}</td>

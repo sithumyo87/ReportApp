@@ -125,4 +125,23 @@ class CustomerController extends Controller
         return redirect()->route('OfficeManagement.customer.index')
                         ->with('success','customer deleted successfully');
     }
+
+    public function attnOnChange(Request $request){
+        // if($request->ajax()){
+            $attn       = $request->attn;
+            $company    = $request->company;
+
+            if($attn != ''){
+                $customer = Customer::findOrFail($attn);
+            }else if($company != ''){
+                $customer = Customer::where('company', $company)->first();
+            }else{
+                $customer = new Customer();
+            }
+
+            $customers = Customer::where('action',true)->get(); 
+
+            return view('OfficeManagement.customer.attn_form',compact('customers', 'customer'));
+        // }
+    }
 }

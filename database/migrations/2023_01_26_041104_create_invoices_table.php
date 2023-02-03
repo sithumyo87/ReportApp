@@ -36,8 +36,7 @@ return new class extends Migration
             $table->string('file_name')->nullable();
             $table->string('Date_INT')->nullable();
             $table->string('tax_id')->default(0);
-            $table->integer('bank_info')->nullable();
-            $table->integer('bank_info_mmk')->nullable();
+            $table->text('bank_info')->nullable();
             $table->integer('submit_status')->nullable();
             $table->string('customer_tax_id')->nullable();
             $table->integer('Currency_type');

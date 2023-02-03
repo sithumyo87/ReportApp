@@ -1,0 +1,99 @@
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #6e707e !important;
+    line-height: 37px !important;
+}
+
+.select2-container--default .select2-selection--single {
+    border: 1px solid #d1d3e2 !important;
+    height: 37px;
+    line-height: 37px !important;
+}
+
+span.select2-selection.select2-selection--single {
+    height: 37px !important;
+}
+
+.m-t-30{
+    margin-top: 30px;
+}
+.m-t-20{
+    margin-top: 20px;
+}
+.m-t-10{
+    margin-top: 10px;
+}
+
+.m-b-30{
+    margin-bottom: 30px;
+}
+.m-b-20{
+    margin-bottom: 20px;
+}
+.m-b-10{
+    margin-bottom: 10px;
+}
+
+.p-t-30{
+    padding-top: 30px;
+}
+.p-t-20{
+    padding-top: 20px;
+}
+.p-t-10{
+    padding-top: 10px;
+}
+
+.p-30 {
+    padding: 30px;
+}
+
+.font-14{
+    font-size: 14px !important;
+}
+
+.font-13{
+    font-size: 13px !important;
+}
+
+table {
+    font-size: 15px;
+}
+
+form {
+    font-size: 15px;
+}
+
+label {
+    font-weight: 600;
+}
+
+.bg-gray-light {
+    background: #dee2e6;
+}
+
+.readonly {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.bank-info-title {
+    font-size: 15px;
+    font-weight: 800;
+}
+
+table.bank-info-table {
+    font-size: 14px;
+}
+
+.bank-info-table td {
+    padding: 0px 10px;
+}
+
+.invoice-button {
+    padding: 3px 10px;
+    border-radius: 3px;
+}
+
+a.refer-attach {
+    font-size: 13px;
+}

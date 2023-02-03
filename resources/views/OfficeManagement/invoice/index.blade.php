@@ -19,7 +19,7 @@
             <p>{{ $message }}</p>
         </div>
     @endif
-    <div class="bg-white p-30">
+    <div class="bg-white p-30 m-t-30">
         <table class="table table-bordered">
             <thead>
                 <tr class="text-center">
@@ -32,11 +32,11 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($data as $key => $row)
+                @foreach ($data as $row)
                     <tr>
                         <td>{{ $row->Date }}</td>
-                        <td><a href="{{route('OfficeManagement.quotationDetail.show',$row->id)}}">{{ $row->Invoice_No }}</a></td>
-                        <td>{{ $quotation->Attn }}</td>
+                        <td><a href="{{route('OfficeManagement.invoiceDetail.show',$row->id)}}">{{ $row->Invoice_No }}</a></td>
+                        <td>{{ $row->Attn }}</td>
                         <td>{{ $row->Company_name }}</td>
                         <td>{{ $row->Sub }}</td>
                         <td>{{ get_pay_term($row->Advance)}}</td>

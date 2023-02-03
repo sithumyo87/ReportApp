@@ -39,7 +39,7 @@ class QuotationController extends Controller
     {
         $customers = Customer::where('action',true)->get(); 
         $currency = Currency::all();
-        $quotations = Quotation::all();
+        $quotations = Quotation::where('SubmitStatus', true)->get();
         return view('OfficeManagement.quotation.create',compact('customers','quotations','currency'));
     }
 
@@ -117,7 +117,7 @@ class QuotationController extends Controller
         $quotation = Quotation::findOrFail($id);
         $customers = Customer::where('action',true)->get(); 
         $currency = Currency::all();
-        $quotations = Quotation::all();
+        $quotations = Quotation::where('SubmitStatus', true)->where('id','!=',$id)->get();
         return view('OfficeManagement.quotation.edit',compact('quotation','customers','currency','quotations'));
     }
 
@@ -178,5 +178,25 @@ class QuotationController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function quoTaxCheck(Request $request){
+        if($request->ajax()){
+            $id = $request->id;
+            $tax = $request->tax;
+            $total = $request->total;
+
+            $quotation = Quotation::find($id);
+            $quotation->Tax = $tax;
+            $quotation->save();
+
+            $tax_amount     = ($quotation->Tax * $total)/100;
+            $grand_total    = $total + $tax_amount;
+            return ([
+                'tax_amount' => number_format($tax_amount,2),
+                'grand_total' => number_format($grand_total,2),
+            ]);
+        }
     }
 }

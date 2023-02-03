@@ -8,10 +8,13 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <meta name="app-url" content="{{ config('app.url') }}">
+
     <title>{{ config('app.name', 'Report App') }}</title>
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
 
@@ -54,22 +57,14 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />   
         <!-- //Date Picker -->
-    <script>
-    //Date Picker
-    $(document).ready(function() {
-        var date_input = $('input[name="date"]'); //our date input has the name "date"
-        var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
-        date_input.datepicker({
-            format: 'yyyy-mm-dd',
-            container: container,
-            todayHighlight: true,
-        autoclose: true,
-    })
-})
-    </script>
+    
     <!-- Date time picker end -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
     <script type="text/javascript" src="{{asset('js/office.js')}}"></script>
-</script>
 </head>
 
 <body>
@@ -148,6 +143,12 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                 </li>
 
                 <li class="nav-item">
+                    <a class="nav-link" href="{{ route('OfficeManagement.purchasingOrder.index')}}">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Purchasing Order</span></a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link" href="{{ route('OfficeManagement.invoice.index')}}">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Invoice</span></a>
@@ -178,9 +179,9 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('OfficeManagement.paymentTerm.index')}}">
+                    <a class="nav-link" href="{{ route('OfficeManagement.bankInfo.index')}}">
                         <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Payment Term</span></a>
+                        <span>Bank Info</span></a>
                 </li>
 
                 <!-- Divider -->

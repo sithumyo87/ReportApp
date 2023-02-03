@@ -32,7 +32,6 @@
         },
         "files": [
             "app/Helpers/Custom.php"
-    
         ]
     },
     "autoload-dev": {

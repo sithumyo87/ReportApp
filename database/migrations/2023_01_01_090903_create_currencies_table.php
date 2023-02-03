@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('Currency_name',100);
             $table->integer('UnitPrice')->nullable();
             $table->string('symbol',100);
+            $table->longText('detail')->nullable();
+            $table->longText('detail_print')->nullable();
             $table->timestamps();
         });
     }

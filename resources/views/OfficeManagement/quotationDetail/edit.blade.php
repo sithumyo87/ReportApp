@@ -33,10 +33,10 @@
             <div class="col-xs-12 col-sm-12 col-md-8">
             <div class="form-group">
                     <label for="">Dealer Name</label>
-                    <select name="dealer_id" class="form-control" required>
+                    <select name="dealer_id" class="form-control select2" required>
                         <option value="">choose Dealer Name</option>
                         @foreach($dealers as $row)
-                        <option value="{{ $row->id }}">{{ $row->name}}</option>
+                        <option value="{{ $row->id }}"  @if($row->id == $quoDetail->dealer_id) selected @endif>{{ $row->name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -58,14 +58,14 @@
                 </div>
                 <div class="form-group">
                     <label for="">Percentage</label>
-                    {!! Form::number('percentage', null, ['placeholder' => '', 'class' => 'form-control']) !!}
+                    {!! Form::number('percent', null, ['placeholder' => '', 'class' => 'form-control']) !!}
                 </div>
                 <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" id="tax" name="tax">
+                    <input type="checkbox" class="form-check-input" id="tax" name="tax" value="1" @if($quoDetail->tax == '1') checked @endif>
                     <label class="form-check-label" for="tax">Tax(5%)</label>
                 </div>
                 <div class="text-center">
-                    <a href="{{ route('OfficeManagement.quotationDetail.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
+                    <a href="{{ route('OfficeManagement.quotationDetail.show',$quoDetail->Quotation_Id) }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
                     <button type="submit" class="btn btn-primary">{{ __('button.update') }}</button>
                 </div>
             </div>

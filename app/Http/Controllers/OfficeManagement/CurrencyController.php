@@ -16,6 +16,7 @@ class CurrencyController extends Controller
         // $this->middleware('permission:currency-edit', ['only' => ['edit','update']]);
         // $this->middleware('permission:currency-delete', ['only' => ['destroy']]);
     }
+    
     /**
      * Display a listing of the resource.
      *
