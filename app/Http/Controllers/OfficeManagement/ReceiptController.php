@@ -27,9 +27,9 @@ class ReceiptController extends Controller
     {
         $customers = Customer::where('action',true)->get(); 
         $currency = Currency::all();
-        $invoices = Invoice::all();
-        $paymentTerms = PaymentTerm::all();
-        return view('OfficeManagement.receipt.create',compact('customers','currency','invoices','paymentTerms'));
+        $invoices = Invoice::where('submit_status', true)->get();
+        $payments = payments();
+        return view('OfficeManagement.receipt.create',compact('customers','currency','invoices','payments'));
     }
 
     /**
@@ -177,4 +177,17 @@ class ReceiptController extends Controller
 				echo '</div>
 			</div>';
 	}
+
+
+    public function invAttnOnChange(Request $request){
+        $invId = $request->invId;
+        if($invId != ''){
+            $invoice = Invoice::findOrFail($invId);
+        }else{
+            $invoice = new Invoice();
+        }
+        $currency = Currency::all();
+        $payments = payments();
+        return view('OfficeManagement.receipt.attn_form',compact('invoice','currency', 'payments'));
+    }
 }
