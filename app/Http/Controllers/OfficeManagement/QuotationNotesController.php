@@ -38,11 +38,22 @@ class QuotationNotesController extends Controller
     public function store(Request $request)
     {
         $quoId = $request->quoId;
-        $input = QuotationNote::create([
-            'QuotationId'=>$quoId,
-            'Note'=>$request->Note,
-        ]);
-        return redirect()->route('OfficeManagement.quotationDetail.show',$quoId)->with('success','quoNote Created successfully');
+        $noteId = $request->noteId;
+
+        if($noteId != ''){
+            $input = QuotationNote::find($noteId);
+            $input = $input->update([
+                'QuotationId'   => $quoId,
+                'Note'          => $request->Note,
+            ]);
+            return redirect()->route('OfficeManagement.quotationDetail.show', $quoId)->with('success','Note Updated successfully');
+        }else{
+            $input = QuotationNote::create([
+                'QuotationId'   => $quoId,
+                'Note'          => $request->Note,
+            ]);
+            return redirect()->route('OfficeManagement.quotationDetail.show', $quoId)->with('success','Note Created successfully');
+        }
     }
 
     /**

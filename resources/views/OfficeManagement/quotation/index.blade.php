@@ -19,7 +19,7 @@
             <p>{{ $message }}</p>
         </div>
     @endif
-    <div class="bg-white p-30">
+    <div class="table-responsive bg-white p-30 m-t-30">
         <table class="table table-bordered">
             <thead>
                 <tr class="text-center">
@@ -37,7 +37,7 @@
                 @foreach ($data as $key => $row)
                     <tr>
                         <td class="text-right">{{ ++$i }}</td>
-                        <td>{{ $row->Date }}</td>
+                        <td>{{ date('d-m-Y', strtotime($row->Date)) }}</td>
                         <td><a href="{{route('OfficeManagement.quotationDetail.show',$row->id)}}">{{ $row->Serial_No }}</a></td>
                         <td>{{ $row->Attn }}</td>
                         <td>{{ $row->Company_name }}</td>
@@ -45,11 +45,11 @@
                         <td>{{ $row->Refer_No }}</td>
                         <td class="text-center">
                             @can('user-edit')
-                                <a class="btn btn-primary" href="{{ route('OfficeManagement.quotation.edit', $row->id) }}"><i class="fa fa-edit"></i></a>
+                                <a class="btn btn-sm btn-primary" href="{{ route('OfficeManagement.quotation.edit', $row->id) }}"><i class="fa fa-edit"></i></a>
                             @endcan
                             @can('user-delete')
                                 {!! Form::open(['method' => 'DELETE', 'route' => ['OfficeManagement.quotation.destroy', $row->id], 'style' => 'display:inline']) !!}
-                                    {!! Form::button('<i class="fa fa-trash"></i>', ['type'=>'submit','class' => 'btn btn-danger', 'id' => 'delete']) !!}
+                                    {!! Form::button('<i class="fa fa-trash"></i>', ['type'=>'submit','class' => 'btn btn-danger btn-sm', 'id' => 'delete']) !!}
                                 {!! Form::close() !!}
                             @endcan
                         </td>

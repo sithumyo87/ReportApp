@@ -16,10 +16,11 @@ return new class extends Migration
         Schema::create('quotation_details', function (Blueprint $table) {
             $table->id();
             $table->integer('Quotation_Id');
+            $table->integer('Invoice_Id')->nullable()->default(null);
             $table->text('Description')->nullable();
             $table->string('Unit_Price')->nullable();
             $table->integer('Qty')->nullable();
-            $table->float('percent');
+            $table->float('percent')->nullable()->default(null);
             $table->integer('dealer_id')->nullable();
             $table->string('form31_no')->nullable();
             $table->string('invoice_no')->nullable();

@@ -11,6 +11,7 @@ use App\Models\Currency;
 use Carbon\Carbon;
 use  App\Models\PaymentTerm;
 use  App\Models\QuotationDetail;
+use DB;
 
 class InvoiceController extends Controller
 {
@@ -30,9 +31,9 @@ class InvoiceController extends Controller
     public function index(Request $request)
     {
         $data = Invoice::where('id','>',0)->orderBy('id','DESC')->paginate(15);
-        $invoice = Invoice::where('id','>',0)->first();
-        $quotation = Quotation::where('Id',$invoice['Quotation_Id'])->first();
-        return view('OfficeManagement.invoice.index',compact('data','invoice','quotation'))->with('i', ($request->input('page', 1) - 1) * 15);
+        // $invoice = Invoice::where('id','>',0)->first();
+        // $quotation = Quotation::where('Id', $invoice->Quotation_Id)->first();
+        return view('OfficeManagement.invoice.index',compact('data'))->with('i', ($request->input('page', 1) - 1) * 15);
     }
 
     /**
@@ -45,8 +46,8 @@ class InvoiceController extends Controller
         $customers = Customer::where('action',true)->get(); 
         $currency = Currency::all();
         $quotations = Quotation::where('SubmitStatus',true)->get();
-        $paymentTerms = PaymentTerm::get();
-        return view('OfficeManagement.invoice.create',compact('customers','quotations','currency','paymentTerms'));
+        $payments = payments();
+        return view('OfficeManagement.invoice.create',compact('customers','quotations','currency','payments'));
     }
 
     /**
@@ -58,13 +59,19 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        
         $quo_Id = $request->Quotation_Id;
+
         if($request->hasFile('file')){
             $request->validate([
                 'file' => 'required|mimes:png,jpg,jpeg,pdf|max:10240'
-              ]);
-            $fileNameToStore = $request->file->getClientOriginalName();
+            ]);
+            $fileNameWithExtension = $request->file->getClientOriginalName();
+            $fileName = pathinfo($fileNameWithExtension, PATHINFO_FILENAME);
+            $fileExtension = $request->file->getClientOriginalExtension();
+
+            $datetime = strtotime(date('Y-m-d H:i:s'));
+
+            $fileNameToStore = $fileName.$datetime.$fileExtension;
             $request->file->move(public_path('attachments/officeManagement/'), $fileNameToStore);
             $storedFileName= 'attachments/officeManagement/'.$fileNameToStore;
         }else{
@@ -89,13 +96,11 @@ class InvoiceController extends Controller
             // 'Date' => 'required',
         ]);
         $invoice = Invoice::create($input);
+
         if ($quo_Id != "") {
-            $quo_Detail = QuotationDetail::find($quo_Id);
-            $quo_Detail->update([
-                'invoice_no' => $invoice->id,
-                'Quotation_Id' => $quo_Id,
-            ]);
+            DB::table('quotation_details')->where('Quotation_Id',$quo_Id)->update(['Invoice_Id' => $invoice->id]);
         }
+
         return redirect()->route('OfficeManagement.invoice.index')
                         ->with('success','Invoice created successfully');
     }
@@ -183,5 +188,17 @@ class InvoiceController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function quoAttnOnChange(Request $request){
+        $quoId = $request->quoId;
+        if($quoId != ''){
+            $quotation = Quotation::findOrFail($quoId);
+        }else{
+            $quotation = Quotation();
+        }
+        $currency = Currency::all();
+        return view('OfficeManagement.invoice.attn_form',compact('quotation','currency'));
     }
 }

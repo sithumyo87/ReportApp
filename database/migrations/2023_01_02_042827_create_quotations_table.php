@@ -27,7 +27,8 @@ return new class extends Migration
             $table->float('Discount')->nullable()->unsigned();
             $table->string('Refer_No')->nullable();
             $table->integer('Refer_status')->nullable()->unsigned();
-            $table->string('Currency_type');
+            $table->string('Currency_type'); 
+            $table->integer('Tax')->default(0)->unsigned();
             $table->integer('SubmitStatus')->nullable()->unsigned();
             $table->string('sign_name',100)->nullable();
             $table->string('file_name',100)->nullable();

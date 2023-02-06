@@ -4,6 +4,9 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use DB;
 
 class Handler extends ExceptionHandler
 {
@@ -43,6 +46,27 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
+        $this->renderable(function (\Illuminate\Auth\AuthenticationException $e, $request) {
+            if ($request->is('api/*')) {
+                if($request->token_id != null){
+                    DB::table('personal_access_tokens')->where('id',$request->token_id)->delete();
+                }
+                return response()->json(['success' => false, 'title'=> 'Unauthorized','message'=>'You don\'t have the permission to access.', 'exception' => 'AuthenticationException'], 404);
+            }
+        });
+        
+        $this->renderable(function (NotFoundHttpException $e, $request) {
+            if ($request->is('api/*')) {
+                return response()->json(['success' => false, 'title'=> 'PageNotFound','message'=>'The requested url is not found.', 'exception' => 'NotFoundHttpException'], 404);
+            }
+        });
+
+        $this->renderable(function (UnauthorizedHttpException $e, $request) {
+            if ($request->is('api/*')) {
+                return response()->json(['success' => false,'title'=>'Unauthorized', 'message' => 'Your login time is expired. Please login again', 'exception' => 'UnauthorizedHttpException'], 403);
+            }
+        });
+
         $this->reportable(function (Throwable $e) {
             //
         });

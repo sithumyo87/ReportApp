@@ -10,6 +10,7 @@ class Receipt extends Model
     use HasFactory;
     protected $fillable = [
         'Invoice_Id',
+        'Quotation_Id',
         'Attn',
         'Company_name',
         'Contact_phone',
@@ -17,10 +18,15 @@ class Receipt extends Model
         'Sub',
         'Receipt_No',
         'Date',
-        'Advance',
+        'frec_date',
+        'srec_date',
         'Discount',
         'Tax',
-        'Currency_type',
+        'Advance',
+        'First_Receipt',
+        'Second_Receipt',
         'Refer_status',
+        'sign_name',
+        'Currency_type',
     ];
 }

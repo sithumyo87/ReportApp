@@ -27,4 +27,6 @@ class Quotation extends Model
         'file_name',
         'Date_INT',
     ];
+
+   
 }

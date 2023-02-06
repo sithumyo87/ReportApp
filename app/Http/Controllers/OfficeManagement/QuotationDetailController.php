@@ -29,11 +29,11 @@ class QuotationDetailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request,$id)
+    public function create($id)
     {
-        $quoId = Quotation::find($id);
+        $quotation = Quotation::find($id);
         $dealers = Dealer::where('action',true)->get(); 
-        return view('OfficeManagement.quotationDetail.create',compact('dealers','quoId'));
+        return view('OfficeManagement.quotationDetail.create',compact('dealers','quotation'));
     }
 
     /**
@@ -49,22 +49,23 @@ class QuotationDetailController extends Controller
             
         ]);
 
-        if($request->tax == "on"){
+        if($request->tax == "1"){
             $tax_amount = 5;
         }else{
             $tax_amount = 0;
         }
         // $quoDetail = QuotationDetail::create($input);
         $input = QuotationDetail::create([
-            'Quotation_Id'=>$request->Quotation_Id,
-            'Description'=>$request->Description,
-	        'Unit_Price' => $request->Unit_Price,
-	        'Qty' => $request->Qty,
-	        'percent' => $request->percent,
-	        'dealer_id'=>$request->dealer_id,
-	        'form31_no'=>$request->form31_no,
-	        'tax'=> $request->tax,
-	        'tax_amount'=>$tax_amount,
+            'Quotation_Id'  => $request->Quotation_Id,
+            'Description'   => $request->Description,
+	        'Unit_Price'    => $request->Unit_Price,
+	        'Qty'           => $request->Qty,
+	        'percent'       => $request->percent,
+	        'dealer_id'     => $request->dealer_id,
+	        'form31_no'     => $request->form31_no,
+            'invoice_no'    => $request->invoice_no,
+	        'tax'           => $request->tax,
+	        'tax_amount'    => $tax_amount,
         ]);
         return redirect()->route('OfficeManagement.quotationDetail.show',$request->Quotation_Id)
                         ->with('success','Quotation Detail created successfully');
@@ -96,7 +97,6 @@ class QuotationDetailController extends Controller
     public function edit($id)
     {
         $quoDetail = QuotationDetail::find($id);
-        // dd($quoDetail);
         $dealers = Dealer::where('action',true)->get(); 
         return view('OfficeManagement.quotationDetail.edit',compact('quoDetail','dealers'));
     }
@@ -110,7 +110,29 @@ class QuotationDetailController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            
+        ]);
+
+        if($request->tax == "1"){
+            $tax_amount = 5;
+        }else{
+            $tax_amount = 0;
+        }
+        $quotationDetail = QuotationDetail::find($id);
+        $quotationDetail->update([
+            'Description'   => $request->Description,
+	        'Unit_Price'    => $request->Unit_Price,
+	        'Qty'           => $request->Qty,
+	        'percent'       => $request->percent,
+	        'dealer_id'     => $request->dealer_id,
+	        'form31_no'     => $request->form31_no,
+            'invoice_no'    => $request->invoice_no,
+	        'tax'           => $request->tax,
+	        'tax_amount'    => $tax_amount,
+        ]);
+        return redirect()->route('OfficeManagement.quotationDetail.show',$quotationDetail->Quotation_Id)
+                        ->with('success','Quotation Detail updated successfully');
     }
 
     /**
@@ -121,7 +143,10 @@ class QuotationDetailController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $quotationDetailOld = QuotationDetail::find($id);
+        $quotationDetail = QuotationDetail::where('id', $id)->delete();
+        return redirect()->route('OfficeManagement.quotationDetail.show',$quotationDetailOld->Quotation_Id)
+        ->with('success','Quotation Detail deleted successfully');
     }
 
     public function getNote(Request $request, $quoDetailId,$quoNoteId ){
@@ -141,7 +166,7 @@ class QuotationDetailController extends Controller
             'file_name' =>  $authorizer->file_name,
         ]);
         return redirect()->route('OfficeManagement.quotationDetail.show',$id)
-                        ->with('success','Successfully Authorized Updated');
+        ->with('success','Authorized Person Updated Successful!');
     }
 
     public function quotationConfirm($id){
@@ -151,7 +176,7 @@ class QuotationDetailController extends Controller
             'SubmitStatus' => 1,
         ]);
         return redirect()->route('OfficeManagement.quotationDetail.show',$id)
-                        ->with('success','Successfully Submitted');
+        ->with('success','Quotation Confirm Successful!');
 
     }
 

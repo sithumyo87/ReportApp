@@ -10,6 +10,7 @@ class QuotationDetail extends Model
     use HasFactory;
     protected $fillable = [
         'Quotation_Id',
+        'Invoice_Id',
         'Description',
         'Unit_Price',
         'Qty',

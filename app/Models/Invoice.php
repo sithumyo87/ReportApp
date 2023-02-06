@@ -33,7 +33,6 @@ class Invoice extends Model
     'Date_INT',
     'tax_id',
     'bank_info',
-    'bank_info_mmk',
     'submit_status',
     'customer_tax_id',
     'Currency_type',
