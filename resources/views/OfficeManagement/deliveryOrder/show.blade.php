@@ -155,29 +155,41 @@
     <!-- end detail -->
 
     <!-- authorized Person -->
-    <div class="row">
-        <div class="col-md-8"></div>
-        <div class="col-md-4 text-center">
-            @if($deliveryOrder->submit_status == '1')
-                @if($deliveryOrder->received_sign != "")
-                    <img src="{{ asset($deliveryOrder->received_sign)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img">
+    <div class="m-10">
+        <div class="row bg-white p-b-20">
+            <div class="col-md-6 text-center">
+                @if($deliveryOrder->received_sign != '')
+                    <img src="{{ asset($deliveryOrder->received_sign) }}" class="img-responsive img-sign" height="100"/> <br>
                 @else
-                    <img src="{{ asset('img/author-icon.png')}}" alt="" width=100 height=100 class="text-center" id="authorizer-img">
+                    <img src="{{ asset('signature/blank.png') }}" class="img-responsive img-sign" height="100"/> <br>
                 @endif
-                <h6>Authorized Person</h6> 
-                {!! Form::open(['route' => ['OfficeManagement.invoiceAuthorizer',$deliveryOrder->id],'method' => 'POST']) !!}
-                <div class="row">
-                    <div class="col-md-10">
-                        <div class="form-group">
-                            
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-sm btn-primary float-right" type="submit">Add</button>
-                    </div>
-                </div>
-                {!! Form::close() !!}
-            @endif
+                @if($deliveryOrder->submit_status != '1')
+                    <button type="button" class="btn btn-primary m-b-10 sign-button" data-bs-toggle="modal" data-bs-target="#receiver" id="receiverSign">
+                        Add Signature
+                    </button>
+                @endif
+                <h6>Received By</h6>
+                @if($deliveryOrder->received_name != '')
+                    <h6><b>{{ $deliveryOrder->received_name }}</b></h6>
+                @endif
+            </div>
+
+            <div class="col-md-6 text-center">
+                @if($deliveryOrder->delivered_sign != '')
+                    <img src="{{ asset($deliveryOrder->delivered_sign) }}" class="img-responsive img-sign" height="100"/> <br>
+                @else
+                    <img src="{{ asset('signature/blank.png') }}" class="img-responsive img-sign" height="100"/> <br>
+                @endif
+                @if($deliveryOrder->submit_status != '1')
+                    <button type="button" class="btn btn-primary m-b-10 sign-button" data-bs-toggle="modal" data-bs-target="#deliever">
+                        Add Signature
+                    </button>
+                @endif
+                <h6>Delivered By</h6>
+                @if($deliveryOrder->delivered_name != '')
+                    <h6><b>{{ $deliveryOrder->delivered_name }}</b></h6>
+                @endif
+            </div>
         </div>
     </div>
 
@@ -192,6 +204,9 @@
             <a href="{{route('OfficeManagement.deliveryOrderConfirm',$deliveryOrder->id)}}"><p><button class="btn btn-primary btn-block w-80">Confirm</button></p></a> 
         </div>
     @endif
+
+
+    
 </div>
 
 <!-- The Modal -->
@@ -255,6 +270,80 @@
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- The receiver -->
+<div class="modal" id="receiver">
+    <div class="modal-dialog modal-lg">
+    {!! Form::open(['route' => ['OfficeManagement.deliveryOrderSign', $deliveryOrder->id], 'method' => 'POST', 'files' => true]) !!}
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Signature for Receiver</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body align-self-center">
+                <div class="form-group" style="width: 500px;">
+                    <div class="form-group">
+                        <label for="">Receiver Name</label>
+                        {!! Form::text('received_name', null, ['placeholder' => 'Name', 'class' => 'form-control']) !!}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="" for="">Signature:</label>
+                    <button id="clear" class="btn btn-warning btn-sm float-right m-b-10">Clear</button> <br/>
+                    <div  style="width: 500px; height: 300px;">
+                        <div class="sig" style="width: 500px; height: 300px;"></div>
+                        <textarea class="signature64" name="received_sign" style="display: none"></textarea> 
+                    </div>
+                </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">{{ __('button.save') }}</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    {!! Form::close() !!}
+    </div>
+</div>
+
+<!-- The receiver -->
+<div class="modal" id="deliever">
+    <div class="modal-dialog modal-lg">
+        {!! Form::open(['route' => ['OfficeManagement.deliveryOrderSign', $deliveryOrder->id], 'method' => 'POST', 'files' => true]) !!}
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Signature for Deliever</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body align-self-center">
+                <div class="form-group" style="width: 500px;">
+                    <div class="form-group">
+                        <label for="">Deliever Name</label>
+                        {!! Form::text('delivered_name', null, ['placeholder' => 'Name', 'class' => 'form-control']) !!}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="" for="">Signature:</label>
+                    <button id="clear" class="btn btn-warning btn-sm float-right m-b-10">Clear</button> <br/>
+                    <div  style="width: 500px; height: 300px;">
+                        <div class="sig" style="width: 500px; height: 300px;"></div>
+                        <textarea class="signature64" name="delivered_sign" style="display: none"></textarea> 
+                    </div>
+                </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">{{ __('button.save') }}</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    {!! Form::close() !!}
     </div>
 </div>
 @endsection

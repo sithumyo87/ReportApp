@@ -237,3 +237,20 @@ function advanceName($nth){
 function dateformat($dateYMD){
     return date('d-m-Y', strtotime($dateYMD));
 }
+
+function saveSignature($sign_input){
+    $folderPath = public_path('signature/');
+    $image_parts = explode(";base64,", $sign_input);
+    $image_type_aux = explode("image/", $image_parts[0]);
+    
+    if(isset($image_type_aux[1])){
+        $image_type     = $image_type_aux[1];
+        $image_base64   = base64_decode($image_parts[1]);
+        $fileName       = uniqid() . '.'.$image_type;
+        $file           = $folderPath . $fileName;
+        file_put_contents($file, $image_base64);
+        return ['status'=> true, 'file' => 'signature/'.$fileName];
+    }else{
+        return ['status'=> false, 'error' => 'Please input the signature'];
+    }
+}

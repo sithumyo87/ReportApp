@@ -93,10 +93,13 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'OfficeManagement', 'namespa
 
     // Delivery Order
     Route::resource('deliveryOrder', DeliveryOrderController::class);
+    Route::resource('deliveryOrderDetail', DeliveryOrderDetailController::class);
     Route::get('/deliveryOrderQuoInvCheck', 'DeliveryOrderController@deliveryOrderQuoInvCheck');
     Route::get('/deliveryOrderConfirmDelivery/{id}','DeliveryOrderController@deliveryOrderConfirmDelivery')->name('deliveryOrderConfirmDelivery');
     Route::get('/deliveryOrderConfirm/{id}','DeliveryOrderController@deliveryOrderConfirm')->name('deliveryOrderConfirm');
-    Route::resource('deliveryOrderDetail', DeliveryOrderDetailController::class);
+    // do sign
+    Route::post('/deliveryOrderSign/{id}', 'DeliveryOrderController@deliveryOrderSign')->name('deliveryOrderSign');
+    
 
     //PaymentTerm
     Route::resource('paymentTerm', PaymentTermController::class);

@@ -13,6 +13,15 @@ span.select2-selection.select2-selection--single {
     height: 37px !important;
 }
 
+.m-30{
+    margin: 30px;
+}
+.m-20{
+    margin: 20px;
+}
+.m-10{
+    margin: 10px;
+}
 .m-t-30{
     margin-top: 30px;
 }
@@ -41,6 +50,12 @@ span.select2-selection.select2-selection--single {
 }
 .p-t-10{
     padding-top: 10px;
+}
+.p-b-30{
+    padding-bottom: 30px;
+}
+.p-b-20{
+    padding-bottom: 20px;
 }
 
 .p-30 {
@@ -96,4 +111,9 @@ table.bank-info-table {
 
 a.refer-attach {
     font-size: 13px;
+}
+
+.img-sign {
+    margin: 20px;
+    border: 1px solid #Efefef;
 }

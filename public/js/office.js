@@ -51,7 +51,19 @@ $(document).ready(function() {
             'removeformat | help',
         content_css: '//www.tiny.cloud/css/codepen.min.css'
     });
-})
+
+    var sig = $('.sig').signature({syncField: $(this).find('.signature64'), syncFormat: 'PNG'});
+    $('#clear').click(function(e) {
+        e.preventDefault();
+        sig.signature('clear');
+        $(".signature64", this).val('');
+    });
+    $('.sign-button').click(function(e) {
+        e.preventDefault();
+        sig.signature('clear');
+        $(".signature64", this).val('');
+    });
+});
 
 //Quotation 
 $(document).on('select2:select','#quo-get-name', function(e) {
