@@ -85,6 +85,18 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'OfficeManagement', 'namespa
     // Purchasing Order
     Route::resource('purchasingOrder', PurchasingOrderController::class);
     Route::resource('purchasingOrderDetail', PurchasingOrderDetailController::class, ['except' => 'index']);
+    Route::get('poTaxCheck', 'PurchasingOrderController@poTaxCheck');
+    Route::post('poAuthorizer/{id}', 'PurchasingOrderController@poAuthorizer')->name('poAuthorizer');
+    Route::resource('purchasingOrderNote', PurchasingOrderNoteController::class, ['only' => ['store', 'destroy']]);
+    Route::get('/poConfirm/{id}','PurchasingOrderController@poConfirm')->name('poConfirm');
+
+
+    // Delivery Order
+    Route::resource('deliveryOrder', DeliveryOrderController::class);
+    Route::get('/deliveryOrderQuoInvCheck', 'DeliveryOrderController@deliveryOrderQuoInvCheck');
+    Route::get('/deliveryOrderConfirmDelivery/{id}','DeliveryOrderController@deliveryOrderConfirmDelivery')->name('deliveryOrderConfirmDelivery');
+    Route::get('/deliveryOrderConfirm/{id}','DeliveryOrderController@deliveryOrderConfirm')->name('deliveryOrderConfirm');
+    Route::resource('deliveryOrderDetail', DeliveryOrderDetailController::class);
 
     //PaymentTerm
     Route::resource('paymentTerm', PaymentTermController::class);

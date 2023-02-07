@@ -233,3 +233,7 @@ function advanceName($nth){
         return $nth. 'th ';
     }
 }
+
+function dateformat($dateYMD){
+    return date('d-m-Y', strtotime($dateYMD));
+}

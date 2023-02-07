@@ -138,9 +138,9 @@
                 <br><br><br>
             </div>
             <div class="text-end ">
-                    <a href="{{ route('OfficeManagement.quotation.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
-                    <button type="submit" class="btn btn-primary">{{ __('button.save') }}</button>
-                </div>
+                <a href="{{ route('OfficeManagement.quotation.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
+                <button type="submit" class="btn btn-primary">{{ __('button.save') }}</button>
+            </div>
         </div>
         {!! Form::close() !!}
     </div>

@@ -28,7 +28,7 @@
     @endif
     <div class="bg-white p-30">
         <!-- <h3 class="text-center m-b-20"></h3> -->
-        {!! Form::open(['route' => ['OfficeManagement.purchasingOrderDetail.store'], 'method' => 'POST']) !!}
+        {!! Form::model($poDetail, ['route' => ['OfficeManagement.purchasingOrderDetail.update', $poDetail->id], 'method' => 'PATCH']) !!}
         {!! Form::hidden('po_id', $po->id) !!}
         <div class="row justify-content-center">
             <div class="col-xs-12 col-sm-12 col-md-8 mt-3">
@@ -37,7 +37,7 @@
                     <select name="dealer_id" class="form-control select2" required>
                         <option value="">Choose Dealer Name</option>
                         @foreach($dealers as $row)
-                        <option value="{{ $row->id }}">{{ $row->name}}</option>
+                        <option value="{{ $row->id }}" @if($poDetail->dealer_id == $row->id) checked @endif>{{ $row->name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -62,7 +62,7 @@
                     {!! Form::number('qty', null, ['placeholder' => 'qty (only number)', 'class' => 'form-control']) !!}
                 </div>
                 <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" id="tax" name="tax" value="5">
+                    <input type="checkbox" class="form-check-input" id="tax" name="tax" value="5" @if($poDetail->tax == 5) checked @endif>
                     <label class="form-check-label" for="tax">Tax(5%)</label>
                 </div>
                 <hr>

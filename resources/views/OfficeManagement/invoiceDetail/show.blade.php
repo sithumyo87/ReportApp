@@ -8,12 +8,12 @@
         <div class="col-md-7">
             <div class="d-flex justify-content-end">
                 @if($invoice->submit_status == true)
-                    <a href="{{ route('OfficeManagement.quotationDetail.create') }}"
+                    <a href="{{ route('OfficeManagement.invoice.create') }}"
                         class="btn btn-success d-none d-lg-block m-l-15 mr-3"><i class="fa fa-print"></i>
                         Print
                     </a>
                 @endif
-                <a href="{{ route('OfficeManagement.quotation.index') }}"
+                <a href="{{ route('OfficeManagement.invoice.index') }}"
                     class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-back"></i>
                     Back
                 </a>
@@ -142,10 +142,9 @@
                 ?>
                 @foreach($invDetails as $row)
                 <?php
-                 $subTotal += $row->Unit_Price * $row->Qty;
-                 $subTotalWithPer += percent_price($row->Unit_Price, $row->percent) * $row->Qty;
-                 ?>
-
+                    $subTotal += $row->Unit_Price * $row->Qty;
+                    $subTotalWithPer += percent_price($row->Unit_Price, $row->percent) * $row->Qty;
+                ?>
                 <tr>
                     <td>{{ $row->Description }}</td>
                     <td class="text-right">{{ $row->Unit_Price }} {{$currency->Currency_name}}</td>
@@ -208,7 +207,7 @@
                     </div>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
                         <p>
-                        {{number_format($subTotalWithPer,2)}} {{$currency->Currency_name}}
+                            {{ number_format($subTotalWithPer,2) }} {{ $currency->Currency_name }}
                         </p>
                     </div>
                 </div>

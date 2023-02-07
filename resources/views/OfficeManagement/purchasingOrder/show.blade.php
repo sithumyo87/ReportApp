@@ -46,10 +46,11 @@
                 <tr class="text-center">
                     <th width="130">Description</th>
                     <th>Unit Price</th>
-                    <th>Percent</th>
-                    <th>Unit Price (With %)</th>
                     <th>Qty</th>
                     <th>SubTotal</th>
+                    @if($po->submit_status != '1')
+                        <th width="150">{{ __('label.action') }}</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -62,18 +63,34 @@
                     $subTotal += $row->price * $row->qty;
                 ?>
                 <tr>
-                    <td>{{ $row->Description }}</td>
-                    <td class="text-right">{{ $row->price }} {{$currency->Currency_name}}</td>
-                    <td class="text-right">{{ $row->percent }}%</td>
-                    <td class="text-right">{{number_format(percent_price($row->price, 0), 2)}} {{$currency->Currency_name}}</td>
+                    <td>{!! $row->description !!}</td>
+                    <td class="text-right">{{ $row->price }} {{ $currency->Currency_name }}</td>
                     <td class="text-right">{{ $row->qty }}</td>
                     <td class="text-right">{{ number_format($row->price * $row->qty,2) }} {{$currency->Currency_name}}</td>
-                    <td class="text-right">{{ number_format(percent_price($row->price, 0) * $row->qty,2); }} {{$currency->Currency_name}}</td>
+                    @if($po->submit_status != '1')
+                        <td class="text-center">
+                            @can('user-edit')
+                            <a class="btn btn-sm btn-primary"
+                                href="{{ route('OfficeManagement.purchasingOrderDetail.edit', $row->id) }}">
+                                <i class="fa fa-edit"></i></a>
+                            @endcan
+                            @can('user-delete')
+                                @if($po->submit_status != '1')
+                                    {!! Form::open(['method' => 'DELETE', 'route' => ['OfficeManagement.purchasingOrderDetail.destroy',
+                                    $row->id], 'style' => 'display:inline']) !!}
+                                        {!! Form::button('<i class="fa fa-trash"></i>', ['type'=>'submit','class' => 'btn btn-sm btn-danger', 'onclick' => 'return confirm("Are you sure to delete?")',
+                                        'id' => 'delete']) !!}
+                                    {!! Form::close() !!}
+                                @endif
+                            @endcan
+                        </td>
+                    @endif
                 </tr>
                 @endforeach
                 <tr>
-                    <td colspan="5" class="text-right"><b>Total</b></td>
+                    <td colspan="3" class="text-right"><b>Total</b></td>
                     <td class="text-right"><b>{{ number_format($subTotal,2) }} {{$currency->Currency_name}}</b></td>
+                    @if($po->submit_status != '1')<td></td>@endif
                 </tr>
                 @endif
                 @if($po->submit_status != '1')
@@ -84,7 +101,8 @@
                             {{ __('button.create') }}
                         </a>
                     </td> 
-                    <td colspan="5"></td>
+                    <td colspan="3"></td>
+                    @if($po->submit_status != '1')<td></td>@endif
                 </tr>
                 @endif
             </tbody>
@@ -113,7 +131,7 @@
                             <p><strong>Tax (5%)</strong></p>
                             </div>
                             <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                            <label><input type="checkbox" class="minimal" id="inv-tax-check" data-id="{{ $po->id; }}" data-total="{{ $subTotal }}" @if($po->tax == 5) checked @endif></label>
+                            <label><input type="checkbox" class="minimal" id="po-tax-check" data-id="{{ $po->id; }}" data-total="{{ $subTotal }}" @if($po->tax == 5) checked @endif></label>
                         </div>
                     </div>
                 @else
@@ -128,13 +146,13 @@
                 @endif
 
                 <?php 
-                    $taxAmount = $po->tax * ($subTotal)/100;
+                    $taxAmount  = $po->tax * ($subTotal)/100;
                     $grandTotal = $subTotal + $taxAmount;
                 ?>
 
                 <div class="row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right">
-                        <p><strong>Tax Amount</strong></p>
+                        <p><strong>Tax Amount </strong></p>
                     </div>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
                     <p><span id="tax-amount">{{ number_format($taxAmount,2);}}</span> {{$currency->Currency_name}}</p>
@@ -155,13 +173,38 @@
             <!-- start note & file -->
             <div class="col-md-7 float-left">
                 <!-- Note -->
-                @if(count($notes) > 0)
+                @if(count($notes) > 0 || $po->submit_status != '1')
                     <label for="note">Notes</label>
                     @foreach($notes as $row)
-                    <p class="bg-gray-light text-dark p-2 noteFont">
-                        {{$row->note}}
-                    </p>
+                    {!! Form::open(['method' => 'DELETE', 'route' => ['OfficeManagement.purchasingOrderNote.destroy', $row->id], ]) !!} 
+                        <p class="bg-gray-light text-dark p-2 noteFont">
+                            {{ $row->note }}
+                            {{ Form::hidden('poId', $po->id) }}
+                            @if($po->submit_status == 0)
+                                {{-- delete note --}}
+                                {!! Form::button('<i class="fa fa-trash text-danger"></i>', ['type'=>'submit','class' => ' float-right',
+                                'onclick'=>'return confirm("Are you sure to delete?")','style' => 'background:none;border:none']) !!}   
+
+                                {{-- edit note  --}}
+                                <a class="float-right me-2 edit-note" data-id="{{$row->id}}" data-note="{{ $row->note }}"><i class="fa fa-edit text-warning"></i></a>
+                            @endif
+                            {!! Form::close() !!}
+                        </p>
                     @endforeach
+                @endif
+
+                @if($po->submit_status == 0)
+                    {!! Form::open(['route' => 'OfficeManagement.purchasingOrderNote.store', 'method' => 'POST']) !!}
+                    {{ Form::hidden('poId', $po->id) }}
+                    {{ Form::hidden('noteId', null, ['id' => 'noteId']) }}
+                    <div class="form-group">
+                        <textarea name="Note" id="note" cols="5" rows="2" class="form-control" required></textarea>
+                    </div>
+                    <div class="text-right mt-3">
+                        <button class="btn btn-sm btn-grey note-reset" type="reset">Reset</button>
+                        <button class="btn btn-sm btn-primary" type="submit">Add</button>
+                    </div>
+                    {!! Form::close() !!}
                 @endif
                 <!-- Note ENd -->
             </div>
@@ -178,8 +221,9 @@
             @else
                 <img src="{{ asset('img/author-icon.png')}}" alt="" width=100 height=100 class="text-center" id="authorizer-img">
             @endif
+            @if($po->submit_status == 0)
             <h6>Authorized Person</h6> 
-            {!! Form::open(['route' => ['OfficeManagement.invoiceAuthorizer',$po->id],'method' => 'POST']) !!}
+            {!! Form::open(['route' => ['OfficeManagement.poAuthorizer',$po->id],'method' => 'POST']) !!}
             <div class="row">
                 <div class="col-md-10">
                     <div class="form-group">
@@ -195,8 +239,17 @@
                     <button class="btn btn-sm btn-primary float-right" type="submit">Add</button>
                 </div>
             </div>
+            @else
+                <p>{{ $po->sign_name }}</p>
+            @endif
             {!! Form::close() !!}
         </div>
     </div>
+
+    @if($po->submit_status == 0)
+    <div class="text-center ">
+        <a href="{{route('OfficeManagement.poConfirm',$po->id)}}"><p><button class="btn btn-primary btn-block w-80">Confirm</button></p></a> 
+    </div>
+    @endif
 </div>
 @endsection

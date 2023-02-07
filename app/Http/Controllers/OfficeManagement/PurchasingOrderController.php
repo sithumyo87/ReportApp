@@ -123,4 +123,43 @@ class PurchasingOrderController extends Controller
     {
         //
     }
+
+    public function poTaxCheck(Request $request){
+        if($request->ajax()){
+            $id = $request->id;
+            $tax = $request->tax;
+            $total = $request->total;
+
+            $po = PurchasingOrder::find($id);
+            $po->tax = $tax;
+            $po->save();
+
+            $tax_amount     = ($po->tax * $total)/100;
+            $grand_total    = $total + $tax_amount;
+            return ([
+                'tax_amount' => number_format($tax_amount, 2),
+                'grand_total' => number_format($grand_total, 2),
+            ]);
+        }
+    }
+
+    public function poAuthorizer(Request $request, $id){
+        $authorizer = Authorizer::find($request->authorizer);
+        $po = PurchasingOrder::find($id);
+        $po->update([
+            'sign_name' =>  $authorizer->authorized_name,
+            'file_name' =>  $authorizer->file_name,
+        ]);
+        return redirect()->route('OfficeManagement.purchasingOrder.show',$id)
+                        ->with('success','Authorized Person Updated Successful!');
+    }
+
+    public function poConfirm($id){
+        $po = PurchasingOrder::find($id);
+        $po->update([
+            'submit_status' => 1,
+        ]);
+        return redirect()->route('OfficeManagement.purchasingOrder.show',$id)
+        ->with('success','Purchasing Order Confirmed Successful!');
+    }
 }

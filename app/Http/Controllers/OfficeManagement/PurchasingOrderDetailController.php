@@ -30,18 +30,10 @@ class PurchasingOrderDetailController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        $input = $request->all();
+        PurchasingOrderDetail::create($input);
+        return redirect()->route('OfficeManagement.purchasingOrder.show',$request->po_id)
+        ->with('success','Purchasing order detail created successfully'); 
     }
 
     /**
@@ -52,7 +44,10 @@ class PurchasingOrderDetailController extends Controller
      */
     public function edit($id)
     {
-        //
+        $poDetail = PurchasingOrderDetail::findOrFail($id);
+        $po = PurchasingOrder::findOrFail($poDetail->po_id);
+        $dealers = Dealer::where('action',true)->get(); 
+        return view('OfficeManagement.purchasingOrder.detail_edit',compact('poDetail','po', 'dealers'));
     }
 
     /**
@@ -64,7 +59,11 @@ class PurchasingOrderDetailController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input = $request->all();
+        $poDetail = PurchasingOrderDetail::findOrFail($id);
+        $poDetail->update($input);
+        return redirect()->route('OfficeManagement.purchasingOrder.show',$request->po_id)
+        ->with('success','Purchasing order detail updated successfully'); 
     }
 
     /**
@@ -75,6 +74,10 @@ class PurchasingOrderDetailController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $poDetail = PurchasingOrderDetail::findOrFail($id);
+        $poId = $poDetail->po_id;
+        $poDetail->destroy($id);
+        return redirect()->route('OfficeManagement.purchasingOrder.show', $poId)
+                        ->with('success','Purchasing order detail deleted successfully');
     }
 }

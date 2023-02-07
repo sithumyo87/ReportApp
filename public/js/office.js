@@ -254,3 +254,97 @@ function inv_attn_on_change(invId){
     });
 }
 
+
+$(document).on('click','#po-tax-check', function(e) {
+
+    checkBox = document.getElementById('po-tax-check');
+    var id = $('#po-tax-check').data('id');
+    var total = $('#po-tax-check').data('total');
+    var tax = '0';
+    // Check if the element is selected/checked
+    if(checkBox.checked) {
+        var tax = '5';
+    }
+    var urlPath = url() + 'OfficeManagement/poTaxCheck?id=' + id + '&tax=' + tax+ '&total=' + total;
+    $.ajax({
+        type: 'GET',
+        url: urlPath,
+        success: function(data) {
+            console.log(data);
+           $('#tax-amount').html(data['tax_amount']);
+           $('#grand-total').html(data['grand_total']);
+        },
+    });
+});
+
+
+$(document).on('click','#quo-cb', function(e) {
+    var value = $(this).val();
+    var check = '0';
+    if($(this).prop("checked") == true) {
+        check = 1;
+        $('#inv-cb').prop('checked', false);
+        $("#inv_no").attr('disabled', 'disabled');
+        $("#inv_no").val('').change();
+        $("#quo_no").removeAttr('disabled');
+    }else{
+        $("#quo_no").attr('disabled', 'disabled');
+        $("#quo_no").val('').change();
+    }
+
+    var quo_no = $('#quo_no').val();
+    var inv_no = $('#inv_no').val();
+    deliveryOrderQuoInvCheck(quo_no, inv_no);
+});
+
+$(document).on('click','#inv-cb', function(e) {
+    var value = $(this).val();
+    var check = '0';
+    if($(this).prop("checked") == true) {
+        check = 1;
+        $('#quo-cb').prop('checked', false);
+        $("#quo_no").attr('disabled', 'disabled');
+        $("#quo_no").val('').change();
+        $("#inv_no").removeAttr('disabled');
+    }else{
+        $("#inv_no").attr('disabled', 'disabled');
+        $("#inv_no").val('').change();
+    }
+
+    var quo_no = $('#quo_no').val();
+    var inv_no = $('#inv_no').val();
+    deliveryOrderQuoInvCheck(quo_no, inv_no);
+});
+
+$(document).on('click','#po-cb', function(e) {
+    if($(this).prop("checked") == true) {
+        $("#po_no").removeAttr('readonly');
+    }else{
+        $("#po_no").attr('readonly', 'readonly');
+    }
+});
+
+$(document).on('select2:select select2:unselect select2:clear', '#quo_no', function(e){
+    var quo_no = $(this).val();
+    console.log('quo_no' + quo_no);
+    deliveryOrderQuoInvCheck(quo_no, '');
+});
+
+$(document).on('select2:select select2:unselect select2:clear', '#inv_no', function(e){
+    var inv_no = $(this).val();
+    console.log('inv_no' + inv_no);
+    deliveryOrderQuoInvCheck('', inv_no);
+});
+
+function deliveryOrderQuoInvCheck(quo_no, inv_no){
+    var urlPath = url() + 'OfficeManagement/deliveryOrderQuoInvCheck?quo_no=' + quo_no + '&inv_no=' + inv_no;
+    $.ajax({
+        type: 'GET',
+        url: urlPath,
+        success: function(data) {
+            $('.inv-quo-group').html(data);
+        },
+    });
+}
+
+

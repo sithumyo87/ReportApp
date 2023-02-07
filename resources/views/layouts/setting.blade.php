@@ -161,6 +161,13 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                 </li>
 
                 <li class="nav-item">
+                    <a class="nav-link" href="{{ route('OfficeManagement.deliveryOrder.index')}}">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Delivery Order</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link" href="{{ route('OfficeManagement.customer.index')}}">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Customer</span></a>
