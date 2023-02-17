@@ -14,6 +14,15 @@ use App\Models\Authorizer;
 
 class QuotationDetailController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:quotation-index|quotation-create|quotation-edit|quotation-delete', ['only' => ['index']]);
+        $this->middleware('permission:quotation-show', ['only' => ['show']]);
+        $this->middleware('permission:quotation-create', ['only' => ['create','store']]);
+        $this->middleware('permission:quotation-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:quotation-delete', ['only' => ['destroy']]);
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -177,6 +186,7 @@ class QuotationDetailController extends Controller
         ]);
         return redirect()->route('OfficeManagement.quotationDetail.show',$id)
         ->with('success','Quotation Confirm Successful!');
+        
 
     }
 

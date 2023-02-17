@@ -10,11 +10,10 @@ class CurrencyController extends Controller
 {
     function __construct()
     {
-        // $this->middleware('permission:currency-index|currency-create|currency-edit|currency-delete', ['only' => ['index','store']]);
-        // $this->middleware('permission:currency-show', ['only' => ['show']]);
-        // $this->middleware('permission:currency-create', ['only' => ['create','store']]);
-        // $this->middleware('permission:currency-edit', ['only' => ['edit','update']]);
-        // $this->middleware('permission:currency-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:currency-index|currency-create|currency-edit|currency-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:currency-create', ['only' => ['create','store']]);
+        $this->middleware('permission:currency-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:currency-delete', ['only' => ['destroy']]);
     }
     
     /**

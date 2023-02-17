@@ -40,21 +40,33 @@
                         {{ Form::label('sub', 'Subject') }}
                         <input class="form-control" name="sub" placeholder="subject" type="text" required/>
                     </div>
-                    <div class="form-group">
-                        <label for="">ATT Name</label>
-                        {!! Form::text('Attn', null, ['placeholder' => 'ATT Name', 'class' => 'form-control']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="company">Company Name</label>
-                        {!! Form::text('Company_name', null, ['placeholder' => 'Company Name', 'class' => 'form-control']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="">Contact phone</label>
-                        {!! Form::text('Contact_phone', null, ['placeholder' => 'Contact phone', 'class' => 'form-control']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="">Address</label>
-                        {!! Form::textarea('Address', null, ['placeholder' => 'Address', 'class' => 'form-control','cols'=>5,'rows'=>5]) !!}
+                    <div class="attn-form">
+                        <div class="form-group">
+                            <label for="">ATT Name</label>
+                            <select name="customer_id" class="form-control attn-customer select2" required>
+                                <option value="">Choose Customer</option>
+                                @foreach($customers as $row)
+                                <option value="{{ $row->id }}">{{ $row->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="company">Company Name</label>
+                            <select name="Company_name" class="form-control attn-company select2" required>
+                                <option value="">Choose Company Name</option>
+                                @foreach($customers as $row)
+                                <option value="{{ $row->company }}">{{ $row->company}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Phone No</label>
+                            {!! Form::text('Contact_phone', null, ['placeholder' => 'Phone Number', 'class' => 'form-control']) !!}
+                        </div>
+                        <div class="form-group">
+                            <label for="">Address</label>
+                            {!! Form::textarea('Address', null, ['placeholder' => 'Address', 'class' => 'form-control','cols'=>5,'rows'=>5]) !!}
+                        </div>
                     </div>
                 </div>
             </div>

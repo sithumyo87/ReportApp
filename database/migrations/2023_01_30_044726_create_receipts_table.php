@@ -33,6 +33,7 @@ return new class extends Migration
             $table->string('Contact_phone',50);
             $table->text('Address')->nullable();
             $table->string('sign_name')->nullable();
+            $table->string('file_name')->nullable();
             $table->string('Date_INT')->nullable();
             $table->string('Currency_type');
             $table->timestamps();

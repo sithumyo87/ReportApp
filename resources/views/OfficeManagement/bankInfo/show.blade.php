@@ -34,16 +34,16 @@
         
     <div class="bg-white p-30 m-t-30">
         <div class="">
-            @can('role-create')
-                <a href="{{ route('OfficeManagement.bankInfoDetail.create', $bankInfo->id) }}" class="btn btn-success"><i class="fa fa-plus-circle"></i>  {{ __('button.create') }}
+            @can('bank-create')
+                <a href="{{ route('OfficeManagement.bankInfoDetail.create', $bankInfo->id) }}" class="btn btn-success btn-sm"><i class="fa fa-plus-circle"></i>  {{ __('button.create') }}
                 </a>
             @endcan
         </div>
-        <table class="table table-bordered m-t-10">
+        <table class="table table-bordered m-t-20">
             <thead>
                 <tr class="text-center">
-                    <th width="50">{{ __('label.no') }}</th>
-                    <th>Label</th>
+                    <th>{{ __('label.no') }}</th>
+                    <th style="min-width: 180px">Label</th>
                     <th>Value</th>
                     <th width="120">{{ __('label.action') }}</th>
                 </tr>
@@ -56,12 +56,12 @@
                         <td>{{$detail->label_name }}</td>
                         <td>{{$detail->value_name }}</td>
                         <td class="text-center">
-                            @can('user-edit')
-                                <a class="btn btn-primary" href="{{ route('OfficeManagement.bankInfoDetail.edit', $detail->id) }}"><i class="fa fa-edit"></i></a>
+                            @can('bank-edit')
+                                <a class="btn btn-primary btn-sm" href="{{ route('OfficeManagement.bankInfoDetail.edit', $detail->id) }}"><i class="fa fa-edit"></i></a>
                             @endcan
-                            @can('user-delete')
+                            @can('bank-delete')
                                 {!! Form::open(['method' => 'DELETE', 'route' => ['OfficeManagement.bankInfoDetail.destroy', $detail->id], 'style' => 'display:inline']) !!}
-                                    {!! Form::button('<i class="fa fa-trash"></i>', ['type'=>'submit','class' => 'btn btn-danger', 'id' => 'delete']) !!}
+                                    {!! Form::button('<i class="fa fa-trash"></i>', ['type'=>'submit','class' => 'btn btn-danger btn-sm', 'id' => 'delete']) !!}
                                 {!! Form::close() !!}
                             @endcan
                         </td>

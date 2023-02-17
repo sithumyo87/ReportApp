@@ -42,6 +42,16 @@
                     </select>
                 </div>
 
+                <div class="form-group form-check inv-to-gp hidden">
+                    <input class="form-check-input" type="checkbox" value="" id="invoiceTo">
+                    <label class="form-check-label" for="invoiceTo">
+                        INVOICE TO
+                    </label>
+                    <button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal" data-bs-target="#inv-create">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+
                 <div id="inv-data-form">
                     <div class="attn-form">
                         <div class="form-group">

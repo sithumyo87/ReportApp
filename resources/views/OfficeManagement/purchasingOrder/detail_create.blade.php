@@ -34,7 +34,7 @@
             <div class="col-xs-12 col-sm-12 col-md-8 mt-3">
                 <div class="form-group">
                     <label for="">Dealer Name</label>
-                    <select name="dealer_id" class="form-control select2" required>
+                    <select name="dealer_id" class="form-control select2">
                         <option value="">Choose Dealer Name</option>
                         @foreach($dealers as $row)
                         <option value="{{ $row->id }}">{{ $row->name}}</option>
@@ -55,11 +55,11 @@
                 </div>
                 <div class="form-group">
                     <label for="">Price Per Item</label>
-                    {!! Form::number('price', null, ['placeholder' => 'Price (only number)', 'class' => 'form-control']) !!}
+                    {!! Form::number('price', null, ['placeholder' => 'Price (only number)', 'class' => 'form-control', 'required', 'step' => '0.01']) !!}
                 </div>
                 <div class="form-group">
                     <label for="">Qty</label>
-                    {!! Form::number('qty', null, ['placeholder' => 'qty (only number)', 'class' => 'form-control']) !!}
+                    {!! Form::number('qty', null, ['placeholder' => 'qty (only number)', 'class' => 'form-control', 'required']) !!}
                 </div>
                 <div class="form-group form-check">
                     <input type="checkbox" class="form-check-input" id="tax" name="tax" value="5">
@@ -67,7 +67,7 @@
                 </div>
                 <hr>
                 <div class="text-center">
-                    <a href="{{ route('OfficeManagement.purchasingOrderDetail.show', $po->id) }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
+                    <a href="{{ route('OfficeManagement.purchasingOrder.show', $po->id) }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
                     <button type="submit" class="btn btn-primary">{{ __('button.save') }}</button>
                 </div>
             </div>

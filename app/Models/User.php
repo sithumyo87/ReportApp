@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
+use Illuminate\Http\Request;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
@@ -43,4 +45,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    protected function searchDataPaginate(Request $request){
+        $data = $this::where('id','>',0);
+        if($request->name != ''){
+            $data = $data->where('name','like', '%'.$request->name.'%');
+        }
+        return $data->orderBy('id','DESC')->paginate(pagination());
+    }
 }

@@ -41,6 +41,16 @@
                     </select>
                 </div>
 
+                <div class="form-group form-check inv-to-gp hidden">
+                    <input class="form-check-input" type="checkbox" value="" id="invoiceTo">
+                    <label class="form-check-label" for="invoiceTo">
+                        INVOICE TO
+                    </label>
+                    <button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal" data-bs-target="#inv-create">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+
                 <div class="quo-data-form">
                     <div class="attn-form">
                         <div class="form-group">
@@ -108,8 +118,8 @@
                     {!! Form::text('form31_no', null, ['placeholder' => 'form31 No', 'class' => 'form-control']) !!}
                 </div>
                 <div class="form-group">
-                    <label for="Date">Form31 Issue Date</label>
-                    {!! Form::text('form31_issue_date', null, ['placeholder' => 'Form31 Issue Date', 'class' => 'form-control date-picker','id'=>'Date','cols'=>5,'rows'=>5]) !!}
+                    <label for="form31_issue_date">Form31 Issue Date</label>
+                    {!! Form::text('form31_issue_date', null, ['placeholder' => 'Form31 Issue Date', 'class' => 'form-control date-picker','id'=>'form31_issue_date','cols'=>5,'rows'=>5]) !!}
                 </div>
                 <div class="form-group">
                 <label for="">FILE UPLOAD</label>
@@ -118,31 +128,80 @@
 
                 <br><br>
 
-                <h4>Purchasing Order</h4>
-                <hr>
+                <h4>Purchasing Order</h4><hr>
                 <label for="chkPo">
-                    <input type="checkbox" id="chkPo" />
-                    PO :
+                    <input type="checkbox" id="chkPo" /> PO :
                 </label>
                 <div id="dvPo" style="display: none">
-                {!! Form::text('po_no', null, ['placeholder' => 'PO:NO', 'class' => 'form-control ']) !!}
-                </div>
-                <br>
+                    {!! Form::text('po_no', null, ['placeholder' => 'PO:NO', 'class' => 'form-control ']) !!}
+                </div> <br>
                 <label for="chkVender">
-                    <input type="checkbox" id="chkVender" />
-                    VENDER ID
+                    <input type="checkbox" id="chkVender" /> VENDER ID
                 </label>
                 <div id="dvVender" style="display: none">
-                {!! Form::text('vender_id', null, ['placeholder' => 'VENDER ID', 'class' => 'form-control box']) !!}
-                </div>
-                <br><br><br>
+                    {!! Form::text('vender_id', null, ['placeholder' => 'VENDER ID', 'class' => 'form-control box']) !!}
+                </div><br><br><br>
             </div>
             <div class="text-end ">
-                <a href="{{ route('OfficeManagement.quotation.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
+                <a href="{{ route('OfficeManagement.invoice.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
                 <button type="submit" class="btn btn-primary">{{ __('button.save') }}</button>
             </div>
         </div>
         {!! Form::close() !!}
+    </div>
+</div>
+
+<!-- The receiver -->
+<div class="modal" id="inv-create">
+    <div class="modal-dialog modal-lg">
+    {!! Form::open(['route' => ['OfficeManagement.personInvoice.store'], 'method' => 'POST', 'files' => true]) !!}
+        <input type="hidden" value="OfficeManagement.invoice.create" name="route">
+        <input type="hidden" value="id" name="{{ null }}">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add New Invoice To</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body align-self-center">
+                <div class="form-group" style="width: 500px;">
+                    <div class="form-group">
+                    <label for="">Name</label>
+                    {!! Form::text('name', null, ['placeholder' => 'Customer Name', 'class' => 'form-control', 'required']) !!}
+                </div>
+                <div class="form-group">
+                    <label for="">Position</label>
+                    {!! Form::text('position', null, ['placeholder' => 'Position', 'class' => 'form-control', 'required']) !!}
+                </div>
+                <div class="form-group">
+                    <label for="">Phone Number</label>
+                    {!! Form::text('phone', null, ['placeholder' => 'Phone Number', 'class' => 'form-control', 'required']) !!}
+                </div>
+                <div class="form-group">
+                    <label for="">Phone Number(Other)</label>
+                    {!! Form::text('phone_other', null, ['placeholder' => 'Phone Number', 'class' => 'form-control']) !!}
+                </div>
+                <div class="form-group">
+                    <label for="">Company</label>
+                    {!! Form::text('company', null, ['placeholder' => 'company name', 'class' => 'form-control', 'required']) !!}
+                </div>
+                <div class="form-group">
+                    <label for="">E-mail</label>
+                    {!! Form::text('email', null, ['placeholder' => 'Email Address', 'class' => 'form-control', 'required']) !!}
+                </div>
+                <div class="form-group">
+                    <label for="">Address</label>
+                    {!! Form::text('address', null, ['placeholder' => 'Address', 'class' => 'form-control', 'cols'=>5,'rows'=>5, 'required']) !!}
+                </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">{{ __('button.save') }}</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    {!! Form::close() !!}
     </div>
 </div>
 @endsection

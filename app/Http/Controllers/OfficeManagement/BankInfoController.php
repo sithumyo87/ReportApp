@@ -9,6 +9,15 @@ use App\Models\BankInfoDetail;
 
 class BankInfoController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:bank-index|bank-create|bank-edit|bank-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:bank-show', ['only' => ['show']]);
+        $this->middleware('permission:bank-create', ['only' => ['create','store']]);
+        $this->middleware('permission:bank-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:bank-delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *

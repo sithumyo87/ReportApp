@@ -7,14 +7,14 @@
         </div>
         <div class="col-md-7">
             <div class="d-flex justify-content-end">
-                @if($invoice->submit_status == true)
-                    <a href="{{ route('OfficeManagement.invoice.create') }}"
-                        class="btn btn-success d-none d-lg-block m-l-15 mr-3"><i class="fa fa-print"></i>
+                @if($invoice->submit_status == true && ($type != '' || $invoice->Advance == '4' || $invoice->Advance == '5'))
+                    <a href="{{ route('OfficeManagement.invoicePrint', ['id' => $invoice->id, 'type' => $type]) }}"
+                        class="btn btn-success btn-sm d-none d-lg-block m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
                         Print
                     </a>
                 @endif
                 <a href="{{ route('OfficeManagement.invoice.index') }}"
-                    class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-back"></i>
+                    class="btn btn-info btn-sm d-none d-lg-block m-l-15"><i class="fa fa-back"></i>
                     Back
                 </a>
             </div>
@@ -26,6 +26,7 @@
     @endif
     
     {{-- get invoice start --}}
+    @can('invoice-create')
     @if($invoice->submit_status == '1')
         <div class="m-b-10">
             @if($invoice->Advance != '6')
@@ -96,24 +97,70 @@
             @endif
         </div>
     @endif
+    @endcan
     {{-- get invoice end --}}
 
     <div class="row">
         <div class="col-md-7">
-            <p><b>Sub: </b>
-                {{ $invoice->Sub}}
-            </p>
-            <p><b>Attn: </b> {{ $invoice->Attn}}</p>
-            <p><b>Company: </b> {{ $invoice->Company_name}}</p>
-            <p><b>Phone No: </b> {{ $invoice->Contact_phone}}</p>
-            <p><b>Address: </b> {{ $invoice->Address}}</p>
+            <table class="table table-no-border">
+                <tbody>
+                    <tr>
+                        <td style="min-width: 150px">Attn</td>
+                        <td>:</td>
+                        <td>{{ $invoice->Attn}}</td>
+                    </tr>
+                    <tr>
+                        <td>Sub</td>
+                        <td>:</td>
+                        <td>{{ $invoice->Sub}}</td>
+                    </tr>
+                    <tr>
+                        <td>Company Name</td>
+                        <td>:</td>
+                        <td>{{ $invoice->Company_name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Contact Phone</td>
+                        <td>:</td>
+                        <td>{{ $invoice->Contact_phone}}</td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>:</td>
+                        <td>{{ $invoice->Address}}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="col-md-5">
-            <p><b>Invoice No: </b> {{ $invoice->Invoice_No}}</p>
-            <p><b>Date: </b>  {{ getInvoiceDate($invoice, $type, $advance_data) }}</p>
-            <p><b>Tax ID: </b> - </p>
-            <p><b>PO No: </b> - {{ $invoice->po_no}}</p>
-            <p><b>Vender ID: </b> - {{ $invoice->vender_id}}</p>
+            <table class="table table-no-border">
+                <tbody>
+                    <tr>
+                        <td style="min-width: 150px">Invoice No</td>
+                        <td>:</td>
+                        <td>{{ $invoice->Invoice_No}} </td>
+                    </tr>
+                    <tr>
+                        <td>Invoice Date</td>
+                        <td>:</td>
+                        <td>{{ getInvoiceDate($invoice, $type, $advance_data) }}</td>
+                    </tr>
+                    @if($invoice->po_no != '')
+                    <tr>
+                        <td>PO No</td>
+                        <td>:</td>
+                        <td>{{ $invoice->po_no}}</td>
+                    </tr>
+                    @endif
+                    @if($invoice->vender_id != '')
+                    <tr>
+                        <td>Vender ID</td>
+                        <td>:</td>
+                        <td>{{ $invoice->vender_id}}</td>
+                    </tr>
+                    @endif
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -122,15 +169,16 @@
         <table class="table table-bordered">
             <thead>
                 <tr class="text-center">
+                    <th>No.</th>
                     <th width="130">Description</th>
                     <th>Unit Price</th>
                     <th>Percent</th>
                     <th>Unit Price (With %)</th>
                     <th>Qty</th>
                     <th>SubTotal</th>
-                    <th width="150">SubTotal (With %)</th>
+                    <th>SubTotal (With %)</th>
                     @if($invoice->submit_status != '1')
-                        <th width="150">{{ __('label.action') }}</th>
+                        <th width="100">{{ __('label.action') }}</th>
                     @endif
                 </tr>
             </thead>
@@ -139,6 +187,7 @@
                 <?php 
                     $subTotal = 0;
                     $subTotalWithPer = 0;
+                    $i = 0;
                 ?>
                 @foreach($invDetails as $row)
                 <?php
@@ -146,21 +195,22 @@
                     $subTotalWithPer += percent_price($row->Unit_Price, $row->percent) * $row->Qty;
                 ?>
                 <tr>
-                    <td>{{ $row->Description }}</td>
+                    <td class="text-center">{{ ++$i }}</td>
+                    <td style="min-width: 200px;">{!! $row->Description !!}</td>
                     <td class="text-right">{{ $row->Unit_Price }} {{$currency->Currency_name}}</td>
-                    <td class="text-right">{{ $row->percent }}%</td>
+                    <td class="text-right">{{ $row->percent > 0 ? $row->percent : '0' }}%</td>
                     <td class="text-right">{{number_format(percent_price($row->Unit_Price, $row->percent),2)}} {{$currency->Currency_name}}</td>
                     <td class="text-right">{{ $row->Qty }}</td>
                     <td class="text-right">{{ number_format($row->Unit_Price * $row->Qty,2) }} {{$currency->Currency_name}}</td>
                     <td class="text-right">{{ number_format(percent_price($row->Unit_Price, $row->percent) * $row->Qty,2); }} {{$currency->Currency_name}}</td>
                     @if($invoice->submit_status != '1')
                         <td class="text-center">
-                            @can('user-edit')
+                            @can('invoice-edit')
                             <a class="btn btn-sm btn-primary"
                                 href="{{ route('OfficeManagement.invoiceDetail.edit', $row->id) }}">
                                 <i class="fa fa-edit"></i></a>
                             @endcan
-                            @can('user-delete')
+                            @can('invoice-delete')
                                 @if($invoice->submit_status != '1')
                                     {!! Form::open(['method' => 'DELETE', 'route' => ['OfficeManagement.invoiceDetail.destroy',
                                     $row->id], 'style' => 'display:inline']) !!}
@@ -174,7 +224,7 @@
                 </tr>
                 @endforeach
                 <tr>
-                    <td colspan="5" class="text-right"><b>Total</b></td>
+                    <td colspan="6" class="text-right"><b>Total</b></td>
                     <td class="text-right"><b>{{ number_format($subTotal,2) }} {{$currency->Currency_name}}</b></td>
                     <td class="text-right"><b>{{ number_format($subTotalWithPer,2)}} {{$currency->Currency_name}}</b></td>
                     @if($invoice->submit_status != '1')<td></td>@endif
@@ -182,9 +232,10 @@
                 @endif
                 @if($invoice->submit_status != '1')
                 <tr>
-                    <td class="text-right">
+                    <td></td>
+                    <td class="text-center">
                         <a href="{{ route('OfficeManagement.invoiceDetailCreate',$invoice->id) }}"
-                            class="btn btn-success d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i>
+                            class="btn btn-success m-l-15"><i class="fa fa-plus-circle"></i>
                             {{ __('button.create') }}
                         </a>
                     </td> 
@@ -233,7 +284,6 @@
                     </div>
                 </div>
                 @else
-                    @if($invoice->Discount > 0)
                     <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right">
                             <p><strong>Discount</strong></p>
@@ -242,7 +292,6 @@
                             <p>{{number_format($invoice->Discount, 2)}} {{$currency->Currency_name}}</p>
                         </div>
                     </div>
-                    @endif
                 @endif
 
                 
@@ -255,15 +304,6 @@
                             <label><input type="checkbox" class="minimal" id="inv-tax-check" data-id="{{ $invoice->id; }}" data-total="{{ $subTotalWithPer }}" @if($invoice->tax_id != 0) checked @endif></label>
                         </div>
                     </div>
-                @else
-                    <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right">
-                            <p><strong>Tax (%)</strong></p>
-                        </div>
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                            <p>{{$invoice->tax_id}}%</p>
-                        </div>
-                    </div>
                 @endif
 
                 <?php 
@@ -273,7 +313,15 @@
 
                 <div class="row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right">
-                        <p><strong>Tax Amount</strong></p>
+                        <p>
+                            <strong>
+                                @if($invoice->submit_status == 0)
+                                    Tax Amount
+                                @else
+                                    Tax ({{$invoice->tax_id}}%)
+                                @endif
+                            </strong>
+                        </p>
                     </div>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
                     <p><span id="tax-amount">{{ number_format($taxAmount,2);}}</span> {{$currency->Currency_name}}</p>
@@ -345,8 +393,8 @@
             <div class="col-md-7 float-left">
 
                 <!-- Note -->
-                @if(count($invNotes) > 0)
-                <label for="note">Notes</label>
+                @if(count($invNotes) > 0 || $invoice->submit_status != '1')
+                    <label for="note">Notes</label>
                 @endif
                 @foreach($invNotes as $row)
                 
@@ -381,7 +429,7 @@
                 @endif
                 <!-- Note ENd -->
 
-                <!-- Bank Information ENd -->
+                <!-- Bank Information start -->
                 <?php 
                     $bankInfo = [];
                     if($invoice->bank_info != ''){
@@ -457,9 +505,9 @@
     </div>
    
     @if($invoice->submit_status == 0)
-    <div class="text-center ">
-        <a href="{{route('OfficeManagement.invoiceConfirm',$invoice->id)}}"><p><button class="btn btn-primary btn-block w-80">Confirm</button></p></a> 
-    </div>
+        <div class="text-center ">
+            <a href="{{route('OfficeManagement.invoiceConfirm',$invoice->id)}}"><p><button class="btn btn-primary btn-block w-80">Confirm</button></p></a> 
+        </div>
     @endif
 </div>
 @endsection

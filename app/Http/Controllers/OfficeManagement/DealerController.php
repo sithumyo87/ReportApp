@@ -8,6 +8,15 @@ use App\Models\Dealer;
 
 class DealerController extends Controller
 {
+
+    function __construct()
+    {
+        $this->middleware('permission:dealer-index|dealer-create|dealer-edit|dealer-delete', ['only' => ['index']]);
+        $this->middleware('permission:dealer-create', ['only' => ['create','store']]);
+        $this->middleware('permission:dealer-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:dealer-delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,8 +24,11 @@ class DealerController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Dealer::where('id','>',0)->where('action',true)->orderBy('id','DESC')->paginate(5);
-        return view('OfficeManagement.dealer.index',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5);
+        $data               = Dealer::searchDataPaginate($request);
+        $company_names      = Dealer::companyDropDown();
+        $customer_names     = Dealer::customerDropDown();
+        $search             = $request;
+        return view('OfficeManagement.dealer.index', compact('data', 'company_names', 'customer_names', 'search'))->with('i', ($request->input('page', 1) - 1) * 5);
     }
 
     /**

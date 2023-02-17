@@ -16,6 +16,7 @@ class CustomerController extends Controller
         $this->middleware('permission:customer-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:customer-delete', ['only' => ['destroy']]);
     }
+    
     /**
      * Display a listing of the resource.
      *
@@ -23,8 +24,11 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Customer::where('id','>',0)->where('action',true)->orderBy('id','DESC')->paginate(5);
-        return view('OfficeManagement.customer.index',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5);
+        $data               = Customer::searchDataPaginate($request);
+        $company_names      = Customer::companyDropDown();
+        $customer_names     = Customer::customerDropDown();
+        $search             = $request;
+        return view('OfficeManagement.customer.index', compact('data', 'company_names', 'customer_names', 'search'))->with('i', pageNumber($request));
     }
 
     /**
@@ -127,7 +131,7 @@ class CustomerController extends Controller
     }
 
     public function attnOnChange(Request $request){
-        // if($request->ajax()){
+        if($request->ajax()){
             $attn       = $request->attn;
             $company    = $request->company;
 
@@ -142,6 +146,6 @@ class CustomerController extends Controller
             $customers = Customer::where('action',true)->get(); 
 
             return view('OfficeManagement.customer.attn_form',compact('customers', 'customer'));
-        // }
+        }
     }
 }

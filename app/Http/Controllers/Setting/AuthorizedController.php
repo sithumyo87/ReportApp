@@ -8,6 +8,15 @@ use App\Models\Authorizer;
 
 class AuthorizedController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:authorizer-index|authorizer-create|authorizer-edit|authorizer-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:authorizer-show', ['only' => ['show']]);
+        $this->middleware('permission:authorizer-create', ['only' => ['create','store']]);
+        $this->middleware('permission:authorizer-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:authorizer-delete', ['only' => ['destroy']]);
+    }
+
     public function index(Request $request)
     {
         $data = Authorizer::where('id','>',0)->orderBy('id','DESC')->paginate(5);

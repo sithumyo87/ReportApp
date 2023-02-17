@@ -1,16 +1,33 @@
-.select2-container--default .select2-selection--single .select2-selection__rendered {
-    color: #6e707e !important;
-    line-height: 37px !important;
+body{
+    font-size: 14px;
 }
 
-.select2-container--default .select2-selection--single {
-    border: 1px solid #d1d3e2 !important;
-    height: 37px;
-    line-height: 37px !important;
+.table-responsive::-webkit-scrollbar {
+width: 0.5em;
+height: 0.5em;   
 }
 
-span.select2-selection.select2-selection--single {
-    height: 37px !important;
+ul.pagination {
+    padding-top: 20px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+}
+
+input, option, table tr td, table tr th{
+    font-size: 14px;
+}
+
+h4.text-themecolor {
+    text-transform: uppercase;
+    font-size: 20px;
+    font-weight: 600;
 }
 
 .m-30{
@@ -82,6 +99,25 @@ label {
     font-weight: 600;
 }
 
+.input-sm{
+    height: 32px !important;
+    border-radius: 3px !important;
+    line-height: 32px !important;
+    font-size: 14px !important;
+}
+
+.select2-selection__rendered {
+    height: 32px !important;
+    line-height: 32px !important;
+    font-size: 14px !important;
+}
+
+.select2-selection--single {
+    height: 32px !important;
+    line-height: 32px !important;
+    
+}
+
 .bg-gray-light {
     background: #dee2e6;
 }
@@ -115,5 +151,47 @@ a.refer-attach {
 
 .img-sign {
     margin: 20px;
-    border: 1px solid #Efefef;
+}
+
+.ui-state-default{
+    border: 1px solid #333 !important;
+    background: #ffffff !important;
+    color: #333 !important;
+}
+
+.ui-state-highlight{
+    border: 2px solid #375dcd !important;
+    background: #ffffff  !important;
+    color: #375dcd !important;
+}
+
+.ui-state-active{
+    border: 2px solid #375dcd !important;
+    background: #bac8ef !important;
+    color: #375dcd !important;
+}
+
+th{
+    vertical-align: middle;
+}
+
+.table-no-border tr td {
+    border: none !important;
+}
+
+.table-no-border tr td:first-child{
+    font-weight: 800;
+}
+
+.table-wrap{
+    padding-top: 20px;
+}
+
+.remove-sign {
+    position: relative;
+    top: -5px;
+}
+
+.hidden {
+    display: none;
 }

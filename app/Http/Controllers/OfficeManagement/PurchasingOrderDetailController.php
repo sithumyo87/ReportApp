@@ -10,6 +10,15 @@ use App\Models\Dealer;
 
 class PurchasingOrderDetailController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:po-index|po-create|po-edit|po-delete', ['only' => ['index']]);
+        $this->middleware('permission:po-show', ['only' => ['show']]);
+        $this->middleware('permission:po-create', ['only' => ['create','store']]);
+        $this->middleware('permission:po-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:po-delete', ['only' => ['destroy']]);
+    }
+    
     /**
      * Show the form for creating a new resource.
      *

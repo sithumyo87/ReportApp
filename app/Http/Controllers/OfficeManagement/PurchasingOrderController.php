@@ -12,9 +12,19 @@ use App\Models\Quotation;
 use App\Models\QuotationNote;
 use App\Models\PurchasingOrderNote;
 use App\Models\Authorizer;
+use PDF;
 
 class PurchasingOrderController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:po-index|po-create|po-edit|po-delete', ['only' => ['index']]);
+        $this->middleware('permission:po-show', ['only' => ['show']]);
+        $this->middleware('permission:po-create', ['only' => ['create','store']]);
+        $this->middleware('permission:po-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:po-delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -22,15 +32,13 @@ class PurchasingOrderController extends Controller
      */
     public function index(Request $request)
     {
-        $data = PurchasingOrder::select('purchasing_orders.*', 'quotations.Serial_No', 'quotations.Refer_No')->leftJoin('quotations', 'quotations.id','=', 'purchasing_orders.quo_id')->paginate(10);
-        $attachs = [];
-        foreach($data as $row){
-            $quoAttfile = QuotationNote::getAttFiles($row->quo_id);
-            if(count($quoAttfile) > 0){
-                $attachs[$row->id] = $quoAttfile;
-            }
-        }
-        return view('OfficeManagement.purchasingOrder.index',compact('data','attachs'))->with('i', ($request->input('page', 1) - 1) * 5);
+        $data           = PurchasingOrder::searchDataPaginate($request);
+        $attachs        = PurchasingOrder::getQuoAttachs($data);
+        $po_codes       = PurchasingOrder::poNoDropDown();
+        $company_names  = Customer::companyDropDown();
+        $customer_names = Customer::customerDropDown();
+        $search         = $request;
+        return view('OfficeManagement.purchasingOrder.index',compact('data','attachs', 'po_codes', 'company_names', 'customer_names', 'search'))->with('i', pageNumber($request));
     }
 
     /**
@@ -58,8 +66,8 @@ class PurchasingOrderController extends Controller
         $count = PurchasingOrder::count();
         $input['po_code'] = 'PO-'.date('Ymd', strtotime($request->date)).sprintf('%04d', $count+1);
         $input['date'] = date('Y-m-d', strtotime($input['date']));
-        PurchasingOrder::create($input);
-        return redirect()->route('OfficeManagement.purchasingOrder.index')
+        $po = PurchasingOrder::create($input);
+        return redirect()->route('OfficeManagement.purchasingOrder.show', $po->id)
                         ->with('success','Purchasing Order created successfully');
     }
 
@@ -161,5 +169,24 @@ class PurchasingOrderController extends Controller
         ]);
         return redirect()->route('OfficeManagement.purchasingOrder.show',$id)
         ->with('success','Purchasing Order Confirmed Successful!');
+    }
+
+    public function poPrint($id){
+        $po = PurchasingOrder::select('purchasing_orders.*', 'quotations.Serial_No', 'quotations.Refer_No')->leftJoin('quotations', 'quotations.id','=', 'purchasing_orders.quo_id')->where('purchasing_orders.id', $id)->first();
+        $poDetails = PurchasingOrderDetail::where('po_id', $id)->get();
+        $currency   = Currency::findOrFail($po->currency);
+        $notes = PurchasingOrderNote::where('po_id', $id)->get();
+        $authorizers = Authorizer::get();
+        
+        $data = [
+            'po'                => $po,
+            'poDetails'         => $poDetails,
+            'currency'          => $currency,
+            'notes'             => $notes,
+            'authorizers'       => $authorizers,
+        ]; 
+
+        $pdf = PDF::loadView('OfficeManagement.purchasingOrder.print', $data);
+        return $pdf->stream($po->po_code.'.pdf');
     }
 }

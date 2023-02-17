@@ -11,10 +11,21 @@ use App\Models\Invoice;
 use App\Models\InvoiceDetail;
 use App\Models\Quotation;
 use App\Models\QuotationDetail;
+use App\Models\Customer;
 use DB;
+use PDF;
 
 class DeliveryOrderController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:do-index|do-create|do-edit|do-delete', ['only' => ['index']]);
+        $this->middleware('permission:do-show', ['only' => ['show']]);
+        $this->middleware('permission:do-create', ['only' => ['create','store']]);
+        $this->middleware('permission:do-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:do-delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -22,8 +33,12 @@ class DeliveryOrderController extends Controller
      */
     public function index(Request $request)
     {
-        $data = DeliveryOrder::where('id','>',0)->orderBy('id','DESC')->paginate(15);
-        return view('OfficeManagement.deliveryOrder.index',compact('data'))->with('i', ($request->input('page', 1) - 1) * 15);
+        $data               = DeliveryOrder::searchDataPaginate($request);
+        $do_codes           = DeliveryOrder::doNoDropDown();
+        $company_names      = Customer::companyDropDown();
+        $customer_names     = Customer::customerDropDown();
+        $search             = $request;
+        return view('OfficeManagement.deliveryOrder.index', compact('data', 'do_codes', 'company_names', 'customer_names', 'search'))->with('i', pageNumber($request));
     }
 
     /**
@@ -35,7 +50,8 @@ class DeliveryOrderController extends Controller
     {
         $invoices = Invoice::where('submit_status',1)->get();
         $quotations = Quotation::where('SubmitStatus',1)->get();
-        return view('OfficeManagement.deliveryOrder.create',compact('invoices', 'quotations'));
+        $customers  = Customer::where('action',true)->get(); 
+        return view('OfficeManagement.deliveryOrder.create',compact('invoices', 'quotations', 'customers'));
     }
 
     /**
@@ -265,5 +281,44 @@ class DeliveryOrderController extends Controller
         return redirect()->route('OfficeManagement.deliveryOrder.show', $do->id)
                 ->with('success','Signature done successfully');
 
+    }
+
+    public function deliveryOrderSignRemove($id, $sign){
+        $do = DeliveryOrder::findOrFail($id);
+        if($sign == 'received'){
+            $do->received_sign = null; 
+            $do->received_name = null;
+        }else if($sign = 'delivered'){
+            $do->delivered_sign = null; 
+            $do->delivered_name = null;
+        }
+        $do->save();
+        return redirect()->route('OfficeManagement.deliveryOrder.show', $do->id)
+                ->with('success','Signature deleted done successfully');
+    }
+
+    public function doPrint($id, $date=null){
+        $deliveryOrder = DeliveryOrder::findOrFail($id);
+
+        $details = DeliveryOrderDetail::where('do_id', $id)->get();
+        $detail_records = [];
+        foreach($details as $detail){
+            $record = DeliveryOrderDetailRecord::where('do_id', $id)->where('do_detail_id', $detail->id)->where('date', $date)->orderBy('id', 'desc')->first();
+            $amount_sum = DeliveryOrderDetailRecord::where('do_id', $id)->where('do_detail_id', $detail->id)->where('date', $date)->sum('amount');
+            if(isset($record)){
+                $record->amount = $amount_sum != '' ? $amount_sum : 0;
+            }
+            $detail_records[$detail->id] = $record;
+        }
+        
+        $data = [
+            'deliveryOrder'  => $deliveryOrder,
+            'details'        => $details,
+            'detail_records' => $detail_records,
+            'date'           => $date
+        ]; 
+
+        $pdf = PDF::loadView('OfficeManagement.deliveryOrder.print', $data);
+        return $pdf->stream($deliveryOrder->do_code.'.pdf');
     }
 }

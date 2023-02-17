@@ -25,15 +25,21 @@ $(function () {
 });
 
 //Date Picker
-$(document).ready(function() {
-    var date_input = $('.date-picker'); //our date input has the name "date"
+$(document).ready(function() { 
+
+    // bootstrap date-picker
     var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
-    date_input.datepicker({
-        format: 'dd-mm-yyyy',
-        container: container,
-        todayHighlight: true,
-        autoclose: true,
-    })
+
+    $('.date-picker').each(function(){
+        $(this).datepicker({
+            dateFormat: 'dd-mm-yy',
+            todayHighlight: true,
+        });
+        $(this).attr('autocomplete', 'off');
+    });
+
+    
+    
     $('.select2').select2();
 
     tinymce.init({
@@ -43,12 +49,13 @@ $(document).ready(function() {
         plugins: [
             'advlist autolink lists link image charmap print preview anchor',
             'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste code help wordcount', 'image'
+            'insertdatetime media table paste code help wordcount', 'image',
+            'textcolor'
         ],
         toolbar: 'undo redo | formatselect | ' +
             'bold italic backcolor | alignleft aligncenter ' +
             'alignright alignjustify | bullist numlist outdent indent | ' +
-            'removeformat | help',
+            'removeformat | help ' + ' forecolor backcolor ',
         content_css: '//www.tiny.cloud/css/codepen.min.css'
     });
 
@@ -177,11 +184,13 @@ $(document).on('select2:select select2:unselect select2:clear','.quo-select', fu
     console.log('quo chnge' + quoId);
     if(quoId != ''){
         quo_attn_on_change(quoId);
+        $('.inv-to-gp').removeClass('hidden');
     }else{
         attn_on_change('', '');
         $('#sub').val('');
         $('#sub').removeAttr('readonly');
         $('.currency').removeClass('readonly');
+        $('.inv-to-gp').addClass('hidden');
     }
 });
 
@@ -246,12 +255,14 @@ $(document).on('select2:select select2:unselect select2:clear','#inv-select', fu
     console.log('inv chnge' + invId);
     if(invId != ''){
         inv_attn_on_change(invId);
+        $('.inv-to-gp').removeClass('hidden');
     }else{
         attn_on_change('', '');
         $('#sub').val('');
         $('#sub').removeAttr('readonly');
         $('.currency').removeClass('readonly');
         $('.payment').removeClass('readonly');
+        $('.inv-to-gp').addClass('hidden');
     }
 });
 
@@ -355,6 +366,67 @@ function deliveryOrderQuoInvCheck(quo_no, inv_no){
         url: urlPath,
         success: function(data) {
             $('.inv-quo-group').html(data);
+        },
+    });
+}
+
+$(document).on('click','#invoiceTo', function(e) {
+    if($(this).prop("checked") == true) {
+        invoiceToCheck('','');
+    }else{
+        if($('.quo-select').length){
+            var quoId = $('.quo-select').val();
+            console.log('quo chnge' + quoId);
+            if(quoId != ''){
+                quo_attn_on_change(quoId);
+            }else{
+                attn_on_change('', '');
+                $('#sub').val('');
+                $('#sub').removeAttr('readonly');
+                $('.currency').removeClass('readonly');
+            }
+        }
+        if($('#inv-select').length){
+            console.log('inv-select isset');
+            var invId = $('#inv-select').val();
+            console.log('inv change' + invId);
+            if(invId != ''){
+                inv_attn_on_change(invId);
+            }else{
+                attn_on_change('', '');
+                $('#sub').val('');
+                $('#sub').removeAttr('readonly');
+                $('.currency').removeClass('readonly');
+                $('.payment').removeClass('readonly');
+            }
+        }
+    }
+});
+
+$(document).on('select2:select select2:unselect select2:clear','.inv-customer', function(e) {
+    var attn = $(this).val();
+    console.log('attn ' + attn);
+    invoiceToCheck(attn, '');
+});
+
+$(document).on('select2:select select2:unselect select2:clear','.inv-company', function(e) {
+    var company = $(this).val(); 
+    invoiceToCheck('', company);
+});
+
+function invoiceToCheck(attn, company){
+    var urlPath = url() + 'OfficeManagement/invoiceToCheck?attn=' + attn+ '&company=' + company;
+    $.ajax({
+        type: 'GET',
+        url: urlPath,
+        success: function(data) {
+            $('.attn-form').html(data);
+            $('.select2').select2({
+                tags: true,
+                placeholder: "Select an Option",
+                allowClear: true,
+                width: '100%'
+            });
         },
     });
 }

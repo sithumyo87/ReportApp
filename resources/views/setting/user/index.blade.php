@@ -15,11 +15,29 @@
         </div>
     </div>
     @if ($message = Session::get('success'))
-        <div class="alert alert-success">
+        <div class="alert alert-success m-t-30">
             <p>{{ $message }}</p>
         </div>
     @endif
-    <div class="bg-white p-30">
+
+    <div class="bg-white p-30 m-t-30">
+        <div class="search">
+            {!! Form::open(['method' => 'GET', 'route' => ['setting.user.index']]) !!}
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        {!! Form::text('name', null, ['placeholder' => 'Name', 'class' => 'form-control input-sm']) !!}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-sm">Search</button>
+                        <a href="{{ route('setting.user.index') }}" class="btn btn-warning btn-sm">Clear</a>
+                    </div>
+                </div>
+            </div>
+            {!! Form::close() !!}
+        </div>
         <table class="table table-bordered">
             <thead>
                 <tr class="text-center">
@@ -45,14 +63,14 @@
                         </td>
                         <td class="text-center">
                             @can('user-show')
-                                <a class="btn btn-info" href="{{ route('setting.user.show', $user->id) }}"><i class="fa fa-eye"></i></a>
+                                <a class="btn btn-info btn-sm" href="{{ route('setting.user.show', $user->id) }}"><i class="fa fa-eye"></i></a>
                             @endcan
                             @can('user-edit')
-                                <a class="btn btn-primary" href="{{ route('setting.user.edit', $user->id) }}"><i class="fa fa-edit"></i></a>
+                                <a class="btn btn-primary btn-sm" href="{{ route('setting.user.edit', $user->id) }}"><i class="fa fa-edit"></i></a>
                             @endcan
                             @can('user-delete')
                                 {!! Form::open(['method' => 'DELETE', 'route' => ['setting.user.destroy', $user->id], 'style' => 'display:inline']) !!}
-                                    {!! Form::button('<i class="fa fa-trash"></i>', ['type'=>'submit','class' => 'btn btn-danger', 'id' => 'delete']) !!}
+                                    {!! Form::button('<i class="fa fa-trash"></i>', ['type'=>'submit','class' => 'btn btn-danger btn-sm', 'onclick' => "return confirm('Are you sure to delete?')"]) !!}
                                 {!! Form::close() !!}
                             @endcan
                         </td>

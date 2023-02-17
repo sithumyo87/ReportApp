@@ -5,12 +5,20 @@
         <div class="col-md-5 align-self-center">
             <h4 class="text-themecolor">{{ $po->po_code}} 's Detail</h4>
         </div>
-        <div class="col-md-7">
+        <div class="col-md-7"> 
             <div class="d-flex justify-content-end">
-                <a href="{{ route('OfficeManagement.purchasingOrder.index') }}"
-                    class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-back"></i>
-                    Back
-                </a>
+                @if($po->submit_status == true)
+                    <a href="{{ route('OfficeManagement.poPrint', $po->id) }}"
+                    class="btn btn-success btn-sm d-none d-lg-block m-l-15 mr-3" target="_blank"><i class="fa fa-back"></i>
+                    Print
+                    </a>
+                @endif
+                <div class="d-flex justify-content-end">
+                    <a href="{{ route('OfficeManagement.purchasingOrder.index') }}"
+                        class="btn btn-info btn-sm d-none d-lg-block m-l-15"><i class="fa fa-back"></i>
+                        Back
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -22,20 +30,58 @@
 
     <div class="row">
         <div class="col-md-7">
-            <p><b>Sub: </b>
-                {{ $po->sub}}
-            </p>
-            <p><b>Attn: </b> {{ $po->Attn}}</p>
-            <p><b>Company: </b> {{ $po->Company_name}}</p>
-            <p><b>Phone No: </b> {{ $po->Contact_phone}}</p>
-            <p><b>Address: </b> {{ $po->Address}}</p>
+            <table class="table table-no-border">
+                <tbody>
+                    <tr>
+                        <td style="min-width: 150px">Sub</td>
+                        <td>:</td>
+                        <td> {{ $po->sub}}</td>
+                    </tr>
+                    <tr>
+                        <td>Attn</td>
+                        <td>:</td>
+                        <td>{{ $po->Attn}}</td>
+                    </tr>
+                    <tr>
+                        <td>Company Name</td>
+                        <td>:</td>
+                        <td>{{ $po->Company_name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Contact Phone</td>
+                        <td>:</td>
+                        <td>{{ $po->Contact_phone}}</td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>:</td>
+                        <td>{{ $po->Address}}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="col-md-5">
-            <p><b>Order No: </b> {{ $po->po_code }}</p>
-            <p><b>Date: </b>  {{ $po->date }}</p>
-            @if($po->Serial_No != '')
-                <p><b>Quatation No.: </b>  {{ $po->Serial_No }}</p>
-            @endif
+            <table class="table table-no-border">
+                <tbody>
+                    <tr>
+                        <td style="min-width: 150px">Order No</td>
+                        <td>:</td>
+                        <td>{{ $po->po_code }}</td>
+                    </tr>
+                    <tr>
+                        <td>Date</td>
+                        <td>:</td>
+                        <td>{{ dateformat($po->date) }}</td>
+                    </tr>
+                     @if($po->Serial_No != '')
+                    <tr>
+                        <td>PO No</td>
+                        <td>:</td>
+                        <td>{{ $po->Serial_No }}</td>
+                    </tr>
+                    @endif
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -69,12 +115,12 @@
                     <td class="text-right">{{ number_format($row->price * $row->qty,2) }} {{$currency->Currency_name}}</td>
                     @if($po->submit_status != '1')
                         <td class="text-center">
-                            @can('user-edit')
+                            @can('po-edit')
                             <a class="btn btn-sm btn-primary"
                                 href="{{ route('OfficeManagement.purchasingOrderDetail.edit', $row->id) }}">
                                 <i class="fa fa-edit"></i></a>
                             @endcan
-                            @can('user-delete')
+                            @can('po-delete')
                                 @if($po->submit_status != '1')
                                     {!! Form::open(['method' => 'DELETE', 'route' => ['OfficeManagement.purchasingOrderDetail.destroy',
                                     $row->id], 'style' => 'display:inline']) !!}
@@ -96,10 +142,12 @@
                 @if($po->submit_status != '1')
                 <tr>
                     <td class="text-right">
-                        <a href="{{ route('OfficeManagement.purchasingOrderDetail.create',['po_id' => $po->id]) }}"
-                            class="btn btn-success d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i>
-                            {{ __('button.create') }}
-                        </a>
+                        @can('po-create')
+                            <a href="{{ route('OfficeManagement.purchasingOrderDetail.create',['po_id' => $po->id]) }}"
+                                class="btn btn-success btn-sm d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i>
+                                {{ __('button.create') }}
+                            </a>
+                        @endcan
                     </td> 
                     <td colspan="3"></td>
                     @if($po->submit_status != '1')<td></td>@endif

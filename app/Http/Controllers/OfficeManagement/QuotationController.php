@@ -3,17 +3,22 @@
 namespace App\Http\Controllers\OfficeManagement;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\Quotation;
 use App\Models\Customer;
 use App\Models\Currency;
+use App\Models\QuotationDetail;
+use App\Models\QuotationNote;
+use App\Models\Dealer;
+use App\Models\Authorizer;
+use PDF;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 
 class QuotationController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:quotation-index|quotation-create|quotation-edit|quotation-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:quotation-index|quotation-create|quotation-edit|quotation-delete', ['only' => ['index']]);
         $this->middleware('permission:quotation-show', ['only' => ['show']]);
         $this->middleware('permission:quotation-create', ['only' => ['create','store']]);
         $this->middleware('permission:quotation-edit', ['only' => ['edit','update']]);
@@ -26,8 +31,12 @@ class QuotationController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Quotation::where('id','>',0)->orderBy('id','DESC')->paginate(5);
-        return view('OfficeManagement.quotation.index',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5);
+        $data           = Quotation::searchDataPaginate($request);
+        $quo_nos        = Quotation::quoNoDropDown();
+        $company_names  = Customer::companyDropDown();
+        $customer_names = Customer::customerDropDown();
+        $search         = $request;
+        return view('OfficeManagement.quotation.index',compact('data', 'quo_nos', 'company_names', 'customer_names', 'search'))->with('i', pageNumber($request));
     }
 
     /**
@@ -177,7 +186,10 @@ class QuotationController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $quotation = Quotation::find($id);
+        $quotation->delete();
+        return redirect()->route('OfficeManagement.quotation.index')
+                        ->with('success','Quotation deleted successfully');
     }
 
 
@@ -199,4 +211,27 @@ class QuotationController extends Controller
             ]);
         }
     }
+
+    public function print($id){
+        $quotation = Quotation::find($id);
+        $currency = Currency::where('id',$quotation->Currency_type)->first();
+        $quoDetails = QuotationDetail::where('Quotation_Id',$id)->get();
+        $quoNotes = QuotationNote::where('QuotationId',$quotation->id)->where('Note','!=',"")->get();
+        $authorizers = Authorizer::get();
+  
+        $data = [
+            'quotation'     => $quotation,
+            'currency'      => $currency,
+            'quoDetails'    => $quoDetails,
+            'quoNotes'      => $quoNotes,
+            'authorizers'   => $authorizers,
+        ]; 
+
+        // return view('OfficeManagement.quotation.print')->with($data);
+            
+        $pdf = PDF::loadView('OfficeManagement.quotation.print', $data);
+     
+        return $pdf->stream($quotation->Serial_No.'.pdf');
+    }
+
 }

@@ -7,19 +7,19 @@
         </div>
         <div class="col-md-7 align-self-center text-right">
             <div class="d-flex justify-content-end align-items-center">
-                @can('role-create')
-                    <a href="{{ route('setting.authorizer.create') }}" class="btn btn-success d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i>  {{ __('button.create') }}
+                @can('authorizer-create')
+                    <a href="{{ route('setting.authorizer.create') }}" class="btn btn-success d-none d-lg-block btn-sm m-l-15"><i class="fa fa-plus-circle"></i>  {{ __('button.create') }}
                     </a>
                 @endcan
             </div>
         </div>
     </div>
     @if ($message = Session::get('success'))
-        <div class="alert alert-success">
+        <div class="alert alert-success m-t-30">
             <p>{{ $message }}</p>
         </div>
     @endif
-    <div class="bg-white p-30">
+    <div class="bg-white p-30 m-t-30">
         <table class="table table-bordered">
             <thead>
                 <tr class="text-center">
@@ -38,12 +38,12 @@
                             <img src="{{ asset($row->file_name) }}" alt="" style="width:100px;height:100px">
                         </td>
                         <td class="text-center">
-                            @can('user-edit')
-                                <a class="btn btn-primary" href="{{ route('setting.authorizer.edit',$row->id) }}"><i class="fa fa-edit"></i></a>
+                            @can('authorizer-edit')
+                                <a class="btn btn-primary btn-sm" href="{{ route('setting.authorizer.edit',$row->id) }}"><i class="fa fa-edit"></i></a>
                             @endcan
-                            @can('user-delete')
+                            @can('authorizer-delete')
                                 {!! Form::open(['method' => 'DELETE', 'route' => ['setting.authorizer.destroy',$row->id], 'style' => 'display:inline']) !!}
-                                    {!! Form::button('<i class="fa fa-trash"></i>', ['type'=>'submit','class' => 'btn btn-danger', 'id' => 'delete']) !!}
+                                    {!! Form::button('<i class="fa fa-trash"></i>', ['type'=>'submit','class' => 'btn btn-danger btn-sm', 'id' => 'delete']) !!}
                                 {!! Form::close() !!}
                             @endcan
                         </td>

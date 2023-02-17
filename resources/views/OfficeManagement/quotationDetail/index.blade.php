@@ -8,13 +8,12 @@
         <div class="col-md-7">
             <div class="d-flex justify-content-end">
                 @if($quotation->SubmitStatus == true)
-                    <a href="{{ route('OfficeManagement.quotationDetail.create') }}"
-                        class="btn btn-success d-none d-lg-block m-l-15 mr-3"><i class="fa fa-print"></i>
+                    <a href="{{ route('OfficeManagement.quotationPrint', $quotation->id) }}" class="btn btn-success btn-sm d-none d-lg-block m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
                         Print
                     </a>
                 @endif
                 <a href="{{ route('OfficeManagement.quotation.index') }}"
-                    class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-back"></i>
+                    class="btn btn-info btn-sm d-none d-lg-block m-l-15"><i class="fa fa-back"></i>
                     Back
                 </a>
             </div>
@@ -23,23 +22,63 @@
     <hr>
     @if ($message = Session::get('success'))
         <div class="alert alert-success">
-            <p>{{ $message }}</p>
+            {{ $message }}
         </div>
     @endif
     <div class="row">
         <div class="col-md-7">
-            <p><b>Sub: </b>
-                {{ $quotation->Sub}}
-            </p>
-            <p><b>Attn: </b> {{ $quotation->Serial_No}}</p>
-            <p><b>Company: </b> {{ $quotation->Company_name}}</p>
-            <p><b>Phone No: </b> {{ $quotation->Contact_phone}}</p>
-            <p><b>Address: </b> {{ $quotation->Address}}</p>
+            <table class="table table-no-border">
+                <tbody>
+                    <tr>
+                        <td style="min-width: 150px">Sub</td>
+                        <td>:</td>
+                        <td>{{ $quotation->Sub}}</td>
+                    </tr>
+                    <tr>
+                        <td>Attn</td>
+                        <td>:</td>
+                        <td>{{ $quotation->Serial_No}}</td>
+                    </tr>
+                    <tr>
+                        <td>Company Name</td>
+                        <td>:</td>
+                        <td>{{ $quotation->Company_name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Contact Phone</td>
+                        <td>:</td>
+                        <td>{{ $quotation->Contact_phone}}</td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>:</td>
+                        <td>{{ $quotation->Address}}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="col-md-5">
-            <p><b>Serial No: </b> {{ $quotation->Serial_No}}</p>
-            <p><b>Refer No: </b> {{ $quotation->Refer_No}}</p>
-            <p><b>Date: </b> {{ $quotation->Date}}</p>
+            <table class="table table-no-border">
+                <tbody>
+                    <tr>
+                        <td style="min-width: 150px">Quotation No</td>
+                        <td>:</td>
+                        <td>{{ $quotation->Serial_No}}</td>
+                    </tr>
+                    @if($quotation->Refer_No != '')
+                    <tr>
+                        <td>Refer No</td>
+                        <td>:</td>
+                        <td>{{ $quotation->Refer_No }}</td>
+                    </tr>
+                    @endif
+                    <tr>
+                        <td>Quotation Date</td>
+                        <td>:</td>
+                        <td>{{ date('d-m-Y', strtotime($quotation->Date)) }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -48,15 +87,15 @@
         <table class="table table-bordered">
             <thead>
                 <tr class="text-center">
-                    <th width="130">Description</th>
+                    <th style="min-width: 130px">Description</th>
                     <th>Unit Price</th>
                     <th>Percent</th>
-                    <th>Unit Price (With %)</th>
+                    <th>Unit Price <br> (With %)</th>
                     <th>Qty</th>
                     <th>SubTotal</th>
-                    <th width="150">SubTotal (With %)</th>
+                    <th width="150">SubTotal <br> (With %)</th>
                     @if($quotation->SubmitStatus != '1')
-                        <th width="150">{{ __('label.action') }}</th>
+                        <th width="100">{{ __('label.action') }}</th>
                     @endif
                 </tr>
             </thead>
@@ -72,7 +111,7 @@
                     $subTotalWithPer += percent_price($row->Unit_Price, $row->percent) * $row->Qty;
                 ?>
                 <tr>
-                    <td>{{ $row->Description }}</td>
+                    <td style="min-width: 200px;">{!! $row->Description !!}</td>
                     <td class="text-right">{{ $row->Unit_Price }} {{$currency->Currency_name}}</td>
                     <td class="text-right">{{ $row->percent }}%</td>
                     <td class="text-right">{{number_format(percent_price($row->Unit_Price, $row->percent),2)}} {{$currency->Currency_name}}</td>
@@ -81,12 +120,12 @@
                     <td class="text-right">{{ number_format(percent_price($row->Unit_Price, $row->percent) * $row->Qty,2); }} {{$currency->Currency_name}}</td>
                     @if($quotation->SubmitStatus != '1')
                         <td class="text-center">
-                            @can('user-edit')
+                            @can('quotation-edit')
                             <a class="btn btn-sm btn-primary"
                                 href="{{ route('OfficeManagement.quotationDetail.edit', $row->id) }}">
                                 <i class="fa fa-edit"></i></a>
                             @endcan
-                            @can('user-delete')
+                            @can('quotation-delete')
                                 {!! Form::open(['method' => 'DELETE', 'route' => ['OfficeManagement.quotationDetail.destroy',
                                 $row->id], 'style' => 'display:inline']) !!}
                                 {!! Form::button('<i class="fa fa-trash"></i>', ['type'=>'submit','class' => 'btn btn-sm btn-danger', 'onclick' => 'return confirm("Are you sure to delete?")',
@@ -108,11 +147,13 @@
                 @endif
                 @if($quotation->SubmitStatus != '1')
                 <tr>
-                    <td class="text-right">
-                        <a href="{{ route('OfficeManagement.quotationDetailCreate',$quotation->id) }}"
-                            class="btn btn-success d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i>
-                            {{ __('button.create') }}
-                        </a>
+                    <td class="text-center">
+                        @can('quotation-create')
+                            <a href="{{ route('OfficeManagement.quotationDetailCreate',$quotation->id) }}"
+                                class="btn btn-success m-l-15"><i class="fa fa-plus-circle"></i>
+                                {{ __('button.create') }}
+                            </a>
+                        @endcan
                     </td> 
                     <td colspan="6"></td>
                     @if($quotation->SubmitStatus != '1')<td></td>@endif
@@ -220,7 +261,6 @@
                         {!! Form::open(['method' => 'DELETE', 'route' => ['OfficeManagement.quotationFile.destroy', $row->id], ]) !!} 
                         <p class="bg-dark text-white p-2 noteFont">
                         {{ Form::hidden('Quotation_Id', $quotation->id) }}
-
                             <a href="{{ asset($row->list_file) }} " class="text-white " target="_blank">{{ $row->list_name != "" ? $row->list_name  : str_replace('attachments/', '', $row->list_file)}}</a>
                             @if($quotation->SubmitStatus == 0)
                             {!! Form::button('<i class="fa fa-trash text-danger"></i>', ['type'=>'submit','class' => ' float-right',
@@ -265,7 +305,7 @@
                 <div class="row">
                     <div class="col-md-10">
                         <div class="form-group">
-                            <select name="authorizer" id="authorizer" class="form-control form-select">\
+                            <select name="authorizer" id="authorizer" class="form-control form-select" required>
                             <option value="">Select Authorized Person</option>
                                 @foreach($authorizers as $row)
                                     <option value="{{ $row->id }}" <?php if($row->authorized_name == $quotation->sign_name) echo "selected";?> data-file="{{ asset($row->file_name) }}">{{$row->authorized_name}}</option>

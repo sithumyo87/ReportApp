@@ -15,6 +15,16 @@ use App\Models\Advance;
 
 class ReceiptDetailController extends Controller
 {
+
+    function __construct()
+    {
+        $this->middleware('permission:receipt-index|receipt-create|receipt-edit|receipt-delete', ['only' => ['index']]);
+        $this->middleware('permission:receipt-show', ['only' => ['show']]);
+        $this->middleware('permission:receipt-create', ['only' => ['create','store']]);
+        $this->middleware('permission:receipt-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:receipt-delete', ['only' => ['destroy']]);
+    }
+    
     /**
      * Display a listing of the resource.
      *

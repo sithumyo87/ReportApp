@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Setting;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use DB;
 use Hash;
 use Illuminate\Support\Arr;
@@ -13,7 +14,7 @@ class RoleController extends Controller
 {
     function __construct()
     {
-       $this->middleware('permission:role-list|role-create|role-edit|role-delete', ['only' => ['index','store']]);
+       $this->middleware('permission:role-index|role-create|role-edit|role-delete', ['only' => ['index']]);
        $this->middleware('permission:role-create', ['only' => ['create','store']]);
        $this->middleware('permission:role-edit', ['only' => ['edit','update']]);
        $this->middleware('permission:role-delete', ['only' => ['destroy']]);
@@ -26,7 +27,7 @@ class RoleController extends Controller
     public function index(Request $request)
     {
         $roles = Role::orderBy('id','DESC')->paginate(5);
-        return view('setting.roles.index',compact('roles'))
+        return view('setting.role.index',compact('roles'))
             ->with('i', ($request->input('page', 1) - 1) * 5);
     }
 
@@ -38,7 +39,7 @@ class RoleController extends Controller
     public function create()
     {
         $permission = Permission::get();
-        return view('setting.roles.create',compact('permission'));
+        return view('setting.role.create',compact('permission'));
     }
 
     /**
@@ -57,7 +58,7 @@ class RoleController extends Controller
         $role = Role::create(['name' => $request->input('name')]);
         $role->syncPermissions($request->input('permission'));
     
-        return redirect()->route('setting.roles.index')
+        return redirect()->route('setting.role.index')
                         ->with('success','Role created successfully');
     }
 
@@ -74,7 +75,7 @@ class RoleController extends Controller
             ->where("role_has_permissions.role_id",$id)
             ->get();
     
-        return view('setting.roles.show',compact('role','rolePermissions'));
+        return view('setting.role.show',compact('role','rolePermissions'));
     }
 
     /**
@@ -91,7 +92,7 @@ class RoleController extends Controller
             ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
             ->all();
     
-        return view('setting.roles.edit',compact('role','permission','rolePermissions'));
+        return view('setting.role.edit',compact('role','permission','rolePermissions'));
     }
 
     /**
@@ -114,7 +115,7 @@ class RoleController extends Controller
     
         $role->syncPermissions($request->input('permission'));
     
-        return redirect()->route('setting.roles.index')
+        return redirect()->route('setting.role.index')
                         ->with('success','Role updated successfully');
     }
 

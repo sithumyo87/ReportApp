@@ -16,20 +16,14 @@
     <link href="{{ asset('css/style.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 
-    <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
+    {{-- <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css"> --}}
 
     <!-- Fonts -->
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-    <!-- <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet"> -->
-    <!-- <script
-src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
-</script> -->
-
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Scripts -->
+    <!-- font awesome -->
+    <script src="https://kit.fontawesome.com/9128648aaf.js" crossorigin="anonymous"></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
@@ -90,11 +84,11 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
                 <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <a class="sidebar-brand d-flex align-items-center justify-content-center">
                     <div class="sidebar-brand-icon rotate-n-15">
                         <i class="fas fa-laugh-wink"></i>
                     </div>
-                    <div class="sidebar-brand-text mx-3">Report App<sup>2</sup></div>
+                    <div class="sidebar-brand-text mx-3">Report App<sup></sup></div>
                 </a>
 
                 <!-- Divider -->
@@ -102,9 +96,10 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
 
                 <!-- Nav Item - Dashboard -->
                 <li class="nav-item active">
-                    <a class="nav-link" href="index.html">
+                    <a class="nav-link" href="{{ route('home') }}">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Dashboard</span></a>
+                        <span>Dashboard</span>
+                    </a>
                 </li>
 
                 <!-- Divider -->
@@ -114,72 +109,80 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                 <div class="sidebar-heading">
                     Users Management
                 </div>
+                
                 @can('user-index')
                 <!-- Nav Item - Pages Collapse Menu -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('setting.user.index') }}">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Users</span></a>
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
+                @endcan
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('setting.role.index') }}">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Roles</span>
+                    </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('setting.authorizer.index')}}">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Authorizer</span></a>
+                    <a class="nav-link" href="{{ route('setting.permission.index') }}">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Permissions</span>
+                    </a>
                 </li>
-                @endcan
+
                 <!-- Divider -->
                 <hr class="sidebar-divider">
 
                 <div class="sidebar-heading">
                     Office Management
                 </div>
-                <!-- Nav Item - Pages Collapse Menu -->
-                <!-- <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                        aria-expanded="true" aria-controls="collapseTwo">
-                        <i class="fas fa-fw fa-cog"></i>
-                        <span>Office </span>
-                    </a>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="{{ route('OfficeManagement.quotation.index')}}">Quotation</a>
-                            <a class="collapse-item" href="buttons.html">Invoice</a>
-                            <a class="collapse-item" href="cards.html">Receipt</a>
-                        </div>
-                    </div>
-                </li> -->
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('OfficeManagement.quotation.index')}}">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Quotation</span></a>
+                        <i class="fas fa-fw fa-file"></i>
+                        <span>Quotation</span>
+                    </a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('OfficeManagement.purchasingOrder.index')}}">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Purchasing Order</span></a>
+                        <i class="fas fa-fw fa-list"></i>
+                        <span>Purchasing Order</span>
+                    </a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('OfficeManagement.invoice.index')}}">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Invoice</span></a>
+                        <i class="fas fa-fw fa-file-invoice-dollar"></i>
+                        <span>Invoice</span>
+                    </a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('OfficeManagement.receipt.index')}}">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Receipt</span></a>
+                        <i class="fas fa-fw fa-receipt"></i>
+                        <span>Receipt</span>
+                    </a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('OfficeManagement.deliveryOrder.index')}}">
-                        <i class="fas fa-fw fa-chart-area"></i>
+                        <i class="fas fa-fw fa-truck"></i>
                         <span>Delivery Order</span>
                     </a>
                 </li>
+
+                <!-- Divider -->
+                <hr class="sidebar-divider">
+
+                <!-- Heading -->
+                <div class="sidebar-heading">
+                    Interface
+                </div>
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('OfficeManagement.customer.index')}}">
@@ -205,55 +208,16 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                         <span>Bank Info</span></a>
                 </li>
 
-                <!-- Divider -->
-                <hr class="sidebar-divider">
-
-                
-
-                <!-- Heading -->
-                <div class="sidebar-heading">
-                    Interface
-                </div>
-
-                <!-- Nav Item - Pages Collapse Menu -->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                        aria-expanded="true" aria-controls="collapseTwo">
-                        <i class="fas fa-fw fa-cog"></i>
-                        <span>Components</span>
-                    </a>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Custom Components:</h6>
-                            <a class="collapse-item" href="buttons.html">Buttons</a>
-                            <a class="collapse-item" href="cards.html">Cards</a>
-                        </div>
-                    </div>
-                </li>
-
-                <!-- Nav Item - Utilities Collapse Menu -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                        aria-expanded="true" aria-controls="collapseUtilities">
-                        <i class="fas fa-fw fa-wrench"></i>
-                        <span>Utilities</span>
-                    </a>
-                    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                        data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Custom Utilities:</h6>
-                            <a class="collapse-item" href="utilities-color.html">Colors</a>
-                            <a class="collapse-item" href="utilities-border.html">Borders</a>
-                            <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                            <a class="collapse-item" href="utilities-other.html">Other</a>
-                        </div>
-                    </div>
+                    <a class="nav-link" href="{{ route('setting.authorizer.index')}}">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Authorizer</span></a>
                 </li>
 
                 <!-- Divider -->
                 <hr class="sidebar-divider">
 
-                <!-- Heading -->
+                {{-- <!-- Heading -->
                 <div class="sidebar-heading">
                     Addons
                 </div>
@@ -292,10 +256,10 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                     <a class="nav-link" href="tables.html">
                         <i class="fas fa-fw fa-table"></i>
                         <span>Tables</span></a>
-                </li>
+                </li> --}}
 
                 <!-- Divider -->
-                <hr class="sidebar-divider d-none d-md-block">
+                {{-- <hr class="sidebar-divider d-none d-md-block"> --}}
 
                 <!-- Sidebar Toggler (Sidebar) -->
                 <div class="text-center d-none d-md-inline">
@@ -490,7 +454,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
                                     <img class="img-profile rounded-circle"
                                         src="{{ URL::asset('img/undraw_profile.svg')}}">
                                 </a>
@@ -510,7 +474,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                                         Activity Log
                                     </a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModalCustom">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Logout
                                     </a>
@@ -526,6 +490,33 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                         @yield('content')
                     </main>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModalCustom" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" onclick="event.preventDefault();
+                                    document.getElementById('logout-form').submit();">Logout</a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

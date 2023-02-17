@@ -18,6 +18,14 @@ use App\Models\BankInfoDetail;
 
 class InvoiceDetailController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:invoice-index|invoice-create|invoice-edit|invoice-delete', ['only' => ['index']]);
+        $this->middleware('permission:invoice-show', ['only' => ['show']]);
+        $this->middleware('permission:invoice-create', ['only' => ['create','store']]);
+        $this->middleware('permission:invoice-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:invoice-delete', ['only' => ['destroy']]);
+    }
     
     /**
      * Show the form for creating a new resource.
@@ -273,6 +281,7 @@ class InvoiceDetailController extends Controller
 
         $taxAmount = ($invoice->tax_id * ($total - $invoice->Discount))/100;
         $grandTotal = $total - $invoice->Discount + $taxAmount;
+        $grandTotalWithoutTax = $total - $invoice->Discount;
 
         // $tax_amount = ($total - $invoice->Discount) * ($invoice->tax_id/100);
 
@@ -287,7 +296,7 @@ class InvoiceDetailController extends Controller
 			$invoice->update([
 				'FirstInvoice'          => true,
 				'finv_date'             => date("Y-m-d"),
-				'First_payment_amount'  => round($grandTotal * $multiply, 2)
+				'First_payment_amount'  => round($grandTotalWithoutTax * $multiply, 2)
             ]);
 		} elseif ($type == 2) { // second payment
 			$invoice->update([

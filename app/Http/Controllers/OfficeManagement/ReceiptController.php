@@ -9,13 +9,31 @@ use App\Models\Customer;
 use App\Models\Currency;
 use App\Models\Invoice;
 use App\Models\PaymentTerm;
+use App\Models\QuotationDetail;
+use App\Models\QuotationNote;
+use App\Models\Authorizer;
+use App\Models\Advance;
+use PDF;
 
 class ReceiptController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:receipt-index|receipt-create|receipt-edit|receipt-delete', ['only' => ['index']]);
+        $this->middleware('permission:receipt-show', ['only' => ['show']]);
+        $this->middleware('permission:receipt-create', ['only' => ['create','store']]);
+        $this->middleware('permission:receipt-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:receipt-delete', ['only' => ['destroy']]);
+    }
+
     public function index(Request $request)
     {
-        $data = Receipt::where('id','>',0)->orderBy('id','DESC')->paginate(5);
-        return view('OfficeManagement.receipt.index',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5);
+        $data = Receipt::searchDataPaginate($request);
+        $rec_codes          = Receipt::receiptNoDropDown();
+        $company_names      = Customer::companyDropDown();
+        $customer_names     = Customer::customerDropDown();
+        $search             = $request;
+        return view('OfficeManagement.receipt.index', compact('data', 'rec_codes', 'company_names', 'customer_names', 'search'))->with('i', pageNumber($request));
     }
 
     /**
@@ -25,10 +43,10 @@ class ReceiptController extends Controller
      */
     public function create()
     {
-        $customers = Customer::where('action',true)->get(); 
-        $currency = Currency::all();
-        $invoices = Invoice::where('submit_status', true)->get();
-        $payments = payments();
+        $customers  = Customer::where('action',true)->get(); 
+        $currency   = Currency::all();
+        $invoices   = Invoice::where('submit_status', true)->get();
+        $payments   = payments();
         return view('OfficeManagement.receipt.create',compact('customers','currency','invoices','payments'));
     }
 
@@ -57,7 +75,7 @@ class ReceiptController extends Controller
         
         $receipt = Receipt::create($input);
 
-        return redirect()->route('OfficeManagement.receipt.index')
+        return redirect()->route('OfficeManagement.receiptDetail.show',$receipt->id)
                         ->with('success','Receipt created successfully');
     }
 
@@ -178,6 +196,17 @@ class ReceiptController extends Controller
 			</div>';
 	}
 
+    public function receiptAuthorizer(Request $request, $id){
+        $authorizer = Authorizer::find($request->authorizer);
+        $rec = Receipt::find($id);
+        $rec->update([
+            'sign_name' =>  $authorizer->authorized_name,
+            'file_name' =>  $authorizer->file_name,
+        ]);
+        return redirect()->route('OfficeManagement.receiptDetail.show', $id)
+                        ->with('success','Authorized Person Updated Successful!');
+    }
+
 
     public function invAttnOnChange(Request $request){
         $invId = $request->invId;
@@ -189,5 +218,41 @@ class ReceiptController extends Controller
         $currency = Currency::all();
         $payments = payments();
         return view('OfficeManagement.receipt.attn_form',compact('invoice','currency', 'payments'));
+    }
+
+    public function receiptPrint($id, $type=null) {
+        $receipt    = Receipt::findOrFail($id);
+        $invoice    = Invoice::findOrFail($receipt->Invoice_Id);
+        $currency   = Currency::where('id', $receipt->Currency_type)->first();
+        $invDetails = QuotationDetail::where('Invoice_Id', $receipt->Invoice_Id)->get();
+        $invNotes       = QuotationNote::where('InvoiceId', $receipt->Invoice_Id)->where('Note','!=',"")->get();
+        $authorizers    = Authorizer::get();
+
+        // data for other payment
+        if(is_numeric($type)){
+            $advance_data = Advance::where('Invoice_Id', $receipt->Invoice_Id)->where('nth_time', $type)->where('receipt_date', '!=', null)->first();
+        }else{
+            $advance_data = null;
+        }
+        $advance_last = Advance::where('Invoice_Id', $receipt->Invoice_Id)->where('receipt_date', '!=', null)->orderBy('id', 'desc')->first();
+        $advances = Advance::where('Invoice_Id', $receipt->Invoice_Id)->where('receipt_date', '!=', null)->orderBy('id', 'asc')->get();
+        $inv_advances = Advance::where('Invoice_Id', $receipt->Invoice_Id)->where('receipt_date', null)->orderBy('id', 'asc')->get();
+
+        $data = [
+            'receipt'           => $receipt,
+            'invoice'           => $invoice,
+            'invNotes'          => $invNotes,
+            'invDetails'        => $invDetails,
+            'currency'          => $currency,
+            'authorizers'       => $authorizers,
+            'type'              => $type,
+            'advance_last'      => $advance_last,
+            'advances'          => $advances,
+            'advance_data'      => $advance_data,
+            'inv_advances'      => $inv_advances,
+        ]; 
+
+        $pdf = PDF::loadView('OfficeManagement.receipt.print', $data);
+        return $pdf->stream($receipt->Receipt_No.'.pdf');
     }
 }

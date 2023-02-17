@@ -26,9 +26,14 @@ class PermissionController extends Controller
      */
     public function index(Request $request)
     {
-        $data['permissions'] = Permission::orderBy('id','DESC')->paginate($this->paginate);
-        $data['page'] = ($request->input('page', 1) - 1) * $this->paginate;
-        return view('admin.permission.index', $data);
+        $permissions = Permission::where('id','>',0);
+        if($request->name != ''){
+            $permissions = $permissions->where('name', 'like', '%'.$request->name.'%');
+        }
+        $data['permissions']    = $permissions->orderBy('id','DESC')->paginate($this->paginate);
+        $data['page']           = ($request->input('page', 1) - 1) * $this->paginate;
+        $data['search']         = $request->all();
+        return view('setting.permission.index', $data);
     }
 
     /**
@@ -38,7 +43,7 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        return view('admin.permission.create');
+        return view('setting.permission.create');
     }
 
     /**
@@ -53,7 +58,7 @@ class PermissionController extends Controller
             'name' => 'required|unique:permissions,name',
         ]);
         $permission = Permission::create(['name' => $request->input('name')]);
-        return redirect()->route('admin.permission.index')
+        return redirect()->route('setting.permission.index')
         ->with('success','Permission is created successfully');
     }
 
@@ -66,7 +71,7 @@ class PermissionController extends Controller
     public function edit($id)
     {
         $data['permission'] = Permission::findOrFail($id);
-        return view('admin.permission.edit', $data);
+        return view('setting.permission.edit', $data);
     }
 
     /**
@@ -86,7 +91,7 @@ class PermissionController extends Controller
         }
         $permission->name = $request->input('name');
         $permission->save();
-        return redirect()->route('admin.permission.index')
+        return redirect()->route('setting.permission.index')
         ->with('success','Permission is edited successfully');
     }
 
@@ -99,7 +104,7 @@ class PermissionController extends Controller
     public function destroy($id)
     {
         DB::table("permissions")->where('id',$id)->delete();
-        return redirect()->route('admin.permission.index')
+        return redirect()->route('setting.permission.index')
         ->with('success','Permission is deleted successfully');
     }
 }

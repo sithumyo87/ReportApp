@@ -7,8 +7,14 @@
         </div>
         <div class="col-md-7">
             <div class="d-flex justify-content-end">
+                @if($type != '' || $receipt->Advance == '4' || $receipt->Advance == '5')
+                    <a href="{{ route('OfficeManagement.receiptPrint', ['id' => $receipt->id, 'type' => $type]) }}"
+                        class="btn btn-success btn-sm d-none d-lg-block m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
+                        Print
+                    </a>
+                @endif
                 <a href="{{ route('OfficeManagement.receipt.index') }}"
-                    class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-back"></i>
+                    class="btn btn-info btn-sm d-none d-lg-block m-l-15"><i class="fa fa-back"></i>
                     Back
                 </a>
             </div>
@@ -68,17 +74,51 @@
 
     <div class="row">
         <div class="col-md-7">
-            <p><b>Sub: </b>
-                {{ $receipt->Sub}}
-            </p>
-            <p><b>Attn: </b> {{ $receipt->Attn}}</p>
-            <p><b>Company: </b> {{ $receipt->Company_name}}</p>
-            <p><b>Phone No: </b> {{ $receipt->Contact_phone}}</p>
-            <p><b>Address: </b> {{ $receipt->Address}}</p>
+            <table class="table table-no-border">
+                <tbody>
+                    <tr>
+                        <td style="min-width: 150px">Attn</td>
+                        <td>:</td>
+                        <td>{{ $receipt->Attn }}</td>
+                    </tr>
+                    <tr>
+                        <td>Company Name</td>
+                        <td>:</td>
+                        <td>{{ $receipt->Company_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Contact Phone</td>
+                        <td>:</td>
+                        <td>{{ $receipt->Contact_phone }}</td>
+                    </tr>
+                    <tr>
+                        <td>Sub</td>
+                        <td>:</td>
+                        <td>{{ $receipt->Sub }}</td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>:</td>
+                        <td>{{ $receipt->Address }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="col-md-5">
-            <p><b>Receipt No: </b> {{ $receipt->Receipt_No}}</p>
-            <p><b>Date: </b>  {{ getReceiptDate($receipt, $type, $advance_data) }}</p>
+            <table class="table table-no-border">
+                <tbody>
+                    <tr>
+                        <td style="min-width: 150px">Receipt No </td>
+                        <td>:</td>
+                        <td>{{ $receipt->Receipt_No }}</td>
+                    </tr>
+                    <tr>
+                        <td>Receipt Date</td>
+                        <td>:</td>
+                        <td>{{ getReceiptDate($receipt, $type, $advance_data) }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -104,12 +144,12 @@
                 ?>
                 @foreach($invDetails as $row)
                 <?php
-                 $subTotal += $row->Unit_Price * $row->Qty;
-                 $subTotalWithPer += percent_price($row->Unit_Price, $row->percent) * $row->Qty;
-                 ?>
+                    $subTotal += $row->Unit_Price * $row->Qty;
+                    $subTotalWithPer += percent_price($row->Unit_Price, $row->percent) * $row->Qty;
+                ?>
 
                 <tr>
-                    <td>{{ $row->Description }}</td>
+                    <td style="min-width: 200px;">{!! $row->Description !!}</td>
                     <td class="text-right">{{ $row->Unit_Price }} {{$currency->Currency_name}}</td>
                     <td class="text-right">{{ $row->percent }}%</td>
                     <td class="text-right">{{number_format(percent_price($row->Unit_Price, $row->percent),2)}} {{$currency->Currency_name}}</td>
@@ -262,20 +302,20 @@
     <div class="row">
         <div class="col-md-8"></div>
         <div class="col-md-4 text-center">
-            @if($invoice->file_name != "")
-                <img src="{{ asset($invoice->file_name)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img">
+            @if($receipt->file_name != "")
+                <img src="{{ asset($receipt->file_name)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img">
             @else
                 <img src="{{ asset('img/author-icon.png')}}" alt="" width=100 height=100 class="text-center" id="authorizer-img">
             @endif
             <h6>Authorized Person</h6> 
-            {!! Form::open(['route' => ['OfficeManagement.invoiceAuthorizer',$invoice->id],'method' => 'POST']) !!}
+            {!! Form::open(['route' => ['OfficeManagement.receiptAuthorizer',$receipt->id],'method' => 'POST']) !!}
             <div class="row">
                 <div class="col-md-10">
                     <div class="form-group">
                         <select name="authorizer" id="authorizer" class="form-control form-select">
                         <option value="">Select Authorized Person</option>
                             @foreach($authorizers as $row)
-                                <option value="{{ $row->id }}" <?php if($row->authorized_name == $invoice->sign_name) echo "selected";?> data-file="{{ asset($row->file_name) }}">{{$row->authorized_name}}</option>
+                                <option value="{{ $row->id }}" <?php if($row->authorized_name == $receipt->sign_name) echo "selected";?> data-file="{{ asset($row->file_name) }}">{{$row->authorized_name}}</option>
                             @endforeach
                         </select>
                     </div>

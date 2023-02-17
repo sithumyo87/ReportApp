@@ -35,7 +35,7 @@
             <div class="col-xs-12 col-sm-12 col-md-8">
                 <div class="form-group">
                     <label for="">Dealer Name</label>
-                    <select name="dealer_id" class="form-control select2" required>
+                    <select name="dealer_id" class="form-control select2">
                         <option value="">Choose Dealer Name</option>
                         @foreach($dealers as $row)
                         <option value="{{ $row->id }}">{{ $row->name}}</option>
@@ -48,15 +48,15 @@
                 </div>
                 <div class="form-group">
                     <label for="">Description</label>
-                    {!! Form::textarea('Description', null, ['placeholder' => 'Description', 'class' => 'form-control','id'=>'ckeditor','cols'=>5,'rows'=>5]) !!}
+                    {!! Form::textarea('Description', null, ['placeholder' => 'Description', 'class' => 'form-control tinymce-editor', 'cols'=>5,'rows'=>5, 'required']) !!}
                 </div>
                 <div class="form-group">
                     <label for="">PRICE PER ITEM</label>
-                    {!! Form::number('Unit_Price', null, ['placeholder' => '', 'class' => 'form-control']) !!}
+                    {!! Form::number('Unit_Price', null, ['placeholder' => '', 'class' => 'form-control', 'required', 'min' => '0', 'step' => '0.01']) !!}
                 </div>
                 <div class="form-group">
                     <label for="">Qty</label>
-                    {!! Form::number('Qty', null, ['placeholder' => '', 'class' => 'form-control']) !!}
+                    {!! Form::number('Qty', null, ['placeholder' => '', 'class' => 'form-control', 'required', 'min' => '0']) !!}
                 </div>
                 <div class="form-group">
                     <label for="">Percentage</label>

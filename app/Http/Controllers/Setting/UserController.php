@@ -20,6 +20,7 @@ class UserController extends Controller
         $this->middleware('permission:user-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:user-delete', ['only' => ['destroy']]);
     }
+    
     /**
      * Display a listing of the resource.
      *
@@ -27,8 +28,8 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $data = User::where('id','>',0)->orderBy('id','DESC')->paginate(5);
-        return view('setting.user.index',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5);
+        $data = User::searchDataPaginate($request);
+        return view('setting.user.index',compact('data'))->with('i', pageNumber($request));
     }
 
     /**

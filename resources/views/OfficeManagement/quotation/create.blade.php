@@ -73,12 +73,12 @@
 
                 <div class="form-group">
                     <label for="">Subject</label>
-                    {!! Form::text('Sub', null, ['placeholder' => '', 'class' => 'form-control']) !!}
+                    {!! Form::text('Sub', null, ['placeholder' => '', 'class' => 'form-control', 'required']) !!}
                 </div>
 
                 <div class="form-group">
                     <label class="control-label" for="Date">Date</label>
-                    <input class="form-control date-picker" name="date" placeholder="DD-MM-YYYY" type="text" />
+                    <input class="form-control date-picker" name="date" placeholder="DD-MM-YYYY" type="text" required/>
                 </div>
 
                 <div class="form-group">
@@ -87,7 +87,7 @@
                     @foreach($currency as $row)
                         <div class="radio mr-4">
                             <label>
-                                <input type="radio" name="Currency_type" value="{{$row->id}}"> &nbsp; {{$row->Currency_name}}
+                                <input type="radio" name="Currency_type" value="{{$row->id}}" required> &nbsp; {{$row->Currency_name}}
                             </label>
                         </div>
                         @endforeach

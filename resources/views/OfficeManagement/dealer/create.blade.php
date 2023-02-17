@@ -9,7 +9,7 @@
             <div class="d-flex justify-content-end align-items-center">
                 <ol class="breadcrumb">
                     @can('user-index')
-                    <li class="breadcrumb-item"><a href="{{ route('setting.user.index') }}">Dealer</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('OfficeManagement.dealer.index') }}">Dealer</a></li>
                     @endcan
                     <li class="breadcrumb-item active">Create</li>
                 </ol>
@@ -33,15 +33,15 @@
             <div class="col-xs-12 col-sm-12 col-md-8 mt-3">
                 <div class="form-group">
                     <label for="">Name</label>
-                    {!! Form::text('name', null, ['placeholder' => 'dealer Name', 'class' => 'form-control']) !!}
+                    {!! Form::text('name', null, ['placeholder' => 'dealer Name', 'class' => 'form-control', 'required']) !!}
                 </div>
                 <div class="form-group">
                     <label for="">Position</label>
-                    {!! Form::text('position', null, ['placeholder' => 'Position', 'class' => 'form-control']) !!}
+                    {!! Form::text('position', null, ['placeholder' => 'Position', 'class' => 'form-control', 'required']) !!}
                 </div>
                 <div class="form-group">
                     <label for="">Phone Number</label>
-                    {!! Form::text('phone', null, ['placeholder' => 'Phone Number', 'class' => 'form-control']) !!}
+                    {!! Form::text('phone', null, ['placeholder' => 'Phone Number', 'class' => 'form-control', 'required']) !!}
                 </div>
                 <div class="form-group">
                     <label for="">Phone Number(Other)</label>
@@ -49,19 +49,19 @@
                 </div>
                 <div class="form-group">
                     <label for="">Company</label>
-                    {!! Form::text('company', null, ['placeholder' => 'company name', 'class' => 'form-control']) !!}
+                    {!! Form::text('company', null, ['placeholder' => 'company name', 'class' => 'form-control', 'required']) !!}
                 </div>
                 <div class="form-group">
                     <label for="">E-mail</label>
-                    {!! Form::text('email', null, ['placeholder' => 'Email Address', 'class' => 'form-control']) !!}
+                    {!! Form::text('email', null, ['placeholder' => 'Email Address', 'class' => 'form-control', 'required']) !!}
                 </div>
                 <div class="form-group">
                     <label for="">Address</label>
-                    {!! Form::textarea('address', null, ['placeholder' => 'Address', 'class' => 'form-control', 'cols'=>5,'rows'=>5]) !!}
+                    {!! Form::textarea('address', null, ['placeholder' => 'Address', 'class' => 'form-control', 'cols'=>5,'rows'=>5, 'required']) !!}
                 </div>
                 <div class="text-center">
-                    <a href="{{ route('OfficeManagement.dealer.index') }}" class="btn btn-warning">{{ __('button.cancel') }}</a>
-                    <button type="submit" class="btn btn-primary">{{ __('button.save') }}</button>
+                    <a href="{{ route('OfficeManagement.dealer.index') }}" class="btn btn-warning btn-sm">{{ __('button.cancel') }}</a>
+                    <button type="submit" class="btn btn-primary btn-sm">{{ __('button.save') }}</button>
                 </div>
             </div>
         </div>

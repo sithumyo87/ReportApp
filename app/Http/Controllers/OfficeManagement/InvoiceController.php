@@ -6,23 +6,32 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Invoice;
 use App\Models\Quotation;
-use App\Models\Customer;
 use App\Models\Currency;
+use App\Models\PaymentTerm;
+use App\Models\QuotationDetail;
+use App\Models\QuotationNote;
+use App\Models\Customer;
+use App\Models\PersonInvoice;
+use App\Models\Dealer;
+use App\Models\Authorizer;
+use App\Models\Advance;
+use App\Models\BankInfo;
+use App\Models\BankInfoDetail;
 use Carbon\Carbon;
-use  App\Models\PaymentTerm;
-use  App\Models\QuotationDetail;
 use DB;
+use PDF;
 
 class InvoiceController extends Controller
 {
     function __construct()
     {
-        // $this->middleware('permission:Invoice-index|Invoice-create|Invoice-edit|Invoice-delete', ['only' => ['index','store']]);
-        // $this->middleware('permission:Invoice-show', ['only' => ['show']]);
-        // $this->middleware('permission:Invoice-create', ['only' => ['create','store']]);
-        // $this->middleware('permission:Invoice-edit', ['only' => ['edit','update']]);
-        // $this->middleware('permission:Invoice-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:invoice-index|invoice-create|invoice-edit|invoice-delete', ['only' => ['index']]);
+        $this->middleware('permission:invoice-show', ['only' => ['show']]);
+        $this->middleware('permission:invoice-create', ['only' => ['create','store']]);
+        $this->middleware('permission:invoice-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:invoice-delete', ['only' => ['destroy']]);
     }
+    
     /**
      * Display a listing of the resource.
      *
@@ -30,10 +39,12 @@ class InvoiceController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Invoice::where('id','>',0)->orderBy('id','DESC')->paginate(15);
-        // $invoice = Invoice::where('id','>',0)->first();
-        // $quotation = Quotation::where('Id', $invoice->Quotation_Id)->first();
-        return view('OfficeManagement.invoice.index',compact('data'))->with('i', ($request->input('page', 1) - 1) * 15);
+        $data               = Invoice::searchDataPaginate($request);
+        $inv_codes          = Invoice::invoiceNoDropDown();
+        $company_names      = Customer::companyDropDown();
+        $customer_names     = Customer::customerDropDown();
+        $search             = $request;
+        return view('OfficeManagement.invoice.index',compact('data', 'inv_codes', 'company_names', 'customer_names', 'search'))->with('i', pageNumber($request));
     }
 
     /**
@@ -81,7 +92,7 @@ class InvoiceController extends Controller
         $input['Invoice_No'] = 'IV-'.strtotime($input['Date'].' '.date('H:i:s'));
         $input['Date'] =date('Y-m-d',strtotime(str_replace('/', '-', $input['Date'])));
         
-        $input['file_name'] = $storedFileName;
+        $input['form31_files'] = $storedFileName;
         $input['submit_status'] = false;
 
         // dd($input);
@@ -101,7 +112,7 @@ class InvoiceController extends Controller
             DB::table('quotation_details')->where('Quotation_Id',$quo_Id)->update(['Invoice_Id' => $invoice->id]);
         }
 
-        return redirect()->route('OfficeManagement.invoice.index')
+        return redirect()->route('OfficeManagement.invoiceDetail.show', $invoice->id)
                         ->with('success','Invoice created successfully');
     }
 
@@ -124,11 +135,6 @@ class InvoiceController extends Controller
      */
     public function edit($id)
     {
-        $Invoice = Invoice::findOrFail($id);
-        $customers = Customer::where('action',true)->get(); 
-        $currency = Currency::all();
-        $Invoices = Invoice::all();
-        return view('OfficeManagement.invoice.edit',compact('Invoice','customers','currency','Invoices'));
     }
 
     /**
@@ -192,13 +198,61 @@ class InvoiceController extends Controller
 
 
     public function quoAttnOnChange(Request $request){
-        $quoId = $request->quoId;
-        if($quoId != ''){
-            $quotation = Quotation::findOrFail($quoId);
-        }else{
-            $quotation = Quotation();
+        if($request->ajax()){
+            $quoId = $request->quoId;
+            if($quoId != ''){
+                $quotation = Quotation::findOrFail($quoId);
+            }else{
+                $quotation = Quotation();
+            }
+            $currency = Currency::all();
+            return view('OfficeManagement.invoice.attn_form',compact('quotation','currency'));
         }
-        $currency = Currency::all();
-        return view('OfficeManagement.invoice.attn_form',compact('quotation','currency'));
+    }
+    
+    public function invoicePrint($id, $type=null){
+        $invoice    = Invoice::find($id);
+        $currency   = Currency::where('id',$invoice->Currency_type)->first();
+        $invDetails = QuotationDetail::where('Invoice_Id',$id)->get();
+        $invNotes       = QuotationNote::where('InvoiceId', $id)->where('Note','!=',"")->get();
+        $authorizers    = Authorizer::get();
+        $bankInfos = BankInfo::get();
+
+        $bankInfoDetails = [];
+        if($invoice->submit_status == 1 && $invoice->bank_info != ''){
+            $banks = explode(',', $invoice->bank_info);
+            foreach($banks as $bank){
+                $banInfo = BankInfo::find($bank);
+                $bInfo['name'] = $banInfo->name;
+                $bInfo['details'] = BankInfoDetail::where('bank_info_id', $bank)->get();
+                array_push($bankInfoDetails, $bInfo);
+            }
+        }
+
+        // data for other payment
+        if(is_numeric($type)){
+            $advance_data = Advance::where('Invoice_Id', $invoice->id)->where('nth_time', $type)->first();
+        }else{
+            $advance_data = null;
+        }
+        $advance_last = Advance::where('Invoice_Id', $invoice->id)->orderBy('id', 'desc')->first();
+        $advances = Advance::where('Invoice_Id', $invoice->id)->orderBy('id', 'asc')->get();
+
+        $data = [
+            'invoice'           => $invoice,
+            'invNotes'          => $invNotes,
+            'invDetails'        => $invDetails,
+            'currency'          => $currency,
+            'authorizers'       => $authorizers,
+            'bankInfos'         => $bankInfos,
+            'bankInfoDetails'   => $bankInfoDetails,
+            'type'              => $type,
+            'advance_last'      => $advance_last,
+            'advances'          => $advances,
+            'advance_data'      => $advance_data,
+        ]; 
+
+        $pdf = PDF::loadView('OfficeManagement.invoice.print', $data);
+        return $pdf->stream($invoice->Invoice_No.'.pdf');
     }
 }

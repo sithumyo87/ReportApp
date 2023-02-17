@@ -8,14 +8,14 @@
         </div>
         <div class="col-md-7">
             <div class="d-flex justify-content-end">
-                @if($deliveryOrder->submit_status == true)
-                    <a href="{{ route('OfficeManagement.deliveryOrder.create') }}"
-                        class="btn btn-success d-none d-lg-block m-l-15 mr-3"><i class="fa fa-print"></i>
+                @if($deliveryOrder->submit_status == true || count($histories) > 0)
+                    <a href="{{ route('OfficeManagement.doPrint', $deliveryOrder->id) }}"
+                        class="btn btn-success btn-sm d-none d-lg-block m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
                         Print
                     </a>
                 @endif
                 <a href="{{ route('OfficeManagement.deliveryOrder.index') }}"
-                    class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-back"></i>
+                    class="btn btn-info d-none btn-sm d-lg-block m-l-15"><i class="fa fa-back"></i>
                     Back
                 </a>
             </div>
@@ -56,12 +56,14 @@
 
     <!-- start detail -->
     @if($deliveryOrder->submit_status != '1' && $deliveryOrder->quo_id == '' && $deliveryOrder->inv_id == '')
-        <div class="m-b-10">
-            <a href="{{ route('OfficeManagement.deliveryOrderDetail.create', ['do_id' => $deliveryOrder->id]) }}"
-                class="btn btn-success m-l-15"><i class="fa fa-plus-circle"></i>
-                {{ __('Add Descrition') }}
-            </a>
-        </div>
+        @can('do-create')
+            <div class="m-b-10">
+                <a href="{{ route('OfficeManagement.deliveryOrderDetail.create', ['do_id' => $deliveryOrder->id]) }}"
+                    class="btn btn-success btn-sm m-l-15"><i class="fa fa-plus-circle"></i>
+                    {{ __('Add Descrition') }}
+                </a>
+            </div>
+        @endcan
     @endif
     <div class="table-responsive bg-white p-30">
         <table class="table table-bordered">
@@ -121,7 +123,7 @@
 
                     @if($deliveryOrder->submit_status != '1')
                         <td class="text-center">
-                            @can('user-edit')
+                            @can('do-edit')
                                 @if($editState)
                                     @if($refer_state)
                                         @if($showDeliverButton)
@@ -135,7 +137,7 @@
                                 @endif
                             @endcan
 
-                            @can('user-delete')
+                            @can('do-delete')
                                 @if($deliveryOrder->submit_status != '1')
                                     {!! Form::open(['method' => 'DELETE', 'route' => ['OfficeManagement.deliveryOrderDetail.destroy',
                                     $row->id], 'style' => 'display:inline']) !!}
@@ -164,9 +166,14 @@
                     <img src="{{ asset('signature/blank.png') }}" class="img-responsive img-sign" height="100"/> <br>
                 @endif
                 @if($deliveryOrder->submit_status != '1')
-                    <button type="button" class="btn btn-primary m-b-10 sign-button" data-bs-toggle="modal" data-bs-target="#receiver" id="receiverSign">
-                        Add Signature
-                    </button>
+                    <div>
+                        <button type="button" class="btn btn-primary btn-sm m-b-10 sign-button" data-bs-toggle="modal" data-bs-target="#receiver" id="receiverSign">
+                            Add Signature
+                        </button>
+                        @if($deliveryOrder->received_sign != '')
+                            <a href="{{ route('OfficeManagement.deliveryOrderSignRemove', ['id' => $deliveryOrder->id, 'sign' => 'received']) }}" class="btn btn-danger btn-sm remove-sign"><i class="fa fa-trash"></i></a>
+                        @endif
+                    </div>
                 @endif
                 <h6>Received By</h6>
                 @if($deliveryOrder->received_name != '')
@@ -181,9 +188,14 @@
                     <img src="{{ asset('signature/blank.png') }}" class="img-responsive img-sign" height="100"/> <br>
                 @endif
                 @if($deliveryOrder->submit_status != '1')
-                    <button type="button" class="btn btn-primary m-b-10 sign-button" data-bs-toggle="modal" data-bs-target="#deliever">
-                        Add Signature
-                    </button>
+                    <div>
+                        <button type="button" class="btn btn-primary btn-sm m-b-10 sign-button" data-bs-toggle="modal" data-bs-target="#deliever">
+                            Add Signature
+                        </button>
+                        @if($deliveryOrder->delivered_sign != '')
+                            <a href="{{ route('OfficeManagement.deliveryOrderSignRemove', ['id' => $deliveryOrder->id, 'sign' => 'delivered']) }}" class="btn btn-danger btn-sm remove-sign"><i class="fa fa-trash"></i></a>
+                        @endif
+                    </div>
                 @endif
                 <h6>Delivered By</h6>
                 @if($deliveryOrder->delivered_name != '')
@@ -195,7 +207,7 @@
 
     @if($confirmDeliverButton)
         <div class="text-center ">
-            <a href="{{route('OfficeManagement.deliveryOrderConfirmDelivery',$deliveryOrder->id)}}"><p><button class="btn btn-info btn-block w-80">Confirm Deliver</button></p></a> 
+            <a href="{{route('OfficeManagement.deliveryOrderConfirmDelivery',$deliveryOrder->id)}}"><p><button class="btn btn-info btn-sm btn-block w-80">Confirm Deliver</button></p></a> 
         </div>
     @endif
    
@@ -258,6 +270,9 @@
                                                 @endforeach
                                             </tbody>
                                         </table>
+                                        <a href="{{ route('OfficeManagement.doPrint', ['id' => $deliveryOrder->id, 'date' => $history['date']]) }}" class="btn btn-success btn-sm m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
+                                            Print
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -288,7 +303,7 @@
                 <div class="form-group" style="width: 500px;">
                     <div class="form-group">
                         <label for="">Receiver Name</label>
-                        {!! Form::text('received_name', null, ['placeholder' => 'Name', 'class' => 'form-control']) !!}
+                        {!! Form::text('received_name', null, ['placeholder' => 'Name', 'class' => 'form-control', 'required']) !!}
                     </div>
                 </div>
                 <div class="form-group">
@@ -296,7 +311,7 @@
                     <button id="clear" class="btn btn-warning btn-sm float-right m-b-10">Clear</button> <br/>
                     <div  style="width: 500px; height: 300px;">
                         <div class="sig" style="width: 500px; height: 300px;"></div>
-                        <textarea class="signature64" name="received_sign" style="display: none"></textarea> 
+                        <textarea class="signature64" name="received_sign" style="display: none" required></textarea> 
                     </div>
                 </div>
             </div>
@@ -325,7 +340,7 @@
                 <div class="form-group" style="width: 500px;">
                     <div class="form-group">
                         <label for="">Deliever Name</label>
-                        {!! Form::text('delivered_name', null, ['placeholder' => 'Name', 'class' => 'form-control']) !!}
+                        {!! Form::text('delivered_name', null, ['placeholder' => 'Name', 'class' => 'form-control', 'required']) !!}
                     </div>
                 </div>
                 <div class="form-group">
@@ -333,7 +348,7 @@
                     <button id="clear" class="btn btn-warning btn-sm float-right m-b-10">Clear</button> <br/>
                     <div  style="width: 500px; height: 300px;">
                         <div class="sig" style="width: 500px; height: 300px;"></div>
-                        <textarea class="signature64" name="delivered_sign" style="display: none"></textarea> 
+                        <textarea class="signature64" name="delivered_sign" style="display: none" required></textarea> 
                     </div>
                 </div>
             </div>

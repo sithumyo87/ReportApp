@@ -17,6 +17,14 @@ function date_translate($date){
     return num_translate($date);
 }
 
+function pagination(){
+    return 15;
+}
+
+function pageNumber($request){
+    return ($request->input('page', 1) - 1) * pagination();
+}
+
 function percent_price($price, $percent) {
     $float_num = $price;
     if ($percent > 0 && $percent != '') {
