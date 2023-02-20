@@ -22,7 +22,7 @@ class AuthController extends Controller
         try {
             $validateUser = Validator::make($request->all(), 
             [
-                'email'      => 'required',
+                'email'         => 'required',
                 'password'      => 'required'
             ]);
 
@@ -45,11 +45,13 @@ class AuthController extends Controller
             $user = User::where('email', $request->email)->first();
             $token = $user->createToken("API TOKEN");
 
+            $permission = $user->getAllPermissions();
+
             return response()->json([
                 'status'   => true,
                 'token'    => $token->plainTextToken,
                 'token_id' => $token->accessToken->id,
-                'user'     => $user
+                'user'     => $user,
             ], 200);
 
         } catch (\Throwable $th) {

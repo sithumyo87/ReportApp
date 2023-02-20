@@ -76,7 +76,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="Date">Date</label>
-                    <input class="form-control" id="Date" name="date" placeholder="YYY-MM-DD" type="text" value="{{$quotation->Date}}"/>
+                    <input class="form-control date-picker" id="Date" name="date" placeholder="YYY-MM-DD" type="text" value="{{ date('d-m-Y', strtotime($quotation->Date)) }}"/>
                 </div>
                 <div class="form-group">
                     {{ Form::label('currency', 'Currency') }}

@@ -82,7 +82,7 @@ class QuotationController extends Controller
 			$refer_no = '';
 			$Refer = false;
 		};
-        $Date = date('Y-m-d',strtotime(str_replace('/', '-', $request->date)));
+        $Date = date('Y-m-d',strtotime($request->date));
         
         $customerName = Customer::find($request->customer_id);
 
@@ -156,7 +156,7 @@ class QuotationController extends Controller
 			$Refer = false;
 		};
 
-        $Date = date('Y-m-d',strtotime(str_replace('/', '-', $request->date)));
+        $Date = date('Y-m-d',strtotime($request->date));
 
         $customerName = Customer::find($request->customer_id);
 
