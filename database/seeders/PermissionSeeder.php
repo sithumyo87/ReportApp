@@ -20,7 +20,23 @@ class PermissionSeeder extends Seeder
 
         $this->quotation = ['quotation-index', 'quotation-create','quotation-edit','quotation-delete','quotation-show'];
 
+        $this->invoice = ['invoice-index', 'invoice-create','invoice-edit','invoice-delete','invoice-show'];
+
+        $this->receipt = ['receipt-index', 'receipt-create','receipt-edit','receipt-delete','receipt-show'];
+
+        $this->po = ['po-index', 'po-create','po-edit','po-delete','po-show'];
+
+        $this->do = ['do-index', 'do-create','do-edit','do-delete','do-show'];
+
         $this->customer = ['customer-index', 'customer-create','customer-edit','customer-delete','customer-show'];
+
+        $this->dealer = ['dealer-index', 'dealer-create','dealer-edit','dealer-delete','dealer-show'];
+
+        $this->currency = ['currency-index', 'currency-create','currency-edit','currency-delete','currency-show'];
+
+        $this->bank = ['bank-index', 'bank-create','bank-edit','bank-delete','bank-show'];
+
+        $this->authorizer = ['authorizer-index', 'authorizer-create','authorizer-edit','authorizer-delete','authorizer-show'];
     }
     /**
      * Run the database seeds.
@@ -29,18 +45,26 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-         // create permission
-         $this->permission_create($this->dashboard);
-         $this->permission_create($this->permission);
-         $this->permission_create($this->role);
-         $this->permission_create($this->user);
-         $this->permission_create($this->quotation);
-         $this->permission_create($this->customer);
- 
-         // create role and give permission to this role
-         $this->role_create('system', [Permission::all()]);
-         $this->role_create('admin', [Permission::all()]);
-         $this->role_create('moderator', [Permission::all()]);
+        // create permission
+        $this->permission_create($this->dashboard);
+        $this->permission_create($this->permission);
+        $this->permission_create($this->role);
+        $this->permission_create($this->user);
+        $this->permission_create($this->quotation);
+        $this->permission_create($this->invoice);
+        $this->permission_create($this->receipt);
+        $this->permission_create($this->po);
+        $this->permission_create($this->do);
+        $this->permission_create($this->customer);
+        $this->permission_create($this->dealer);
+        $this->permission_create($this->currency);
+        $this->permission_create($this->bank);
+        $this->permission_create($this->authorizer);
+
+        // create role and give permission to this role
+        $this->role_create('system', [Permission::all()]);
+        $this->role_create('admin', [Permission::all()]);
+        $this->role_create('moderator', [Permission::all()]);
     }
 
     public function permission_create($permissions){
