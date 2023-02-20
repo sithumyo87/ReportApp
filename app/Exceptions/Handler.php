@@ -68,9 +68,7 @@ class Handler extends ExceptionHandler
         });
 
         $this->reportable(function (Throwable $e) {
-            if ($request->is('api/*')) {
-                return response()->json(['success' => false,'title'=>'Unauthorized', 'message' => $e->getMessage(), 'exception' => 'UnauthorizedHttpException'], 403);
-            }
+            
         });
     }
 }
