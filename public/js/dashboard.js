@@ -1,14 +1,29 @@
 (function($) {
   "use strict"; // Start of use strict
 
+  console.log('dashboard.js');
+
   // Toggle the side navigation
   $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
+
+    console.log('toggle');
+    
     $("body").toggleClass("sidebar-toggled");
     $(".sidebar").toggleClass("toggled");
     if ($(".sidebar").hasClass("toggled")) {
       $('.sidebar .collapse').collapse('hide');
     };
   });
+
+  $(document).on('click','#sidebarToggle, #sidebarToggleTop', function(e) {
+    console.log('sidebarToggle chnge');
+
+    $("body").toggleClass("sidebar-toggled");
+    $(".sidebar").toggleClass("toggled");
+    if ($(".sidebar").hasClass("toggled")) {
+      $('.sidebar .collapse').collapse('hide');
+    };
+});
 
   // Close any open menu accordions when window is resized below 768px
   $(window).resize(function() {

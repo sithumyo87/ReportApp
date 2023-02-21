@@ -14,16 +14,34 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware' => ['cors', 'auth:sanctum']], function () {
-    Route::post('/user', function(Request $request){
-        return $request->user();
-    }); 
-});
-
 Route::group(['middleware' =>  ['cors', 'auth:sanctum'], 'prefix' => 'office', 'as' => 'office'], function() {
+
+    // quotation start ---------------------------
     Route::get('/quotation', [App\Http\Controllers\Api\QuotationController::class, 'index'])->middleware('permission:quotation-index');
     Route::get('/quotation/create', [App\Http\Controllers\Api\QuotationController::class, 'create'])->middleware('permission:quotation-create');
     Route::post('/quotation/store', [App\Http\Controllers\Api\QuotationController::class, 'store'])->middleware('permission:quotation-create');
+    Route::get('/quotation/edit/{id}', [App\Http\Controllers\Api\QuotationController::class, 'edit'])->middleware('permission:quotation-edit');
+    Route::post('/quotation/update/{id}', [App\Http\Controllers\Api\QuotationController::class, 'update'])->middleware('permission:quotation-edit');
+    // detail
+    Route::get('/quotation/detail/{id}', [App\Http\Controllers\Api\QuotationController::class, 'detail'])->middleware('permission:quotation-show');
+    Route::get('/quotation/detail/create/{id}', [App\Http\Controllers\Api\QuotationController::class, 'detail_create'])->middleware('permission:quotation-create');
+    Route::post('/quotation/detail/store/{id}', [App\Http\Controllers\Api\QuotationController::class, 'detail_store'])->middleware('permission:quotation-create');
+    Route::get('/quotation/detail/edit/{id}', [App\Http\Controllers\Api\QuotationController::class, 'detail_edit'])->middleware('permission:quotation-edit');
+    Route::post('/quotation/detail/update/{id}', [App\Http\Controllers\Api\QuotationController::class, 'detail_update'])->middleware('permission:quotation-edit');
+    Route::post('/quotation/detail/delete/{id}', [App\Http\Controllers\Api\QuotationController::class, 'detail_delete'])->middleware('permission:quotation-delete');
+    Route::post('/quotation/tax_check/{id}', [App\Http\Controllers\Api\QuotationController::class, 'tax_check'])->middleware('permission:quotation-edit');
+    // note
+    Route::post('/quotation/note/store/{id}', [App\Http\Controllers\Api\QuotationController::class, 'note_store'])->middleware('permission:quotation-create');
+    Route::get('/quotation/note/edit/{id}', [App\Http\Controllers\Api\QuotationController::class, 'note_edit'])->middleware('permission:quotation-edit');
+    Route::post('/quotation/note/update/{id}', [App\Http\Controllers\Api\QuotationController::class, 'note_update'])->middleware('permission:quotation-edit');
+    // file
+    Route::post('/quotation/file/{id}', [App\Http\Controllers\Api\QuotationController::class, 'file_store'])->middleware('permission:quotation-edit');
+    Route::post('/quotation/file/delete/{id}', [App\Http\Controllers\Api\QuotationController::class, 'file_delete'])->middleware('permission:quotation-edit');
+    // signature
+    Route::post('/quotation/sign/{id}', [App\Http\Controllers\Api\QuotationController::class, 'sign_store'])->middleware('permission:quotation-edit');
+    // confirm
+    Route::post('/quotation/confirm/{id}', [App\Http\Controllers\Api\QuotationController::class, 'confirm'])->middleware('permission:quotation-edit');
+    // quotation end ---------------------------
 });
 
 Route::group(['middleware' => ['cors']], function () {

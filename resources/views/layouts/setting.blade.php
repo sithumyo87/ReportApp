@@ -33,7 +33,7 @@
     <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="{{ asset('js/dashboard.min.js') }}"></script>
+    <script src="{{ asset('js/dashboard.js') }}"></script>
 
     <!-- Page level plugins -->
     <!-- <script src="{{ asset('vendor/chart.js/Chart.min.js') }}"></script> -->
