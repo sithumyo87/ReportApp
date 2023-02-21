@@ -230,8 +230,9 @@ class QuotationController extends Controller
         // return view('OfficeManagement.quotation.print')->with($data);
             
         $pdf = PDF::loadView('OfficeManagement.quotation.print', $data);
-     
         return $pdf->stream($quotation->Serial_No.'.pdf');
+
+        // return view('OfficeManagement.quotation.print')->with($data);
     }
 
 }

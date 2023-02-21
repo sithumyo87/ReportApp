@@ -167,7 +167,7 @@
 
     <div class="sign text-center">
         @if($receipt->file_name != "")
-            <img src="{{ asset($receipt->file_name)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
+            <img src="{{ public_path($receipt->file_name)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
             <b>{{ $receipt->sign_name }}</b>  <br>
             Next Hop Co.,Ltd.
         @endif

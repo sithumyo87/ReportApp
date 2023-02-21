@@ -104,11 +104,11 @@
 <div class="deliver_receiver">
     <div class="deliver text-center">
         @if($deliveryOrder->received_sign != "")
-            <img src="{{ asset($deliveryOrder->received_sign)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
+            <img src="{{ public_path($deliveryOrder->received_sign)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
             Received By<br>
             <b>{{ $deliveryOrder->received_name }}</b>
         @else
-            <img src="{{ asset('signature/blank.png')}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
+            <img src="{{ public_path('signature/blank.png')}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
             Received By<br>
             <b></b>
         @endif
@@ -116,11 +116,11 @@
 
     <div class="receiver text-center">
         @if($deliveryOrder->delivered_sign != "")
-            <img src="{{ asset($deliveryOrder->delivered_sign)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
+            <img src="{{ public_path($deliveryOrder->delivered_sign)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
             Delivered By<br>
             <b>{{ $deliveryOrder->delivered_name }}</b>
         @else
-            <img src="{{ asset('signature/blank.png')}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
+            <img src="{{ public_path('signature/blank.png')}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
             Delivered By<br>
             <b></b>
         @endif

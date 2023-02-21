@@ -69,11 +69,20 @@ footer {
     width: 70%;
 }
 
+table{
+    border-collapse: collapse;
+}
+
+.table-bordered{
+    margin-top: 10px;
+}
+
 .table-bordered thead tr th, .table-bordered tbody tr td {
     border: 1px solid #333333;
     padding: 5px 10px;
     font-size: 13px;
     vertical-align: middle;
+    margin: 0px !important;
 }
 
 .table-bordered thead tr th {

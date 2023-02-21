@@ -133,7 +133,7 @@
 
     <div class="sign text-center">
         @if($quotation->file_name != "")
-            <img src="{{ asset($quotation->file_name)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
+            <img src="{{ public_path($quotation->file_name)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
             <b>{{ $quotation->sign_name }}</b>  <br>
             Next Hop Co.,Ltd.
         @endif
