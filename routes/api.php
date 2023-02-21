@@ -42,6 +42,21 @@ Route::group(['middleware' =>  ['cors', 'auth:sanctum'], 'prefix' => 'office', '
     // confirm
     Route::post('/quotation/confirm/{id}', [App\Http\Controllers\Api\QuotationController::class, 'confirm'])->middleware('permission:quotation-edit');
     // quotation end ---------------------------
+
+
+    //po start -----------------------------------------
+    Route::get('/po', [App\Http\Controllers\Api\PurchasingOrderController::class, 'index'])->middleware('permission:po-index');
+    Route::get('/po/create', [App\Http\Controllers\Api\PurchasingOrderController::class, 'create'])->middleware('permission:po-create');
+    Route::post('/po/store', [App\Http\Controllers\Api\PurchasingOrderController::class, 'store'])->middleware('permission:po-create');
+    Route::get('/po/edit/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'edit'])->middleware('permission:po-edit');
+    Route::post('/po/update/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'update'])->middleware('permission:po-edit');
+    // detail
+    Route::get('/po/detail/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'detail'])->middleware('permission:po-show');
+    Route::get('/po/detail/create/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'detail_create'])->middleware('permission:po-create');
+    Route::post('/po/detail/store/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'detail_store'])->middleware('permission:po-create');
+    Route::get('/po/detail/edit/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'detail_edit'])->middleware('permission:po-edit');
+    Route::post('/po/detail/update/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'detail_update'])->middleware('permission:po-edit');
+    Route::post('/po/detail/delete/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'detail_delete'])->middleware('permission:po-delete');
 });
 
 Route::group(['middleware' => ['cors']], function () {
