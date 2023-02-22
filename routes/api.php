@@ -57,6 +57,64 @@ Route::group(['middleware' =>  ['cors', 'auth:sanctum'], 'prefix' => 'office', '
     Route::get('/po/detail/edit/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'detail_edit'])->middleware('permission:po-edit');
     Route::post('/po/detail/update/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'detail_update'])->middleware('permission:po-edit');
     Route::post('/po/detail/delete/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'detail_delete'])->middleware('permission:po-delete');
+    Route::post('/po/tax_check/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'tax_check'])->middleware('permission:quotation-edit');
+    // note
+    Route::post('/po/note/store/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'note_store'])->middleware('permission:po-create');
+    Route::get('/po/note/edit/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'note_edit'])->middleware('permission:po-edit');
+    Route::post('/po/note/update/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'note_update'])->middleware('permission:po-edit');
+    Route::post('/po/note/delete/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'note_delete'])->middleware('permission:po-edit');
+    // signature
+    Route::post('/po/sign/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'sign_store'])->middleware('permission:po-edit');
+    // confirm
+    Route::post('/po/confirm/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'confirm'])->middleware('permission:po-edit');
+    ///end po------------------------------------
+
+    //DO start----------------------------------------------
+    Route::get('/do', [App\Http\Controllers\Api\DeliveryOrderController::class, 'index'])->middleware('permission:do-index');
+    Route::get('/do/create', [App\Http\Controllers\Api\DeliveryOrderController::class, 'create'])->middleware('permission:do-create');
+    Route::post('/do/store', [App\Http\Controllers\Api\DeliveryOrderController::class, 'store'])->middleware('permission:do-create');
+    Route::get('/do/edit/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'edit'])->middleware('permission:do-edit');
+    Route::post('/do/update/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'update'])->middleware('permission:po-edit');
+    Route::post('/do/delete/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'delete'])->middleware('permission:do-edit');
+    // detail
+    Route::get('/do/detail/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'detail'])->middleware('permission:do-show');
+    Route::get('/do/detail/create/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'detail_create'])->middleware('permission:do-create');
+    Route::post('/do/detail/store/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'detail_store'])->middleware('permission:do-create');
+    Route::get('/do/detail/edit/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'detail_edit'])->middleware('permission:do-edit');
+    Route::post('/do/detail/update/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'detail_update'])->middleware('permission:do-edit');
+    Route::post('/do/detail/delete/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'detail_delete'])->middleware('permission:do-delete');
+    //DO Invoice Quotation Check
+    Route::post('/do/quo_inv_check', [App\Http\Controllers\Api\DeliveryOrderController::class, 'quo_inv_check'])->middleware('permission:do-edit');
+    //DO Confirm
+    Route::post('/do/do_confirm/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'do_confirm'])->middleware('permission:do-edit');
+    //DO Delivery Confirm
+    Route::post('/do/do_confirm_delivery/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'do_confirm_delivery'])->middleware('permission:do-edit');
+    //DO SIgn
+    Route::post('/do/do_sign/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'do_sign'])->middleware('permission:do-edit');
+    //DO End-------------------------------------------------
+
+    //Invoice Start-----------------------------------------------------
+    Route::get('/invoice', [App\Http\Controllers\Api\InvoiceController::class, 'index'])->middleware('permission:invoice-index');
+    Route::get('/invoice/create', [App\Http\Controllers\Api\InvoiceController::class, 'create'])->middleware('permission:invoice-create');
+    Route::post('/invoice/store', [App\Http\Controllers\Api\InvoiceController::class, 'store'])->middleware('permission:invoice-create');
+    // detail
+    Route::get('/invoice/detail/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'detail'])->middleware('permission:invoice-show');
+    Route::get('/invoice/detail/create/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'detail_create'])->middleware('permission:invoice-create');
+    Route::post('/invoice/detail/store/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'detail_store'])->middleware('permission:invoice-create');
+    Route::get('/invoice/detail/edit/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'detail_edit'])->middleware('permission:invoice-edit');
+    Route::post('/invoice/detail/update/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'detail_update'])->middleware('permission:invoice-edit');
+    Route::post('/invoice/detail/delete/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'detail_delete'])->middleware('permission:invoice-delete');
+    //Tax Check
+    Route::post('/invoice/tax_check/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'tax_check'])->middleware('permission:invoice-edit');
+    //Bank Check
+    Route::post('/invoice/bank_check/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'bank_check'])->middleware('permission:invoice-edit');
+    //Invoice Discount
+    Route::post('/invoice/discount/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'discount'])->middleware('permission:invoice-edit');
+    // signature
+    Route::post('/invoice/sign/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'sign_store'])->middleware('permission:invoice-edit');
+    // confirm
+    Route::post('/invoice/confirm/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'confirm'])->middleware('permission:invoice-edit');
+    //Invoice End---------------------------------------------------------
 });
 
 Route::group(['middleware' => ['cors']], function () {

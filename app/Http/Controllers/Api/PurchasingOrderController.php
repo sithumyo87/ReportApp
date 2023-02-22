@@ -158,9 +158,11 @@ class PurchasingOrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function detail_store(Request $request)
+    public function detail_store(Request $request,$id)
     {
+        
         $input = $request->all();
+        $input['po_id'] = $id;
         PurchasingOrderDetail::create($input);
         return response()->json([
             'status'         => true,
@@ -180,7 +182,7 @@ class PurchasingOrderController extends Controller
         $dealers = Dealer::where('action',true)->get(); 
         return response()->json([
             'status'    => true,
-            'quoDetail' => $poDetail,
+            'poDetail' => $poDetail,
             'dealers'   => $dealers,
         ], 200); 
     }
@@ -211,4 +213,90 @@ class PurchasingOrderController extends Controller
         ], 200);
     }
     
+    public function tax_check(Request $request, $id){
+        $id = $request->id;
+        $tax = $request->tax;
+        $total = $request->total;
+
+        $po = PurchasingOrder::find($id);
+        $po->tax = $tax;
+        $po->save();
+
+        $tax_amount     = ($po->tax * $total)/100;
+        $grand_total    = $total + $tax_amount;
+        return response()->json([
+            'status'    => true,
+            'tax_amount' => number_format($tax_amount,2),
+            'grand_total' => number_format($grand_total,2),
+        ]);
+    }
+
+    public function note_store(Request $request, $id){
+        $input = PurchasingOrderNote::create([
+            'po_id'     => $id,
+            'note'      => $request->Note,
+        ]);
+        return response()->json([
+            'status'    => true,
+            'note'      => $input
+        ], 200);
+    }
+    public function note_edit($id){
+        $note = PurchasingOrderNote::findorfail($id);
+        return response()->json([
+            'status'    => true,
+            'note'      => $note,
+        ], 200);
+    }
+    public function note_update(Request $request,$id){
+        $note = PurchasingOrderNote::find($id);
+        $note->update([
+            'po_id'     => $id,
+            'note'          => $request->Note,
+        ]);
+        return response()->json([
+            'status'    => true,
+            'po_id'     => $id,
+            'note'      => $note,
+        ], 200);
+    }
+
+    public function note_delete(Request $request,$id){
+        $poId = $request->poId;
+        $note = PurchasingOrderNote::find($id);
+        $note->destroy($id);
+        return response()->json([
+            'status'    => true,
+            'note'      => $note,
+        ], 200);
+    }
+
+    public function sign_store(Request $request, $id){
+        $authorizer = Authorizer::find($request->authorizer);
+        $po = PurchasingOrder::find($id);
+        $po->update([
+            'sign_name' =>  $authorizer->authorized_name,
+            'file_name' =>  $authorizer->file_name,
+        ]);
+        return response()->json([
+            'status'    => true,
+        ], 200);
+    }
+
+    public function confirm($id){
+        $po = PurchasingOrder::find($id);
+        $po->update([
+            'submit_status' => 1,
+        ]);
+        return response()->json([
+            'status'    => true,
+        ], 200);
+        
+
+    }
+
+    
+
+    
+
 }
