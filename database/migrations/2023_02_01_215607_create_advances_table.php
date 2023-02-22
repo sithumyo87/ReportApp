@@ -20,6 +20,7 @@ return new class extends Migration
             $table->float('Balance');
             $table->date('Date');
             $table->date('receipt_date')->nullable()->default(null);
+            $table->date('received_date')->nullable();
             $table->integer('nth_time');
             $table->timestamps();
         });

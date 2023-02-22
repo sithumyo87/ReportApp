@@ -189,4 +189,14 @@ class PurchasingOrderController extends Controller
         $pdf = PDF::loadView('OfficeManagement.purchasingOrder.print', $data);
         return $pdf->stream($po->po_code.'.pdf');
     }
+
+
+    public function poReceive(Request $request){
+        $po = PurchasingOrder::find($request->id);
+        $po->update([
+            'received_date' => date('Y-m-d', strtotime($request->received_date)),
+        ]);
+        return redirect()->route('OfficeManagement.purchasingOrder.index',['page' => $request->page])
+        ->with('success','Purchasing Order\'s Received Successfully!');
+    }
 }

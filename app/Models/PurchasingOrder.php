@@ -26,6 +26,7 @@ class PurchasingOrder extends Model
         'file_name',
         'refer_no',
         'submit_status',
+        'received_date',
         'action'
     ];
 

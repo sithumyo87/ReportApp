@@ -105,38 +105,6 @@
                 <!-- Divider -->
                 <hr class="sidebar-divider">
 
-                <!-- Heading -->
-                <div class="sidebar-heading">
-                    Users Management
-                </div>
-                
-                @can('user-index')
-                <!-- Nav Item - Pages Collapse Menu -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('setting.user.index') }}">
-                        <i class="fas fa-fw fa-users"></i>
-                        <span>Users</span>
-                    </a>
-                </li>
-                @endcan
-
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('setting.role.index') }}">
-                        <i class="fas fa-fw fa-users"></i>
-                        <span>Roles</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('setting.permission.index') }}">
-                        <i class="fas fa-fw fa-users"></i>
-                        <span>Permissions</span>
-                    </a>
-                </li>
-
-                <!-- Divider -->
-                <hr class="sidebar-divider">
-
                 <div class="sidebar-heading">
                     Office Management
                 </div>
@@ -173,6 +141,38 @@
                     <a class="nav-link" href="{{ route('OfficeManagement.deliveryOrder.index')}}">
                         <i class="fas fa-fw fa-truck"></i>
                         <span>Delivery Order</span>
+                    </a>
+                </li>
+
+                <!-- Divider -->
+                <hr class="sidebar-divider">
+
+                <!-- Heading -->
+                <div class="sidebar-heading">
+                    Users Management
+                </div>
+                
+                @can('user-index')
+                <!-- Nav Item - Pages Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('setting.user.index') }}">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
+                @endcan
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('setting.role.index') }}">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Roles</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('setting.permission.index') }}">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Permissions</span>
                     </a>
                 </li>
 

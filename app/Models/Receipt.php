@@ -31,6 +31,8 @@ class Receipt extends Model
         'sign_name',
         'file_name',
         'Currency_type',
+        'first_received_date',
+        'second_received_date'
     ];
 
     protected function searchDataPaginate(Request $request){

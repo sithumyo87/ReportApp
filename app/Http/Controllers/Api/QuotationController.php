@@ -32,9 +32,13 @@ class QuotationController extends Controller
     public function index(Request $request)
     {
         $data = Quotation::searchDataPaginate($request);
+        $total = $data->total();
+        $limit = pagination();
         return response()->json([
-            'status'    => true,
-            'data'      => $data
+            'status'            => true,
+            'total'             => $total,
+            'limit'             => $limit,
+            'quotations'        => $data,
         ], 200);
     }
 
@@ -94,7 +98,7 @@ class QuotationController extends Controller
 
         return response()->json([
             'status'            => true,
-            'quotation'         => $quotation,
+            'quotation_id'      => $quotation->id,
         ], 200);   
     }
 
@@ -171,11 +175,11 @@ class QuotationController extends Controller
         return response()->json([
             'status'            => true,
             'quotation'         => $quotation,
-            'currency'          => $currency,
-            'quoDetails'        => $quoDetails,
             'quoNotes'          => $quoNotes,
             'quoFiles'          => $quoFiles,
             'authorizers'       => $authorizers,
+            'quoDetails'        => $quoDetails,
+            'currency'          => $currency,
         ], 200);   
     }
 

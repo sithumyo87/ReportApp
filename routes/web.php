@@ -86,6 +86,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'OfficeManagement', 'namespa
     Route::post('/getReceipt/{id}', 'ReceiptDetailController@getReceipt')->name('receiptDetail.getReceipt');
     Route::get('invAttnOnChange', 'ReceiptController@invAttnOnChange');
     Route::get('/receiptPrint/{id}/{type?}', 'ReceiptController@receiptPrint')->name('receiptPrint');
+    Route::post('/receiptReceive', 'ReceiptController@receive')->name('receipt.receive');
 
     // Purchasing Order
     Route::resource('purchasingOrder', PurchasingOrderController::class);
@@ -95,6 +96,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'OfficeManagement', 'namespa
     Route::resource('purchasingOrderNote', PurchasingOrderNoteController::class, ['only' => ['store', 'destroy']]);
     Route::get('/poConfirm/{id}','PurchasingOrderController@poConfirm')->name('poConfirm');
     Route::get('/poPrint/{id}', 'PurchasingOrderController@poPrint')->name('poPrint');
+    Route::post('/poReceive', 'PurchasingOrderController@poReceive')->name('purchasingOrder.poReceive');
 
 
     // Delivery Order

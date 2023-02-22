@@ -36,6 +36,8 @@ return new class extends Migration
             $table->string('file_name')->nullable();
             $table->string('Date_INT')->nullable();
             $table->string('Currency_type');
+            $table->date('first_received_date')->nullable();
+            $table->date('second_received_date')->nullable();
             $table->timestamps();
         });
     }

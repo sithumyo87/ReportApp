@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('file_name')->nullable();
             $table->integer('refer_no')->nullable();
             $table->integer('submit_status')->default(0);
+            $table->date('received_date')->nullable();
             $table->integer('action')->default(1);
             $table->timestamps();
         });

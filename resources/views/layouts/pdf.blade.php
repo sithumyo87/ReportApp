@@ -13,6 +13,9 @@
             margin-bottom: 40px;
             margin-left: 30px;
             margin-right: 30px;
+            page-break-inside: none !important;
+            page-break-before: none !important;
+            page-break-after: none !important;
         }
 
         .pagenum:before {
@@ -49,6 +52,19 @@
             color: #111111;
             font-size: 12px;
         }
+
+        
+        td {
+            white-space: pre-wrap !important;
+            word-wrap: break-word !important;
+        }
+
+        .break-block {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            page-break-inside: void !important;
+        }
+
         .p-l-10{
             padding-left: 10px;
         }

@@ -1,6 +1,6 @@
 @extends('layouts.setting')
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid detail-table">
     <div class="row quotation page-titles">
         <div class="col-md-5 align-self-center">
             <h4 class="text-themecolor">{{ $po->po_code}} 's Detail</h4>
@@ -30,12 +30,12 @@
 
     <div class="row">
         <div class="col-md-7">
-            <table class="table table-no-border">
+            <table class="table table-no-border detail-table">
                 <tbody>
                     <tr>
                         <td style="min-width: 150px">Sub</td>
                         <td>:</td>
-                        <td> {{ $po->sub}}</td>
+                        <td>{{ $po->sub}}</td>
                     </tr>
                     <tr>
                         <td>Attn</td>
@@ -61,7 +61,7 @@
             </table>
         </div>
         <div class="col-md-5">
-            <table class="table table-no-border">
+            <table class="table table-no-border detail-table">
                 <tbody>
                     <tr>
                         <td style="min-width: 150px">Order No</td>
@@ -75,7 +75,7 @@
                     </tr>
                      @if($po->Serial_No != '')
                     <tr>
-                        <td>PO No</td>
+                        <td>Ref Quotation No</td>
                         <td>:</td>
                         <td>{{ $po->Serial_No }}</td>
                     </tr>
@@ -86,16 +86,16 @@
     </div>
 
     <!-- start detail -->
-    <div class="table-responsive bg-white p-30">
-        <table class="table table-bordered">
+    <div class="table-responsive bg-white m-t-10">
+        <table class="table table-bordered detail-table">
             <thead>
                 <tr class="text-center">
-                    <th width="130">Description</th>
+                    <th style="min-width:130px;">Description</th>
                     <th>Unit Price</th>
                     <th>Qty</th>
                     <th>SubTotal</th>
                     @if($po->submit_status != '1')
-                        <th width="150">{{ __('label.action') }}</th>
+                        <th style="width:90px;">{{ __('label.action') }}</th>
                     @endif
                 </tr>
             </thead>
@@ -141,10 +141,10 @@
                 @endif
                 @if($po->submit_status != '1')
                 <tr>
-                    <td class="text-right">
+                    <td>
                         @can('po-create')
                             <a href="{{ route('OfficeManagement.purchasingOrderDetail.create',['po_id' => $po->id]) }}"
-                                class="btn btn-success btn-sm d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i>
+                                class="btn btn-success btn-sm"><i class="fa fa-plus-circle"></i>
                                 {{ __('button.create') }}
                             </a>
                         @endcan
@@ -159,61 +159,44 @@
     <!-- end detail -->
 
     <div class="row m-t-30">
+        
         <div>
             <!-- start total -->
             <div class="col-md-5 float-right">
-                <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right">
-                        <p><strong>Total</strong></p>
-                    </div>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                        <p>
-                        {{number_format($subTotal,2)}} {{$currency->Currency_name}}
-                        </p>
-                    </div>
-                </div>
+                <div class="float-right">
+                    <table class="table table-no-border detail-table fit-content">
+                        <tr>
+                            <td class='text-right'><strong>Total</strong></td>
+                            <td>{{number_format($subTotal,2)}} {{$currency->Currency_name}}</td>
+                        </tr>
 
-                @if($po->submit_status == 0)
-                    <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right">
-                            <p><strong>Tax (5%)</strong></p>
-                            </div>
-                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                            <label><input type="checkbox" class="minimal" id="po-tax-check" data-id="{{ $po->id; }}" data-total="{{ $subTotal }}" @if($po->tax == 5) checked @endif></label>
-                        </div>
-                    </div>
-                @else
-                    <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right">
-                            <p><strong>Tax (%)</strong></p>
-                        </div>
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                            <p>{{$po->tax}}%</p>
-                        </div>
-                    </div>
-                @endif
+                        <tr>
+                            @if($po->submit_status == 0)
+                                <td class='text-right'><strong>Tax (5%)</strong></td>
+                                <td><label><input type="checkbox" class="minimal" id="po-tax-check" data-id="{{ $po->id; }}" data-total="{{ $subTotal }}" @if($po->tax == 5) checked @endif></label><td>
+                            @else
+                                <td class='text-right'><strong>Tax (%)</strong></td>
+                                <td>{{$po->tax}}%</td>
+                            @endif
+                        </tr>
 
-                <?php 
-                    $taxAmount  = $po->tax * ($subTotal)/100;
-                    $grandTotal = $subTotal + $taxAmount;
-                ?>
+                        <?php 
+                            $taxAmount  = $po->tax * ($subTotal)/100;
+                            $grandTotal = $subTotal + $taxAmount;
+                        ?>
 
-                <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right">
-                        <p><strong>Tax Amount </strong></p>
-                    </div>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                    <p><span id="tax-amount">{{ number_format($taxAmount,2);}}</span> {{$currency->Currency_name}}</p>
-                    </div>
-                </div>
+                        <tr>
+                            <td class="text-right"><strong>Tax Amount </strong></td>
+                            <td><span id="tax-amount">{{ number_format($taxAmount,2);}}</span> {{$currency->Currency_name}}</td>
+                        </tr>
 
-                <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right">
-                        <p><strong>Grand Total</strong></p>
-                    </div>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                    <span id="grand-total">{{ number_format($grandTotal,2)}}</span> {{$currency->Currency_name}}
-                    </div>
+                        <tr>
+                            <td class="text-right"><strong>Grand Total</strong></td>
+                            <td>
+                                <span id="grand-total">{{ number_format($grandTotal,2)}}</span> {{$currency->Currency_name}}
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
             <!-- end total -->
@@ -270,10 +253,10 @@
                 <img src="{{ asset('img/author-icon.png')}}" alt="" width=100 height=100 class="text-center" id="authorizer-img">
             @endif
             @if($po->submit_status == 0)
-            <h6>Authorized Person</h6> 
+            <h6 class="auth-title">Authorized Person</h6> 
             {!! Form::open(['route' => ['OfficeManagement.poAuthorizer',$po->id],'method' => 'POST']) !!}
             <div class="row">
-                <div class="col-md-10">
+                <div class="col-md-10 col-sm-10 col-10">
                     <div class="form-group">
                         <select name="authorizer" id="authorizer" class="form-control form-select">\
                         <option value="">Select Authorized Person</option>
@@ -283,7 +266,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2 col-sm-2 col-2">
                     <button class="btn btn-sm btn-primary float-right" type="submit">Add</button>
                 </div>
             </div>

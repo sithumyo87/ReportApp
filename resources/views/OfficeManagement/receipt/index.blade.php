@@ -8,7 +8,7 @@
         <div class="col-md-7 align-self-center text-right">
             <div class="d-flex justify-content-end align-items-center">
                 @can('receipt-create')
-                    <a href="{{ route('OfficeManagement.receipt.create') }}" class="btn btn-success d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i>  {{ __('button.create') }}
+                    <a href="{{ route('OfficeManagement.receipt.create') }}" class="btn btn-success btn-sm d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i>  {{ __('button.create') }}
                     </a>
                 @endcan
             </div>
@@ -19,7 +19,7 @@
             {{ $message }}
         </div>
     @endif
-    <div class="bg-white p-30 m-t-30">
+    <div class="bg-white p-20 m-t-20">
         <div class="search">
             {!! Form::open(['method' => 'GET', 'route' => ['OfficeManagement.receipt.index']]) !!}
             <div class="row">
@@ -58,6 +58,7 @@
                         <th style="min-width: 200px">Sub</th>
                         <th style="min-width: 110px">Refer No:</th>   
                         <th style="min-width: 110px">Payment Term</th>   
+                        <th style="min-width: 110px">Received</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -70,6 +71,39 @@
                             <td>{{ $row->Sub }}</td>
                             <td></td>
                             <td>{{ get_pay_term($row->Advance)}}</td>
+                            <td class="text-center">
+                                @can('receipt-edit')
+                                    @if($row->Advance == '6')
+                                    @elseif($row->Advance == '4' || $row->Advance == '5')
+                                        @if($row->first_received_date != '')
+                                            <strong>{{ date('d-m-Y', strtotime($row->first_received_date))}}</strong>
+                                        @else
+                                            <a class="btn btn-sm btn-success receivedButton" data-bs-toggle="modal"
+                                                data-bs-target="#receivedModel" data-id="{{ $row->id }}"><i class="fa fa-get-pocket"></i></a>
+                                        @endif
+                                    @else
+                                        @if($row->first_received_date != '')
+                                            <strong>{{ date('d-m-Y', strtotime($row->first_received_date))}}</strong>
+                                        @else
+                                            <a class="btn btn-sm btn-success receivedButton" data-bs-toggle="modal"
+                                                data-bs-target="#receivedModel" data-id="{{ $row->id }}">
+                                                    <i class="fa fa-get-pocket"></i>
+                                                    <small>first</small>
+                                                </a>
+                                        @endif
+
+                                        @if($row->second_received_date != '')
+                                            <strong>{{ date('d-m-Y', strtotime($row->second_received_date))}}</strong>
+                                        @else
+                                            <a class="btn btn-sm btn-success receivedButton" data-bs-toggle="modal"
+                                                data-bs-target="#receivedModel" data-id="{{ $row->id }}">
+                                                    <i class="fa fa-get-pocket"></i>
+                                                    <small>second</small>
+                                                </a>
+                                        @endif
+                                    @endif
+                                @endcan
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -78,6 +112,32 @@
         {!! $data->render() !!}
     </div>
 </div>
+
+<!-- Modal -->
+    <div class="modal fade" id="receivedModel" tabindex="-1" aria-labelledby="receivedModelLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            {!! Form::open(['route' => ['OfficeManagement.receipt.receive'], 'method' => 'POST']) !!}
+                <input type="hidden" value="{{ $data->currentPage() }}" name="page"/>
+                <input type="hidden" value="" name="id" id="receivedId"/>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="receivedModelLabel">Confirm Receipt</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                      <label for="rdate">Received Date</label>
+                      <input type="text" name="received_date" id="rdate" class="form-control input-sm date-picker" placeholder="" aria-describedby="helpId" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Confirm</button>
+                </div>
+                {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
 @endsection
 
 
