@@ -433,6 +433,24 @@ function invoiceToCheck(attn, company){
 
 $(document).on('click', '.receivedButton', function (){
     $('#receivedId').val($(this).data('id'));
-})
+    $('#typeId').val($(this).data('type'));
+});
+
+$(document).on('click', '#info-gear', function (){
+    $('.info-form').removeClass('hidden');
+    $('.info-data').addClass('hidden');
+});
+$(document).on('click', '#info-cancel', function (){
+    $('.info-data').removeClass('hidden');
+    $('.info-form').addClass('hidden');
+});
+
+$(document).on('click', '#psw-gear', function (){
+    $('.psw-form').removeClass('hidden');
+});
+$(document).on('click', '#psw-cancel', function (){
+    $('.psw-form').addClass('hidden');
+});
+
 
 

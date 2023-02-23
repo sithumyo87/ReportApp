@@ -27,7 +27,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
-                            {!! Form::select('po_code', $po_codes, @$search->po_code, [
+                            {!! Form::select('po_code', $po_codes, @$search['po_code'], [
                                 'placeholder' => 'PO Number',
                                 'class' => 'form-control select2 input-sm',
                             ]) !!}
@@ -35,13 +35,13 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            {!! Form::select('company_name', $company_names, @$search->company_name, [
+                            {!! Form::select('company_name', $company_names, @$search['company_name'], [
                                 'placeholder' => 'Company Name',
                                 'class' => 'form-control select2 input-sm',
                             ]) !!}
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group">
                             {!! Form::select('customer_name', $customer_names, @$search->customer_name, [
                                 'placeholder' => 'Customer Name',
@@ -49,7 +49,15 @@
                             ]) !!}
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            {!! Form::select('show', ['received'=>'received','unreceived'=>'unreceived'], @$search->show, [
+                                'placeholder' => 'Show',
+                                'class' => 'form-control select2 input-sm',
+                            ]) !!}
+                        </div>
+                    </div>
+                    <div class="col-md-2">
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary btn-sm">Search</button>
                             <a href="{{ route('OfficeManagement.purchasingOrder.index') }}"
@@ -80,8 +88,7 @@
                         <tr>
                             <td class="text-right">{{ ++$i }}</td>
                             <td class="text-center">{{ date('d-m-Y', strtotime($row->date)) }}</td>
-                            <td><a
-                                    href="{{ route('OfficeManagement.purchasingOrder.show', $row->id) }}">{{ $row->po_code }}</a>
+                            <td><a href="{{ route('OfficeManagement.purchasingOrder.show', $row->id) }}">{{ $row->po_code }}</a>
                             </td>
                             <td>{{ $row->Attn }}</td>
                             <td>{{ $row->Company_name }}</td>
@@ -109,11 +116,13 @@
                             </td>
                             <td class="text-center">
                                 @can('po-edit')
-                                    @if($row->received_date != '')
-                                        <strong>{{ date('d-m-Y', strtotime($row->received_date))}}</strong>
-                                    @else
-                                        <a class="btn btn-sm btn-success receivedButton" data-bs-toggle="modal"
-                                            data-bs-target="#receivedModel" data-id="{{ $row->id }}"><i class="fa fa-get-pocket"></i></a>
+                                @if($row->submit_status == 1)
+                                        @if($row->received_date != '')
+                                            <strong>{{ date('d-m-Y', strtotime($row->received_date))}}</strong>
+                                        @else
+                                            <a class="btn btn-sm btn-success receivedButton" data-bs-toggle="modal"
+                                                data-bs-target="#receivedModel" data-id="{{ $row->id }}"><i class="fa fa-get-pocket"></i></a>
+                                        @endif
                                     @endif
                                 @endcan
                             </td>
@@ -121,7 +130,7 @@
                     @endforeach
                 </tbody>
             </table>
-            {!! $data->render() !!}
+            {!! $data->withQueryString()->links() !!}
         </div>
     </div>
 
@@ -133,7 +142,7 @@
                 <input type="hidden" value="{{ $data->currentPage() }}" name="page"/>
                 <input type="hidden" value="" name="id" id="receivedId"/>
                 <div class="modal-header">
-                    <h5 class="modal-title" id="receivedModelLabel">Confirm Receipt</h5>
+                    <h5 class="modal-title" id="receivedModelLabel">Confirm Receive</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

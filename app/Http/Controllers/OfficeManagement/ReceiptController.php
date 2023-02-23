@@ -33,7 +33,11 @@ class ReceiptController extends Controller
         $company_names      = Customer::companyDropDown();
         $customer_names     = Customer::customerDropDown();
         $search             = $request;
-        return view('OfficeManagement.receipt.index', compact('data', 'rec_codes', 'company_names', 'customer_names', 'search'))->with('i', pageNumber($request));
+        $advances = [];
+        foreach($data as $row){
+            $advances[$row->id] = Advance::where('Invoice_Id', $row->Invoice_Id)->orderBy('nth_time', 'asc')->get();
+        }
+        return view('OfficeManagement.receipt.index', compact('data', 'rec_codes', 'company_names', 'customer_names', 'search', 'advances'))->with('i', pageNumber($request));
     }
 
     /**
@@ -72,7 +76,11 @@ class ReceiptController extends Controller
         
         $input['Receipt_No'] = 'RN-'.strtotime($input['Date'].' '.date('H:i:s'));
         $input['Date'] =date('Y-m-d',strtotime(str_replace('/', '-', $input['Date'])));
-        
+
+        $receipt_old = Receipt::where('Invoice_Id', $input['Invoice_Id'])->get();
+        if(count($receipt_old) > 0){
+            Receipt::where('Invoice_Id', $input['Invoice_Id'])->update(['Invoice_Id'=> null]);
+        }
         $receipt = Receipt::create($input);
 
         return redirect()->route('OfficeManagement.receiptDetail.show',$receipt->id)
@@ -137,15 +145,15 @@ class ReceiptController extends Controller
 
         $Receipt = Receipt::find($id);
         $Receipt->update([
-            'customer_id'=>$request->customer_id,
-            'Attn'=>$customerName->name,
-	        'Company_name' => $request->Company_name,
+            'customer_id'   => $request->customer_id,
+            'Attn'          => $customerName->name,
+	        'Company_name'  => $request->Company_name,
 	        'Contact_phone' => $request->Contact_phone,
-	        'Address' => $request->Address,
-	        'Sub'=>$request->Sub,
-	        'Date'=>$Date,
-	        'Refer_No'=>$refer_no,
-	        'Refer_status' => false,
+	        'Address'       => $request->Address,
+	        'Sub'           => $request->Sub,
+	        'Date'          => $Date,
+	        'Refer_No'      => $refer_no,
+	        'Refer_status'  => false,
 	        'Currency_type' => $request->Currency_type,
         ]);
     
@@ -257,10 +265,43 @@ class ReceiptController extends Controller
     }
 
     public function receive(Request $request){
-        $po = Receipt::find($request->id);
-        $po->update([
-            'received_date' => date('Y-m-d', strtotime($request->received_date)),
-        ]);
+        $type           = $request->type;
+        $receipt        = Receipt::find($request->id);
+        $invoice        = Invoice::findOrFail($receipt->Invoice_Id);
+        $received_date  = date('Y-m-d', strtotime($request->received_date));
+
+        if ($type == 1){ // first payment 50/50 60/40 80/20
+			$receipt->update([
+				'first_received_date' => $received_date,
+            ]);
+            // return $receipt;
+		} elseif ($type == 2) { // second payment
+			$receipt->update([
+				'second_received_date' => $received_date,
+			]);
+		} elseif ($type == 3) {
+            $receipt->update([
+				'first_received_date' => $received_date,
+                'second_received_date' => $received_date,
+			]);
+		} elseif ($type == 4) {
+
+			$advan = Advance::where('Invoice_Id', $invoice->id)->where('received_date', null)->orderBy('id', 'asc')->first();
+
+            $advan_last = Advance::where('Invoice_Id', $invoice->id)->where('received_date', null)->orderBy('id', 'desc')->first();
+
+            if($advan->id == $advan_last->id){
+                $receipt->update([
+                    'first_received_date' => $received_date,
+                    'second_received_date' => $received_date,
+                ]);
+            }
+
+            $advan->update([
+				'received_date' => $received_date,
+			]);
+		}
+
         return redirect()->route('OfficeManagement.receipt.index',['page' => $request->page])
         ->with('success','Receipt\'s Received Successfully!');
     }

@@ -25,20 +25,28 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::select('inv_code', $inv_codes, @$search->inv_code, ['placeholder' => 'Invoice Number', 'class' => 'form-control select2 input-sm']) !!}
+                        {!! Form::select('inv_code', $inv_codes, @$search['inv_code'], ['placeholder' => 'Invoice Number', 'class' => 'form-control select2 input-sm']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::select('company_name', $company_names, @$search->company_name, ['placeholder' => 'Company Name', 'class' => 'form-control select2 input-sm']) !!}
+                        {!! Form::select('company_name', $company_names, @$search['company_name'], ['placeholder' => 'Company Name', 'class' => 'form-control select2 input-sm']) !!}
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
-                        {!! Form::select('customer_name', $customer_names, @$search->customer_name, ['placeholder' => 'Customer Name', 'class' => 'form-control select2 input-sm']) !!}
+                        {!! Form::select('customer_name', $customer_names, @$search['customer_name'], ['placeholder' => 'Customer Name', 'class' => 'form-control select2 input-sm']) !!}
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        {!! Form::select('show', ['received'=>'received (by Receipt)','unreceived'=>'unreceived (by Receipt)'], @$search['show'], [
+                            'placeholder' => 'Show',
+                            'class' => 'form-control select2 input-sm',
+                        ]) !!}
+                    </div>
+                </div>
+                <div class="col-md-2">
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-sm">Search</button>
                         <a href="{{ route('OfficeManagement.invoice.index') }}" class="btn btn-warning btn-sm">Clear</a>
@@ -75,7 +83,7 @@
                 </tbody>
             </table>
         </div>
-        {!! $data->render() !!}
+         {!! $data->withQueryString()->links() !!}
     </div>
 </div>
 @endsection

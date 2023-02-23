@@ -43,7 +43,7 @@ class InvoiceController extends Controller
         $inv_codes          = Invoice::invoiceNoDropDown();
         $company_names      = Customer::companyDropDown();
         $customer_names     = Customer::customerDropDown();
-        $search             = $request;
+        $search             = $request->all();
         return view('OfficeManagement.invoice.index',compact('data', 'inv_codes', 'company_names', 'customer_names', 'search'))->with('i', pageNumber($request));
     }
 

@@ -46,6 +46,13 @@ class Receipt extends Model
         if($request->customer_name != ''){
             $data = $data->where('Attn', $request->customer_name);
         }
+        if($request->show != ''){
+            if($request->show == 'received'){
+                $data = $data->where('first_received_date', '!=', null)->where('first_received_date', '!=', '');
+            }elseif($request->show == 'unreceived'){
+                $data = $data->where('first_received_date', null);
+            }
+        }
         return $data->orderBy('Date','DESC')->paginate(pagination());
     }
 

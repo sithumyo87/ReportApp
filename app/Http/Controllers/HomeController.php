@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\PurchasingOrder;
+use App\Models\Invoice;
 
 class HomeController extends Controller
 {
@@ -23,6 +25,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $request = Request();
+        $request->show = 'unreceived';
+        $poUnrecivedCount = PurchasingOrder::searchDataCount($request);
+        $invUnrecivedCount = Invoice::searchDataCount($request);
+        return view('home', compact('poUnrecivedCount', 'invUnrecivedCount'));
     }
 }

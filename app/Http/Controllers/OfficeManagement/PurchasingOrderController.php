@@ -37,7 +37,7 @@ class PurchasingOrderController extends Controller
         $po_codes       = PurchasingOrder::poNoDropDown();
         $company_names  = Customer::companyDropDown();
         $customer_names = Customer::customerDropDown();
-        $search         = $request;
+        $search         = $request->all();
         return view('OfficeManagement.purchasingOrder.index',compact('data','attachs', 'po_codes', 'company_names', 'customer_names', 'search'))->with('i', pageNumber($request));
     }
 

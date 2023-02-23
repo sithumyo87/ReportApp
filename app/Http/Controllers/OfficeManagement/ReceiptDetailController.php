@@ -65,10 +65,16 @@ class ReceiptDetailController extends Controller
     public function show($id, $type=null)
     {
         $receipt    = Receipt::findOrFail($id);
-        $invoice    = Invoice::findOrFail($receipt->Invoice_Id);
+        if($receipt->Invoice_Id != null){
+            $invoice    = Invoice::findOrFail($receipt->Invoice_Id);
+            $invDetails = QuotationDetail::where('Invoice_Id', $receipt->Invoice_Id)->get();
+            $invNotes   = QuotationNote::where('InvoiceId', $receipt->Invoice_Id)->where('Note','!=',"")->get();
+        }else{
+            $invoice    = new Invoice();
+            $invDetails = [];
+            $invNotes   = [];
+        }
         $currency   = Currency::where('id', $receipt->Currency_type)->first();
-        $invDetails = QuotationDetail::where('Invoice_Id', $receipt->Invoice_Id)->get();
-        $invNotes       = QuotationNote::where('InvoiceId', $receipt->Invoice_Id)->where('Note','!=',"")->get();
         $authorizers    = Authorizer::get();
 
         // data for other payment
@@ -150,12 +156,12 @@ class ReceiptDetailController extends Controller
 				'srec_date'         => date("Y-m-d"),
 			]);
 		} elseif ($type == 4) {
-            $invoice->update([
+			$advan = Advance::where('Invoice_Id', $invoice->id)->where('receipt_date', null)->orderBy('id', 'asc')->first();
+
+            $receipt->update([
 				'First_Receipt'     => true,
                 'Second_Receipt'    => true,
 			]);
-
-			$advan = Advance::where('Invoice_Id', $invoice->id)->where('receipt_date', null)->orderBy('id', 'asc')->first();
 
             $advan->update([
 				'receipt_date' => date('Y-m-d h:i:s')

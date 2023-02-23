@@ -246,7 +246,8 @@
     <!-- authorized Person -->
     <div class="row">
         <div class="col-md-8"></div>
-        <div class="col-md-4 text-center">
+        <div class="col-md-4">
+            <div class="sign-wrap">
             @if($po->file_name != "")
                 <img src="{{ asset($po->file_name)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img">
             @else
@@ -271,9 +272,10 @@
                 </div>
             </div>
             @else
-                <p>{{ $po->sign_name }}</p>
+                <div class="text-center">{{ $po->sign_name }}</div>
             @endif
             {!! Form::close() !!}
+            </div>
         </div>
     </div>
 

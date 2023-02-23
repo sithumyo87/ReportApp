@@ -103,7 +103,7 @@ label {
     font-weight: 600;
 }
 
-.input-sm, input{
+.input-sm, input[type="text"], input[type="number"]{
     height: 32px !important;
     border-radius: 3px !important;
     line-height: 32px !important;
@@ -237,4 +237,57 @@ textarea{
 h6.auth-title {
     font-size: 14px;
     margin-top: 10px;
+}
+.btn-group .receivedButton{
+    border: 3px solid #fff;
+    display: flex;
+    border-radius: 6px !important;
+}
+
+.sign-wrap {
+    width: fit-content;
+    float: right;
+    background: #fff;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+
+.flex-block {
+    display: flex;
+}
+
+.flex-item-1 {
+    flex-grow: 1;
+    padding: 0px 20px;
+}
+
+.setting-icon {
+    font-size: 15px;
+    color: #a3b8f5;
+    border: 2px solid #a3b8f5;
+    padding: 10px;
+}
+
+.setting-box {
+    border: 1px solid #efefef;
+    padding: 20px;
+    border-radius: 5px;
+    background: #ffff;
+}
+
+.setting-box label {
+    float: right;
+    padding-top: 11px;
+}
+
+.table-setting tr td {
+    vertical-align: middle;
+}
+
+.setting-box h6 {
+    font-size: 15px;
+    color: #4c71dd;
+    font-weight: 800;
+    padding-top: 9px;
 }

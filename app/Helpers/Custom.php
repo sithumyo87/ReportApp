@@ -262,3 +262,19 @@ function saveSignature($sign_input){
         return ['status'=> false, 'error' => 'Please input the signature'];
     }
 }
+
+function advanceFormat($number){
+    if($number== 1){
+        return $number.'st';
+    }elseif($number == 3){
+        return $number.'rd';
+    }else{
+        $string = (string)$number; 
+        $lastDigit = $string[strlen($string)-1];
+        if($lastDigit == 2){
+            return $number.'nd';
+        }else{
+            return $number.'th';
+        }
+    }
+}

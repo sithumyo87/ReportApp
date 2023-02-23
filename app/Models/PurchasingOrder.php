@@ -30,7 +30,7 @@ class PurchasingOrder extends Model
         'action'
     ];
 
-    protected function searchDataPaginate(Request $request){
+    protected function searchData(Request $request){
         $data = $this->select('purchasing_orders.*', 'quotations.Serial_No', 'quotations.Refer_No')->leftJoin('quotations', 'quotations.id','=', 'purchasing_orders.quo_id');
         if($request->po_code != ''){
             $data = $data->where('purchasing_orders.po_code', $request->po_code);
@@ -41,7 +41,24 @@ class PurchasingOrder extends Model
         if($request->customer_name != ''){
             $data = $data->where('purchasing_orders.Attn', $request->customer_name);
         }
+        if($request->show != ''){
+            if($request->show == 'received'){
+                $data = $data->where('purchasing_orders.received_date', '!=', null)->where('purchasing_orders.received_date', '!=', '');
+            }elseif($request->show == 'unreceived'){
+                $data = $data->where('purchasing_orders.received_date', null);
+            }
+        }
+        return $data;
+    }
+
+    protected function searchDataPaginate(Request $request){
+        $data = $this->searchData($request);
         return $data->orderBy('purchasing_orders.date', 'desc')->paginate(pagination());
+    }
+
+    protected function searchDataCount(Request $request){
+        $data = $this->searchData($request);
+        return $data->get()->count();
     }
 
     protected function getQuoAttachs($data){

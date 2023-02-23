@@ -37,6 +37,8 @@ class PermissionSeeder extends Seeder
         $this->bank = ['bank-index', 'bank-create','bank-edit','bank-delete','bank-show'];
 
         $this->authorizer = ['authorizer-index', 'authorizer-create','authorizer-edit','authorizer-delete','authorizer-show'];
+
+        $this->setting = ['password-change', 'email-change','profile-change'];
     }
     /**
      * Run the database seeds.
@@ -60,6 +62,7 @@ class PermissionSeeder extends Seeder
         $this->permission_create($this->currency);
         $this->permission_create($this->bank);
         $this->permission_create($this->authorizer);
+        $this->permission_create($this->setting);
 
         // create role and give permission to this role
         $this->role_create('system', [Permission::all()]);

@@ -14,6 +14,7 @@ class Advance extends Model
         'Balance',
         'Date',
         'receipt_date',
+        'received_date',
         'nth_time'
     ];
 }

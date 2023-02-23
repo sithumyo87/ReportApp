@@ -117,6 +117,11 @@
                         <td>:</td>
                         <td>{{ getReceiptDate($receipt, $type, $advance_data) }}</td>
                     </tr>
+                    <tr>
+                        <td>Ref Invoice No.</td>
+                        <td>:</td>
+                        <td>{{ @$invoice->Invoice_No }}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -137,11 +142,11 @@
                 </tr>
             </thead>
             <tbody>
-                @if(!empty($invDetails))
                 <?php 
                     $subTotal = 0;
                     $subTotalWithPer = 0;
                 ?>
+                @if(!empty($invDetails))
                 @foreach($invDetails as $row)
                 <?php
                     $subTotal += $row->Unit_Price * $row->Qty;
@@ -184,7 +189,7 @@
                     </div>
                 </div>
 
-                @if($invoice->Discount > 0)
+                @if(@$invoice->Discount > 0)
                     <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right">
                             <p><strong>Discount</strong></p>
@@ -201,7 +206,7 @@
                         <p><strong>Tax (%)</strong></p>
                     </div>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                        <p>{{$invoice->tax_id}}%</p>
+                        <p>{{@$invoice->tax_id}}%</p>
                     </div>
                 </div>
 

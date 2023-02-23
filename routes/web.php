@@ -124,4 +124,5 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'setting', 'namespace' => 'A
     Route::resource('role', RoleController::class);
     Route::resource('user', UserController::class);
     Route::resource('authorizer', AuthorizedController::class);
+    Route::resource('setting', SettingController::class);
 });

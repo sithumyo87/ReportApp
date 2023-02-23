@@ -33,17 +33,26 @@
                         {!! Form::select('company_name', $company_names, @$search->company_name, ['placeholder' => 'Company Name', 'class' => 'form-control select2 input-sm']) !!}
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         {!! Form::select('customer_name', $customer_names, @$search->customer_name, ['placeholder' => 'Customer Name', 'class' => 'form-control select2 input-sm']) !!}
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        {!! Form::select('show', ['received'=>'received','unreceived'=>'unreceived'], @$search->show, [
+                            'placeholder' => 'Show',
+                            'class' => 'form-control select2 input-sm',
+                        ]) !!}
+                    </div>
+                </div>
+                <div class="col-md-2">
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-sm">Search</button>
                         <a href="{{ route('OfficeManagement.receipt.index') }}" class="btn btn-warning btn-sm">Clear</a>
                     </div>
                 </div>
+                
             </div>
             {!! Form::close() !!}
         </div>
@@ -74,33 +83,55 @@
                             <td class="text-center">
                                 @can('receipt-edit')
                                     @if($row->Advance == '6')
+                                        <?php $advs = $advances[$row->id];?>
+                                        @foreach ($advs as $adv)
+                                            @if($adv->received_date != '')
+                                                <strong>{{ dateformat($adv->received_date)}}</strong>
+                                            @else
+                                                <a class="btn btn-sm btn-success receivedButton" data-bs-toggle="modal" data-bs-target="#receivedModel" 
+                                                data-id="{{ $row->id }}"
+                                                data-type="4">
+                                                    <small>{{ advanceFormat($adv->nth_time) }}</small>
+                                                    <i class="fa fa-get-pocket"></i>
+                                                </a>
+                                                <?php break;?>
+                                            @endif
+                                        @endforeach
                                     @elseif($row->Advance == '4' || $row->Advance == '5')
                                         @if($row->first_received_date != '')
-                                            <strong>{{ date('d-m-Y', strtotime($row->first_received_date))}}</strong>
+                                            <strong>{{ dateformat($row->first_received_date)}}</strong>
                                         @else
                                             <a class="btn btn-sm btn-success receivedButton" data-bs-toggle="modal"
-                                                data-bs-target="#receivedModel" data-id="{{ $row->id }}"><i class="fa fa-get-pocket"></i></a>
+                                                data-bs-target="#receivedModel" 
+                                                data-id="{{ $row->id }}"
+                                                data-type="3"><i class="fa fa-get-pocket"></i></a>
                                         @endif
                                     @else
+                                        <div class="">
                                         @if($row->first_received_date != '')
-                                            <strong>{{ date('d-m-Y', strtotime($row->first_received_date))}}</strong>
-                                        @else
-                                            <a class="btn btn-sm btn-success receivedButton" data-bs-toggle="modal"
-                                                data-bs-target="#receivedModel" data-id="{{ $row->id }}">
+                                            <strong>{{ dateformat($row->first_received_date)}}</strong>
+                                            <br>
+                                            @if($row->second_received_date != '')
+                                                <strong>{{ dateformat($row->second_received_date)}}</strong>
+                                            @else
+                                                <a class="btn btn-sm btn-success receivedButton flex-block" data-bs-toggle="modal" data-bs-target="#receivedModel" 
+                                                data-id="{{ $row->id }}"
+                                                data-type="2">
+                                                    <small>2nd</small>
                                                     <i class="fa fa-get-pocket"></i>
-                                                    <small>first</small>
                                                 </a>
+                                            @endif
+                                        @else
+                                            <a class="btn btn-sm btn-success receivedButton flex-block" data-bs-toggle="modal" data-bs-target="#receivedModel" 
+                                            data-id="{{ $row->id }}"
+                                            data-type="1">
+                                                <small>1st</small>
+                                                <i class="fa fa-get-pocket"></i>
+                                            </a>
                                         @endif
 
-                                        @if($row->second_received_date != '')
-                                            <strong>{{ date('d-m-Y', strtotime($row->second_received_date))}}</strong>
-                                        @else
-                                            <a class="btn btn-sm btn-success receivedButton" data-bs-toggle="modal"
-                                                data-bs-target="#receivedModel" data-id="{{ $row->id }}">
-                                                    <i class="fa fa-get-pocket"></i>
-                                                    <small>second</small>
-                                                </a>
-                                        @endif
+                                       
+                                        </div>
                                     @endif
                                 @endcan
                             </td>
@@ -120,8 +151,9 @@
             {!! Form::open(['route' => ['OfficeManagement.receipt.receive'], 'method' => 'POST']) !!}
                 <input type="hidden" value="{{ $data->currentPage() }}" name="page"/>
                 <input type="hidden" value="" name="id" id="receivedId"/>
+                <input type="hidden" value="" name="type" id="typeId"/>
                 <div class="modal-header">
-                    <h5 class="modal-title" id="receivedModelLabel">Confirm Receipt</h5>
+                    <h5 class="modal-title" id="receivedModelLabel">Confirm Receive</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

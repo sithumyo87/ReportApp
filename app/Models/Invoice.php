@@ -45,18 +45,35 @@ class Invoice extends Model
         'form31_files'
     ];  
 
-    protected function searchDataPaginate(Request $request){
-        $data = $this->where('id','>',0);
+    protected function searchData(Request $request){
+        $data = $this->select('invoices.*')->where('invoices.id','>',0);
         if($request->inv_code != ''){
-            $data = $data->where('Invoice_No', $request->inv_code);
+            $data = $data->where('invoices.Invoice_No', $request->inv_code);
         } 
         if($request->company_name != ''){
-            $data = $data->where('Company_name', $request->company_name);
+            $data = $data->where('invoices.Company_name', $request->company_name);
         }
         if($request->customer_name != ''){
-            $data = $data->where('Attn', $request->customer_name);
+            $data = $data->where('invoices.Attn', $request->customer_name);
         }
-        return $data->orderBy('Date','DESC')->paginate(pagination());
+        if($request->show != ''){
+            if($request->show == 'received'){
+                $data = $data->leftJoin('receipts', 'receipts.Invoice_Id','=','invoices.id')->where('receipts.first_received_date', '!=', null)->where('receipts.first_received_date', '!=', '');
+            }elseif($request->show == 'unreceived'){
+                $data = $data->leftJoin('receipts', 'receipts.Invoice_Id','=','invoices.id')->where('receipts.first_received_date', null);
+            }
+        }
+        return $data->distinct();
+    }
+
+    protected function searchDataPaginate(Request $request){
+        $data = $this->searchData($request);
+        return $data->orderBy('invoices.Date','DESC')->paginate(pagination());
+    }
+
+    protected function searchDataCount(Request $request){
+        $data = $this->searchData($request);
+        return $data->get()->count();
     }
 
     protected function invoiceNoDropDown(){
