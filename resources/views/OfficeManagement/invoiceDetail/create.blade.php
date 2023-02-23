@@ -48,7 +48,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">Description</label>
-                    {!! Form::textarea('Description', null, ['placeholder' => 'Description', 'class' => 'form-control tinymce-editor', 'cols'=>5,'rows'=>5, 'required']) !!}
+                    {!! Form::textarea('Description', null, ['placeholder' => 'Description', 'class' => 'form-control tinymce-editor', 'cols'=>5,'rows'=>5,]) !!}
                 </div>
                 <div class="form-group">
                     <label for="">PRICE PER ITEM</label>

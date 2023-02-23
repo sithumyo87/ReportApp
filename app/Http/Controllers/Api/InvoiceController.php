@@ -334,4 +334,141 @@ class InvoiceController extends Controller
         ]);
     }
     
+    public function note_store(Request $request, $id){
+        $invId = $request->invId;
+        $input = QuotationNote::create([
+            'InvoiceId'     => $invId,
+            'Note'          => $request->Note,
+        ]);
+        return response()->json([
+            'status'    => true,
+            'note'      => $input
+        ], 200);
+    }
+    public function note_edit($id){
+        $note = QuotationNote::findorfail($id);
+        return response()->json([
+            'status'    => true,
+            'note'      => $note,
+        ], 200);
+    }
+    public function note_update(Request $request,$id){
+        $invId = $request->invId;
+        $note = QuotationNote::find($id);
+        $input = $note->update([
+            'InvoiceId'     => $invId,
+            'Note'          => $request->Note,
+        ]);
+        return response()->json([
+            'status'    => true,
+            'note'      => $note,
+        ], 200);
+    }
+
+    public function note_delete(Request $request,$id){
+        $invId = $request->invId;
+        $note = QuotationNote::find($id);
+        $note->destroy($id);
+        return response()->json([
+            'status'    => true,
+            'note'      => $note,
+        ], 200);
+    }
+    public function quo_attn_on_change(Request $request){
+            $quoId = $request->quoId;
+            if($quoId != ''){
+                $quotation = Quotation::findOrFail($quoId);
+            }
+            $currency = Currency::all();
+            return response()->json([
+                'status'    => true,
+                'currency'  => $currency,
+                'quotation' => $quotation
+            ], 200);
+    }
+
+    public function get_invoice(Request $request, $id){
+        $type = $request->type;
+        // first invoice  = 1; 50/50, 60/40, 80/20
+        // second invoice = 2; 50/50, 60/40, 80/20
+        // cash/credit = 3
+        // other => 4
+
+        // used for other payment
+        $amount     = $request->amount; // total amount
+		$other_amt  = $request->other_amt; // apply amount
+        if($other_amt == ''){
+            $other_amt = 0;
+        }
+
+        $invoice = Invoice::find($id);
+        $details = QuotationDetail::where('Invoice_Id', $id)->get();
+
+        $advances = Advance::where('Invoice_Id', $id)->get();
+
+        $total = 0;
+        foreach ($details as $value) {
+			$total += percent_price($value->Unit_Price, $value->percent) * $value->Qty;
+		}
+
+        $taxAmount = ($invoice->tax_id * ($total - $invoice->Discount))/100;
+        $grandTotal = $total - $invoice->Discount + $taxAmount;
+        $grandTotalWithoutTax = $total - $invoice->Discount;
+
+        // $tax_amount = ($total - $invoice->Discount) * ($invoice->tax_id/100);
+
+        if ($type == 1){ // first payment 50/50 60/40 80/20
+			if ($invoice->Advance == 1) { // 50/50
+				$multiply = 50/100;
+			} elseif ($invoice->Advance == 2) { // 60/40
+				$multiply = 60/100;
+			} else { // 80/20
+				$multiply = 80/100; 
+			}
+			$invoice->update([
+				'FirstInvoice'          => true,
+				'finv_date'             => date("Y-m-d"),
+				'First_payment_amount'  => round($grandTotalWithoutTax * $multiply, 2)
+            ]);
+		} elseif ($type == 2) { // second payment
+			$invoice->update([
+				'SecondInvoice'         => true,
+				'sinv_date'             => date("Y-m-d"),
+				'Second_payment_amount' => round($grandTotal - $invoice->First_payment_amount, 2),
+			]);
+		} elseif ($type == 3) {
+            $invoice->update([
+				'FirstInvoice'  => true, 
+                'SecondInvoice' => true,
+                'finv_date'     => date("Y-m-d"),
+                'sinv_date'     => date("Y-m-d"),
+			]);
+		} elseif ($type == 4) {
+            $invoice->update([
+				'FirstInvoice'  => true, 
+                'SecondInvoice' => true
+			]);
+
+			$last_row = Advance::where('Invoice_Id', $invoice->id)->orderBy('id', 'desc')->first();
+
+            $remain_amt = isset($last_row) ? $last_row->Balance : $amount;
+			$balance    = $remain_amt - $other_amt;
+
+			$last_row_count = isset($last_row) ? $last_row->nth_time : 0;
+			$last_row_count = $last_row_count + 1;
+            
+            $advan = Advance::create([
+				'Invoice_Id'    => $invoice->id,
+				'Advance_value' => $other_amt,
+				'Balance'       => $balance,
+				'Date'          => date('Y-m-d h:i:s'),
+				'nth_time'      => $last_row_count
+			]);
+		}
+        return response()->json([
+            'status'    => true,
+            'invoice' => $invoice,
+            'quo_detail' => $details,
+        ], 200);
+    }
 }
