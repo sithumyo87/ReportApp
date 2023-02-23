@@ -469,7 +469,6 @@ class InvoiceController extends Controller
             'status'    => true,
             'invoice' => $invoice,
             'quo_detail' => $details,
-            
         ], 200);
     }
 }

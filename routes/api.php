@@ -120,10 +120,30 @@ Route::group(['middleware' =>  ['cors', 'auth:sanctum'], 'prefix' => 'office', '
     // confirm
     Route::post('/invoice/confirm/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'confirm'])->middleware('permission:invoice-edit');
     // quotation Attn On change
-    Route::post('/invoice/quoAttnChg/{id?}', [App\Http\Controllers\Api\InvoiceController::class, 'quo_attn_on_change'])->middleware('permission:invoice-edit');
+    Route::post('/invoice/quoAttnChg/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'quo_attn_on_change'])->middleware('permission:invoice-edit');
     //getInvoice
     Route::post('/invoice/getInvoice/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'get_invoice'])->middleware('permission:invoice-edit');
     //Invoice End---------------------------------------------------------
+
+    //Receipt Start--------------------------------------------------------
+    Route::get('/receipt', [App\Http\Controllers\Api\ReceiptController::class, 'index'])->middleware('permission:receipt-index');
+    Route::get('/receipt/create', [App\Http\Controllers\Api\ReceiptController::class, 'create'])->middleware('permission:receipt-create');
+    Route::post('/receipt/store', [App\Http\Controllers\Api\ReceiptController::class, 'store'])->middleware('permission:receipt-create');
+    Route::get('/receipt/edit/{id}', [App\Http\Controllers\Api\ReceiptController::class, 'edit'])->middleware('permission:receipt-edit');
+    Route::post('/receipt/update/{id}', [App\Http\Controllers\Api\ReceiptController::class, 'update'])->middleware('permission:receipt-edit');
+    //detail
+    Route::get('/receipt/detail/{id}/{type?}', [App\Http\Controllers\Api\ReceiptController::class, 'detail'])->middleware('permission:receipt-show');
+     // get_data_from_quo_name
+     Route::get('/receipt/getDataFromQuoName/{id}', [App\Http\Controllers\Api\ReceiptController::class, 'get_data_from_quo_name'])->middleware('permission:receipt-edit');
+     // signature
+    Route::post('/receipt/sign/{id}', [App\Http\Controllers\Api\ReceiptController::class, 'sign_store'])->middleware('permission:receipt-edit');
+     // Invoice Attn On change
+     Route::post('/receipt/invAttnChg/{id}', [App\Http\Controllers\Api\ReceiptController::class, 'inv_attn_on_chg'])->middleware('permission:receipt-edit');
+     //Receive
+     Route::post('/receipt/receive/{id}', [App\Http\Controllers\Api\ReceiptController::class, 'receive'])->middleware('permission:receipt-edit');
+     //getReceipt
+    Route::post('/receipt/getReceipt/{id}', [App\Http\Controllers\Api\ReceiptController::class, 'get_receipt'])->middleware('permission:receipt-edit');
+    //Receipt End----------------------------------------------------------
 });
 
 Route::group(['middleware' => ['cors']], function () {
