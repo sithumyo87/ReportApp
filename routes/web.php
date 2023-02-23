@@ -61,7 +61,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'OfficeManagement', 'namespa
     Route::get('/quoAttnOnChange', 'InvoiceController@quoAttnOnChange');
     
     // Invoice Detail
-    Route::resource('invoiceDetail', InvoiceDetailController::class,  ['only' => ['store', 'save', 'edit', 'update', 'destroy']]);
+    Route::resource('invoiceDetail', InvoiceDetailController::class, );
     Route::get('invoiceDetail/{invoiceDetail}/{type?}', 'InvoiceDetailController@show')->name('invoiceDetail.show');
     Route::get('invoiceDetailCreate/{invId}', 'InvoiceDetailController@invoiceDetailCreate')->name('invoiceDetailCreate');
     

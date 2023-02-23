@@ -104,6 +104,11 @@ Route::group(['middleware' =>  ['cors', 'auth:sanctum'], 'prefix' => 'office', '
     Route::get('/invoice/detail/edit/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'detail_edit'])->middleware('permission:invoice-edit');
     Route::post('/invoice/detail/update/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'detail_update'])->middleware('permission:invoice-edit');
     Route::post('/invoice/detail/delete/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'detail_delete'])->middleware('permission:invoice-delete');
+    // note
+    Route::post('/invoice/note/store/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'note_store'])->middleware('permission:invoice-create');
+    Route::get('/invoice/note/edit/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'note_edit'])->middleware('permission:invoice-edit');
+    Route::post('/invoice/note/update/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'note_update'])->middleware('permission:invoice-edit');
+    Route::post('/invoice/note/delete/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'note_delete'])->middleware('permission:invoice-edit');
     //Tax Check
     Route::post('/invoice/tax_check/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'tax_check'])->middleware('permission:invoice-edit');
     //Bank Check
@@ -114,6 +119,10 @@ Route::group(['middleware' =>  ['cors', 'auth:sanctum'], 'prefix' => 'office', '
     Route::post('/invoice/sign/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'sign_store'])->middleware('permission:invoice-edit');
     // confirm
     Route::post('/invoice/confirm/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'confirm'])->middleware('permission:invoice-edit');
+    // quotation Attn On change
+    Route::post('/invoice/quoAttnChg/{id?}', [App\Http\Controllers\Api\InvoiceController::class, 'quo_attn_on_change'])->middleware('permission:invoice-edit');
+    //getInvoice
+    Route::post('/invoice/getInvoice/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'get_invoice'])->middleware('permission:invoice-edit');
     //Invoice End---------------------------------------------------------
 });
 
