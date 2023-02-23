@@ -431,4 +431,8 @@ function invoiceToCheck(attn, company){
     });
 }
 
+$(document).on('click', '.receivedButton', function (){
+    $('#receivedId').val($(this).data('id'));
+})
+
 

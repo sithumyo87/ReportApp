@@ -79,6 +79,10 @@ h4.text-themecolor {
     padding: 30px;
 }
 
+.p-20 {
+    padding: 20px;
+}
+
 .font-14{
     font-size: 14px !important;
 }
@@ -99,10 +103,16 @@ label {
     font-weight: 600;
 }
 
-.input-sm{
+.input-sm, input{
     height: 32px !important;
     border-radius: 3px !important;
     line-height: 32px !important;
+    font-size: 14px !important;
+}
+
+select{
+    height: 32px !important;
+    border-radius: 3px !important;
     font-size: 14px !important;
 }
 
@@ -179,6 +189,8 @@ th{
     border: none !important;
 }
 
+
+
 .table-no-border tr td:first-child{
     font-weight: 800;
 }
@@ -194,4 +206,35 @@ th{
 
 .hidden {
     display: none;
+}
+
+.detail-table td, .detail-table th{
+    padding: 5px 10px !important;
+    font-size: 13px !important;
+}
+
+.detail-table th {
+    background: #eaecf4 !important;
+}
+
+.detail-table {
+    margin: 0px;
+}
+
+.detail-table label {
+    margin-bottom: 0px !important;
+}
+
+.fit-content{
+    width: fit-content;
+}
+
+textarea{
+    font-size: 14px !important;
+    border-radius: 3px !important;
+}
+
+h6.auth-title {
+    font-size: 14px;
+    margin-top: 10px;
 }

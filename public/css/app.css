@@ -85,8 +85,10 @@ body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-p.noteFont{
-  font-size: 13px;
+p.noteFont {
+  font-size: 12px;
+  margin-bottom: -10px !important;
+  padding: 3px 5px !important;
 }
 
 hr {

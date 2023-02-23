@@ -78,7 +78,8 @@
             ?>
             <tr>
                 <td width="10%"  class="text-center">{{ ++$i }}</td>
-                <td width="40%" width="40%" >{!! $row->description !!}</td>
+                <td width="40%" width="40%" >
+                <div class="break-block">{!! $row->description !!}</div></td>
                 <td width="20%" class="text-right">{{ $row->price }} {{ $currency->Currency_name }}</td>
                 <td width="10%" class="text-right">{{ $row->Qty }}</td>
                 <td width="20%" class="text-right">{{ number_format($row->price * $row->qty,2) }} {{$currency->Currency_name}}{{$currency->Currency_name}}</td>

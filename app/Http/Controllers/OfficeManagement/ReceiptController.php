@@ -255,4 +255,13 @@ class ReceiptController extends Controller
         $pdf = PDF::loadView('OfficeManagement.receipt.print', $data);
         return $pdf->stream($receipt->Receipt_No.'.pdf');
     }
+
+    public function receive(Request $request){
+        $po = Receipt::find($request->id);
+        $po->update([
+            'received_date' => date('Y-m-d', strtotime($request->received_date)),
+        ]);
+        return redirect()->route('OfficeManagement.receipt.index',['page' => $request->page])
+        ->with('success','Receipt\'s Received Successfully!');
+    }
 }

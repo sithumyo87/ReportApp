@@ -52,6 +52,7 @@ class AuthController extends Controller
                 'token'    => $token->plainTextToken,
                 'token_id' => $token->accessToken->id,
                 'user'     => $user,
+                'modules'  => ['office']
             ], 200);
 
         } catch (\Throwable $th) {
