@@ -49,7 +49,7 @@
                 @endforeach
             </tbody>
         </table>
-        {!! $data->render() !!}
+        {!! $data->withQueryString()->links() !!}
     </div>
 </div>
 @endsection

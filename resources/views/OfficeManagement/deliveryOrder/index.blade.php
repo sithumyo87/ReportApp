@@ -25,17 +25,17 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::select('do_code', $do_codes, @$search->do_code, ['placeholder' => 'Receipt Number', 'class' => 'form-control select2 input-sm']) !!}
+                        {!! Form::select('do_code', $do_codes, @$search['do_code'], ['placeholder' => 'Receipt Number', 'class' => 'form-control select2 input-sm']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::select('company_name', $company_names, @$search->company_name, ['placeholder' => 'Company Name', 'class' => 'form-control select2 input-sm']) !!}
+                        {!! Form::select('company_name', $company_names, @$search['company_name'], ['placeholder' => 'Company Name', 'class' => 'form-control select2 input-sm']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::select('customer_name', $customer_names, @$search->customer_name, ['placeholder' => 'Customer Name', 'class' => 'form-control select2 input-sm']) !!}
+                        {!! Form::select('customer_name', $customer_names, @$search['customer_name'], ['placeholder' => 'Customer Name', 'class' => 'form-control select2 input-sm']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -86,7 +86,7 @@
                 </tbody>
             </table>
         </div>
-        {!! $data->render() !!}
+        {!! $data->withQueryString()->links() !!}
     </div>
 </div>
 @endsection
