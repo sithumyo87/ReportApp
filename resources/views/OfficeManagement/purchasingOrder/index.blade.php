@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
-                            {!! Form::select('customer_name', $customer_names, @$search->customer_name, [
+                            {!! Form::select('customer_name', $customer_names, @$search['customer_name'], [
                                 'placeholder' => 'Customer Name',
                                 'class' => 'form-control select2 input-sm',
                             ]) !!}
@@ -51,7 +51,7 @@
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
-                            {!! Form::select('show', ['received'=>'received','unreceived'=>'unreceived'], @$search->show, [
+                            {!! Form::select('show', ['received'=>'received','unreceived'=>'unreceived'], @$search['show'], [
                                 'placeholder' => 'Show',
                                 'class' => 'form-control select2 input-sm',
                             ]) !!}

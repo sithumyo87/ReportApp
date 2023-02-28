@@ -25,22 +25,22 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::select('rec_code', $rec_codes, @$search->rec_code, ['placeholder' => 'Receipt Number', 'class' => 'form-control select2 input-sm']) !!}
+                        {!! Form::select('rec_code', $rec_codes, @$search['rec_code'], ['placeholder' => 'Receipt Number', 'class' => 'form-control select2 input-sm']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::select('company_name', $company_names, @$search->company_name, ['placeholder' => 'Company Name', 'class' => 'form-control select2 input-sm']) !!}
+                        {!! Form::select('company_name', $company_names, @$search['company_name'], ['placeholder' => 'Company Name', 'class' => 'form-control select2 input-sm']) !!}
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
-                        {!! Form::select('customer_name', $customer_names, @$search->customer_name, ['placeholder' => 'Customer Name', 'class' => 'form-control select2 input-sm']) !!}
+                        {!! Form::select('customer_name', $customer_names, @$search['customer_name'], ['placeholder' => 'Customer Name', 'class' => 'form-control select2 input-sm']) !!}
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
-                        {!! Form::select('show', ['received'=>'received','unreceived'=>'unreceived'], @$search->show, [
+                        {!! Form::select('show', ['received'=>'received','unreceived'=>'unreceived'], @$search['show'], [
                             'placeholder' => 'Show',
                             'class' => 'form-control select2 input-sm',
                         ]) !!}
@@ -94,7 +94,7 @@
                                                     <small>{{ advanceFormat($adv->nth_time) }}</small>
                                                     <i class="fa fa-get-pocket"></i>
                                                 </a>
-                                                <?php break;?>
+                                                <?php ?>
                                             @endif
                                         @endforeach
                                     @elseif($row->Advance == '4' || $row->Advance == '5')
@@ -140,7 +140,7 @@
                 </tbody>
             </table>
         </div>
-        {!! $data->render() !!}
+        {!! $data->withQueryString()->links() !!}
     </div>
 </div>
 

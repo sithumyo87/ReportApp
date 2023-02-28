@@ -170,7 +170,7 @@
             <thead>
                 <tr class="text-center">
                     <th>No.</th>
-                    <th width="130">Description</th>
+                    <th style="min-width: 130px">Description</th>
                     <th>Unit Price</th>
                     <th>Percent</th>
                     <th>Unit Price (With %)</th>
