@@ -27,73 +27,50 @@
             font-family: 'Pyidaungsu', 'Nunito' !important;
         }
 
-        /** Define the margins of your page **/
         @page {
-            margin-top: 120px;
-            margin-bottom: 40px;
-            margin-left: 30px;
-            margin-right: 30px;
-            page-break-inside: none !important;
-            page-break-before: none !important;
-            page-break-after: none !important;
-        }
-
-        .pagenum:before {
-            content: counter(page);
-            float: right;
-            padding-bottom: 10px;
-        }
-
-        header {
-            position: fixed;
-            top: -90px;
-            left: 0px;
-            right: 0px;
-            height: 0px;
-            background-color: #ffffff;
-
-            font-weight: 800;
-            font-size:14px;
-        }
-
-        footer {
-            position: fixed; 
-            bottom: -20px; 
-            left: 0px; 
-            right: 0px;
-            height: 20px; 
-
-            /** Extra personal styles **/
-            background-color: #ffffff;
-            color: #111111;
-            font-size: 12px;
+            header: page-header;
+            footer: page-footer;
         }
 
         table{
-            width: 100% !important;
+           border-collapse: collapse;
+           width: 100% !important;
+           font-size: 14px;
+           page-break-inside: auto !important;
+           overflow: wrap;
         }
 
+        tbody, thead, tr{
+            page-break-inside: auto !important;
+           break-inside: auto !important;
+           overflow: wrap;
+        }
 
-        .p-l-10{
-            padding-left: 10px;
-        }
-        .bold-font{
-            font-weight: 600;
-            font-size: 13px;
-        }
-        .block{
+        .header{
             display: block;
-            height: fit-content;
-        }
-        .flex-division{
-            display: flex;
+            width: 100%;
+            color: #483D8B;
+            font-weight: bold;
+            font-size: 13px;
         }
         .right-div{
             float:right;
+            width: 50%;
+            text-align: right;
         }
         .left-div{
             float:left;
+            width: 50%;
         }
+
+        .footer{
+            font-size: 12px;
+            color: #483D8B;
+        }
+        .footer-link{
+            text-decoration: none;
+        }
+
         .flex-item1{
             width: 30%;
             float: right;
@@ -105,7 +82,8 @@
 
         table{
             border-collapse: collapse;
-            width:100%;
+            width:100% !important;
+            overflow: wrap;
         }
 
         .table-bordered{
@@ -136,6 +114,7 @@
         .note_and_sign .note{
             width: 70%;
             float: left;
+            margin-top: 10px;
         }
 
         .note_and_sign .sign{
@@ -145,8 +124,7 @@
         }
 
         .note-title{
-            font-size: 13px;
-            font-weight: bold;
+            font-size: 13px !important;
         }
 
         .note-body{
@@ -190,26 +168,67 @@
             width: 100px;
             height: 100px;
         }
+
+        .rTable {
+            display: table !important;
+            width: 100% !important;
+        }
+        .rTableRow {
+            display: table-row !important;
+        }
+        .rTableHeading {
+            display: table-header-group !important;
+            background-color: #ddd !important;
+        }
+        .rTableCell {
+            display: table-cell !important;
+            border: 1px solid #999999 !important;
+        }
+        .rTableHead {
+            display: table-cell !important;
+            padding: 3px 10px !important;
+            border: 1px solid #999999 !important;
+        }
+        .rTableHeading {
+            display: table-header-group !important;
+            background-color: #ddd !important;
+            font-weight: bold !important;
+        }
+        .rTableFoot {
+            display: table-footer-group !important;
+            font-weight: bold !important;
+            background-color: #ddd !important;
+        }
+        .rTableBody {
+            display: table-row-group !important;
+        }
     </style>
 </head>
 
 <body>
-    <header>
-        <div class="left-div">
-            <img src="{{ public_path('img/nexthop-logo.png') }}" width="50px">
-            <img src="{{ public_path('img/itp.png') }}" width="140px" class="p-l-10">
+    <htmlpageheader name="page-header">
+        <div class="header">
+            <div class="left-div">
+                <img src="{{ public_path('img/nexthop-logo.png') }}" width="50px">
+                <img src="{{ public_path('img/itp.png') }}" width="140px" class="p-l-10">
+            </div>
+            <div class="right-div text-right">
+                <div>Next Hop IT Service Provider</div>
+                <div>Route To Future</div>
+                <div>For Your Business</div>
+            </div>
         </div>
-        <div class="right-div">
-            <div>Next Hop IT Service Provider</div>
-            <div>Route To Future</div>
-            <div>For Your Business</div>
+    </htmlpageheader>
+
+    <htmlpagefooter name="page-footer">
+        <div class="footer">
+            <div class="pagenum" style="float: right"></div>
+            <div>Building 371, Room 302, Yar Zar Dirit Housing, Botataung Township, Yangon, Myanmar</div>
+            <div>Tel: 09-5012101, 09-73129351, 09-5033257, Email : info@thenexthop.net , Website : 
+                <a href="https://www.thenexthop.net/" class="footer-link">www.thenexthop.net</a>
+            </div>
         </div>
-    </header>
-    <footer>
-        <div class="pagenum" style="float: right"></div>
-        <div>Building 371, Room 302, Yar Zar Dirit Housing, Botataung Township, Yangon, Myanmar</div>
-        <div>Tel: 09-5012101, 09-73129351, 09-5033257, Email : info@thenexthop.net , Website : <a href="https://www.thenexthop.net/">www.thenexthop.net</a></div>
-    </footer>
+    </htmlpagefooter>
     <!-- Wrap the content of your PDF inside a main tag -->
     <main>
         @yield('content')

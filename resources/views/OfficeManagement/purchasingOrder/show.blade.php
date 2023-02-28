@@ -9,10 +9,17 @@
             <div class="d-flex justify-content-end">
                 @if($po->submit_status == true)
                     <a href="{{ route('OfficeManagement.poPrint', $po->id) }}"
-                    class="btn btn-success btn-sm d-none d-lg-block m-l-15 mr-3" target="_blank"><i class="fa fa-back"></i>
-                    Print
+                    class="btn btn-success btn-sm d-none d-lg-block m-l-15 mr-3" target="_blank">
+                        <i class="fa fa-back"></i>
+                        Print
+                    </a>
+                    <a href="{{ route('OfficeManagement.poPrint', ['id'=>$po->id, 'pdf' => 'js']) }}"
+                    class="btn btn-success btn-sm d-none d-lg-block m-l-15 mr-3" target="_blank">
+                        <i class="fa fa-back"></i>
+                        Print2
                     </a>
                 @endif
+
                 <div class="d-flex justify-content-end">
                     <a href="{{ route('OfficeManagement.purchasingOrder.index') }}"
                         class="btn btn-info btn-sm d-none d-lg-block m-l-15"><i class="fa fa-back"></i>
@@ -22,6 +29,7 @@
             </div>
         </div>
     </div>
+    
     <hr>
     @if ($message = Session::get('success'))
         <div class="alert alert-success">{{ $message }}</div>

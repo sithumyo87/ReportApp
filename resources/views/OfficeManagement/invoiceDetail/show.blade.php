@@ -1,6 +1,6 @@
 @extends('layouts.setting')
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid detail-table">
     <div class="row quotation page-titles">
         <div class="col-md-5 align-self-center">
             <h4 class="text-themecolor">{{ $invoice->Invoice_No}} 's Detail</h4>
@@ -9,12 +9,12 @@
             <div class="d-flex justify-content-end">
                 @if($invoice->submit_status == true && ($type != '' || $invoice->Advance == '4' || $invoice->Advance == '5'))
                     <a href="{{ route('OfficeManagement.invoicePrint', ['id' => $invoice->id, 'type' => $type]) }}"
-                        class="btn btn-success btn-sm d-none d-lg-block m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
+                        class="btn btn-success d-none d-lg-block m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
                         Print
                     </a>
                 @endif
                 <a href="{{ route('OfficeManagement.invoice.index') }}"
-                    class="btn btn-info btn-sm d-none d-lg-block m-l-15"><i class="fa fa-back"></i>
+                    class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-back"></i>
                     Back
                 </a>
             </div>
@@ -35,7 +35,7 @@
                     $invoice->id], 'style' => 'display:inline']) !!}
                         {!! Form::hidden('type', getInvoiceType($invoice)) !!}
                         {!! Form::hidden('amount', null) !!}
-                        {!! Form::button('<i class="fa fa fa-sort"></i> GET INVOICE', ['type'=>'submit','class' => 'btn btn-sm btn-info', 'onclick' => 'return confirm("Are you sure to get invoice?")',
+                        {!! Form::button('<i class="fa fa fa-sort"></i> GET INVOICE', ['type'=>'submit','class' => 'btn btn-info', 'onclick' => 'return confirm("Are you sure to get invoice?")',
                         'id' => 'delete']) !!}
                     {!! Form::close() !!}
                 @endif
@@ -206,7 +206,7 @@
                     @if($invoice->submit_status != '1')
                         <td class="text-center">
                             @can('invoice-edit')
-                            <a class="btn btn-sm btn-primary"
+                            <a class="btn btn-primary"
                                 href="{{ route('OfficeManagement.invoiceDetail.edit', $row->id) }}">
                                 <i class="fa fa-edit"></i></a>
                             @endcan
@@ -214,7 +214,7 @@
                                 @if($invoice->submit_status != '1')
                                     {!! Form::open(['method' => 'DELETE', 'route' => ['OfficeManagement.invoiceDetail.destroy',
                                     $row->id], 'style' => 'display:inline']) !!}
-                                        {!! Form::button('<i class="fa fa-trash"></i>', ['type'=>'submit','class' => 'btn btn-sm btn-danger', 'onclick' => 'return confirm("Are you sure to delete?")',
+                                        {!! Form::button('<i class="fa fa-trash"></i>', ['type'=>'submit','class' => 'btn btn-danger', 'onclick' => 'return confirm("Are you sure to delete?")',
                                         'id' => 'delete']) !!}
                                     {!! Form::close() !!}
                                 @endif
@@ -273,11 +273,11 @@
                             <div class="row">
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        <input class="form-control" value="{{ $invoice->Discount}}" name="discount">
+                                        <input type="number" min="0" step="0.001" class="form-control" value="{{ $invoice->Discount}}" name="discount">
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <button class="btn btn-sm btn-primary float-right" type="submit">Add</button>
+                                    <button class="btn btn-primary float-right" type="submit">Add</button>
                                 </div>
                             </div>
                         {!! Form::close() !!}
@@ -422,8 +422,8 @@
                         <textarea name="Note" id="note" cols="5" rows="2" class="form-control" required></textarea>
                     </div>
                     <div class="text-right mt-3">
-                        <button class="btn btn-sm btn-grey note-reset" type="reset">Reset</button>
-                        <button class="btn btn-sm btn-primary" type="submit">Add</button>
+                        <button class="btn btn-grey note-reset" type="reset">Reset</button>
+                        <button class="btn btn-primary" type="submit">Add</button>
                     </div>
                     {!! Form::close() !!}
                 @endif
@@ -496,7 +496,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <button class="btn btn-sm btn-primary float-right" type="submit">Add</button>
+                        <button class="btn btn-primary float-right" type="submit">Add</button>
                     </div>
                 </div>
                 {!! Form::close() !!}

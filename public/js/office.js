@@ -452,5 +452,14 @@ $(document).on('click', '#psw-cancel', function (){
     $('.psw-form').addClass('hidden');
 });
 
+$(document).on('click', '#email-gear', function (){
+    $('.email-form').removeClass('hidden');
+    $('.email-data').addClass('hidden');
+});
+$(document).on('click', '#email-cancel', function (){
+    $('.email-data').removeClass('hidden');
+    $('.email-form').addClass('hidden');
+});
+
 
 

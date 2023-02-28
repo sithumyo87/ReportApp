@@ -486,6 +486,11 @@
         </div>
     </div>
 
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModalCustom" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">

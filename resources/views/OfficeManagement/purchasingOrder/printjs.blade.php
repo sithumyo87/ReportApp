@@ -77,9 +77,7 @@
             ?>
             <tr style="box-decoration-break: clone;">
                 <td class="text-center">{{ ++$i }}</td>
-                <td>
-                    {!! $row->description !!}
-                </td>
+                <td>{!! $row->description !!}</td>
                 <td class="text-right">{{ $row->price }} {{ $currency->Currency_name }}</td>
                 <td class="text-right">{{ $row->qty }}</td>
                 <td class="text-right">{{ number_format($row->price * $row->qty,2) }} {{$currency->Currency_name}}{{$currency->Currency_name}}</td>
@@ -111,25 +109,7 @@
         @endif
     </table>
 </div>
-<!-- end detail -->
-
-<div class="rTable">
-    <div class="rTableRow">
-        <div class="rTableHead"><strong>Name</strong></div>
-        <div class="rTableHead"><span style="font-weight: bold;">Telephone</span></div>
-        <div class="rTableHead">&nbsp;</div>
-    </div>
-    <div class="rTableRow">
-        <div class="rTableCell">John</div>
-        <div class="rTableCell"><a href="tel:0123456785">0123 456 785</a></div>
-        <div class="rTableCell"><img src="images/check.gif" alt="checked" /></div>
-    </div>
-    <div class="rTableRow">
-        <div class="rTableCell">Cassie</div>
-        <div class="rTableCell"><a href="tel:9876532432">9876 532 432</a></div>
-        <div class="rTableCell"><img src="images/check.gif" alt="checked" /></div>
-    </div>
-</div>
+<!-- end detail --> 
 
 <div class="note_and_sign">
     <div class="note">

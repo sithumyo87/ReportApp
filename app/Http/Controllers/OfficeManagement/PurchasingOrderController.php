@@ -13,6 +13,7 @@ use App\Models\QuotationNote;
 use App\Models\PurchasingOrderNote;
 use App\Models\Authorizer;
 use PDF;
+use MPDF;
 
 class PurchasingOrderController extends Controller
 {
@@ -171,12 +172,12 @@ class PurchasingOrderController extends Controller
         ->with('success','Purchasing Order Confirmed Successful!');
     }
 
-    public function poPrint($id){
+    public function poPrint(Request $request, $id){
         $po = PurchasingOrder::select('purchasing_orders.*', 'quotations.Serial_No', 'quotations.Refer_No')->leftJoin('quotations', 'quotations.id','=', 'purchasing_orders.quo_id')->where('purchasing_orders.id', $id)->first();
-        $poDetails = PurchasingOrderDetail::where('po_id', $id)->get();
-        $currency   = Currency::findOrFail($po->currency);
-        $notes = PurchasingOrderNote::where('po_id', $id)->get();
-        $authorizers = Authorizer::get();
+        $poDetails      = PurchasingOrderDetail::where('po_id', $id)->get();
+        $currency       = Currency::findOrFail($po->currency);
+        $notes          = PurchasingOrderNote::where('po_id', $id)->get();
+        $authorizers    = Authorizer::get();
         
         $data = [
             'po'                => $po,
@@ -186,9 +187,26 @@ class PurchasingOrderController extends Controller
             'authorizers'       => $authorizers,
         ]; 
 
-        $pdf = PDF::loadView('OfficeManagement.purchasingOrder.print', $data);
+        if($request->pdf == 'js'){
+            $data['layout'] = 'layouts.pdfjs';
+            $pdf = MPDF::chunkLoadView('<html-separator/>','OfficeManagement.purchasingOrder.printjs', $data);
+            // $pdf->use_kwt = true;
+            $pdf->shrink_tables_to_fit=1;
+            $pdf->keep_table_proportions = true;
+            return view('OfficeManagement.purchasingOrder.printjs2')->with($data);
+        }else{
+            $data['layout'] = 'layouts.mpdf';
+            $pdf = MPDF::chunkLoadView('<html-separator/>','OfficeManagement.purchasingOrder.print', $data);
+            // $pdf->use_kwt = true;
+            $pdf->shrink_tables_to_fit=1;
+            $pdf->keep_table_proportions = true;
+        }
+
+        
         return $pdf->stream($po->po_code.'.pdf');
     }
+    
+
 
 
     public function poReceive(Request $request){

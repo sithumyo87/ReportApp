@@ -125,4 +125,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'setting', 'namespace' => 'A
     Route::resource('user', UserController::class);
     Route::resource('authorizer', AuthorizedController::class);
     Route::resource('setting', SettingController::class);
+
+    Route::get('/setting', 'SettingController@index')->name('setting.index');
+    Route::post('/setting/profileChange', 'SettingController@profileChange')->name('setting.profileChange');
+    Route::post('/setting/emailChange', 'SettingController@emailChange')->name('setting.emailChange');
+    Route::post('/setting/passwordChange', 'SettingController@passwordChange')->name('setting.passwordChange');
 });
