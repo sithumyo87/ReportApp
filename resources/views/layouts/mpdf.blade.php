@@ -72,12 +72,12 @@
         }
 
         .flex-item1{
-            width: 30%;
+            width: 35%;
             float: right;
         }
         .flex-item2{
             flex-grow: 1;
-            width: 70%;
+            width: 65%;
         }
 
         table{
@@ -167,40 +167,6 @@
         #authorizer-img{
             width: 100px;
             height: 100px;
-        }
-
-        .rTable {
-            display: table !important;
-            width: 100% !important;
-        }
-        .rTableRow {
-            display: table-row !important;
-        }
-        .rTableHeading {
-            display: table-header-group !important;
-            background-color: #ddd !important;
-        }
-        .rTableCell {
-            display: table-cell !important;
-            border: 1px solid #999999 !important;
-        }
-        .rTableHead {
-            display: table-cell !important;
-            padding: 3px 10px !important;
-            border: 1px solid #999999 !important;
-        }
-        .rTableHeading {
-            display: table-header-group !important;
-            background-color: #ddd !important;
-            font-weight: bold !important;
-        }
-        .rTableFoot {
-            display: table-footer-group !important;
-            font-weight: bold !important;
-            background-color: #ddd !important;
-        }
-        .rTableBody {
-            display: table-row-group !important;
         }
     </style>
 </head>

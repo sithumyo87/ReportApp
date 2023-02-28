@@ -1,4 +1,4 @@
-@extends('layouts.pdf')
+@extends('layouts.mpdf')
 @section('content')
 
 <div class="description-wrap">
@@ -7,9 +7,9 @@
             <table class="table">
                 <tbody>
                     <tr>
-                        <td width="70">Quotation No</td>
-                        <td>:</td>
-                        <td width="100">{{ $quotation->Serial_No}}</td>
+                        <td width="100">Quotation No</td>
+                        <td width="10">:</td>
+                        <td>{{ $quotation->Serial_No}}</td>
                     </tr>
                     @if($quotation->Refer_No != '')
                     <tr>
@@ -30,8 +30,8 @@
             <table class="table">
                 <tbody>
                     <tr>
-                        <td width="70">Attn</td>
-                        <td>:</td>
+                        <td width="100">Attn</td>
+                        <td width="10">:</td>
                         <td>{{ $quotation->Serial_No}}</td>
                     </tr>
                     <tr>
@@ -66,10 +66,10 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Lot No</th>
-                <th>Description</th>
+                <th width="50">Lot No</th>
+                <th style="width: 300px;">Description</th>
                 <th>Unit in Price <br> ({{$currency->Currency_name}}) </th>
-                <th>Qty</th>
+                <th width="50">Qty</th>
                 <th>Total In Price <br> ({{$currency->Currency_name}})</th>
             </tr>
         </thead>
@@ -86,11 +86,11 @@
             $subTotalWithPer += percent_price($row->Unit_Price, $row->percent) * $row->Qty;
         ?>
         <tr>
-            <td width="10%"  class="text-center">{{ ++$i }}</td>
-            <td width="40%" width="40%" >{!! $row->Description !!}</td>
-            <td width="20%" class="text-right">{{number_format(percent_price($row->Unit_Price, $row->percent),2)}} {{$currency->Currency_name}}</td>
-            <td width="10%" class="text-right">{{ $row->Qty }}</td>
-            <td width="20%" class="text-right">{{ number_format(percent_price($row->Unit_Price, $row->percent) * $row->Qty,2); }} {{$currency->Currency_name}}</td>
+            <td class="text-center">{{ ++$i }}</td>
+            <td>{!! $row->Description !!}</td>
+            <td class="text-right">{{number_format(percent_price($row->Unit_Price, $row->percent),2)}} {{$currency->Currency_name}}</td>
+            <td class="text-right">{{ $row->Qty }}</td>
+            <td class="text-right">{{ number_format(percent_price($row->Unit_Price, $row->percent) * $row->Qty,2); }} {{$currency->Currency_name}}</td>
         </tr>
         @endforeach
 

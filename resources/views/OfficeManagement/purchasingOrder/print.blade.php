@@ -6,9 +6,9 @@
             <table class="table">
                 <tbody>
                     <tr>
-                        <td width="70">Order No</td>
-                        <td>:</td>
-                        <td width="100">{{ $po->po_code }}</td>
+                        <td width="100">Order No</td>
+                        <td width="10">:</td>
+                        <td>{{ $po->po_code }}</td>
                     </tr>
                     <tr>
                         <td>Date</td>
@@ -23,7 +23,7 @@
                 <tbody>
                     <tr>
                         <td width="100">Sub</td>
-                        <td>:</td>
+                        <td width="10">:</td>
                         <td> {{ $po->sub}}</td>
                     </tr>
                     <tr>
@@ -58,10 +58,10 @@
     <table class="table table-bordered table-break">
         <thead>
             <tr>
-                <th>Lot No</th>
-                <th>Description</th>
+                <th width="50">Lot <br> No</th>
+                <th style="width: 300px;">Description</th>
                 <th>Unit in Price </th>
-                <th>QTY</th>
+                <th width="50">QTY</th>
                 <th>Subtotal</th>
             </tr>
         </thead>
@@ -112,24 +112,6 @@
     </table>
 </div>
 <!-- end detail -->
-
-<div class="rTable">
-    <div class="rTableRow">
-        <div class="rTableHead"><strong>Name</strong></div>
-        <div class="rTableHead"><span style="font-weight: bold;">Telephone</span></div>
-        <div class="rTableHead">&nbsp;</div>
-    </div>
-    <div class="rTableRow">
-        <div class="rTableCell">John</div>
-        <div class="rTableCell"><a href="tel:0123456785">0123 456 785</a></div>
-        <div class="rTableCell"><img src="images/check.gif" alt="checked" /></div>
-    </div>
-    <div class="rTableRow">
-        <div class="rTableCell">Cassie</div>
-        <div class="rTableCell"><a href="tel:9876532432">9876 532 432</a></div>
-        <div class="rTableCell"><img src="images/check.gif" alt="checked" /></div>
-    </div>
-</div>
 
 <div class="note_and_sign">
     <div class="note">

@@ -1,7 +1,7 @@
 @extends('layouts.setting')
 @section('content')
 
-<div class="container-fluid">
+<div class="container-fluid detail-table">
     <div class="row quotation page-titles">
         <div class="col-md-5 align-self-center">
             <h4 class="text-themecolor">{{ $deliveryOrder->do_code}} 's Detail</h4>
@@ -37,20 +37,72 @@
 
     <div class="row">
         <div class="col-md-7">
-            <p><b>Attn: </b> {{ $deliveryOrder->Attn}}</p>
-            <p><b>Company Name: </b> {{ $deliveryOrder->Company_name}}</p>
-            <p><b>Contact Phone: </b> {{ $deliveryOrder->Contact_phone}}</p>
-            <p><b>Address: </b> {{ $deliveryOrder->Address}}</p>
-            <p><b>Sub: </b>
-                {{ $deliveryOrder->sub}}
-            </p>
+         <table class="table table-no-border">
+                <tbody>
+                    <tr>
+                        <td style="min-width: 150px">Attn</td>
+                        <td>:</td>
+                        <td>{{ $deliveryOrder->Attn}}</td>
+                    </tr>
+                    <tr>
+                        <td>Company Name</td>
+                        <td>:</td>
+                        <td>{{ $deliveryOrder->Company_name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Contact Phone</td>
+                        <td>:</td>
+                        <td>{{ $deliveryOrder->Contact_phone}}</td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>:</td>
+                        <td>{{ $deliveryOrder->Address}}</td>
+                    </tr>
+                    <tr>
+                        <td>Sub</td>
+                        <td>:</td>
+                        <td>{{ $deliveryOrder->sub}}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="col-md-5">
-            <p><b>D.O No. </b> {{ $deliveryOrder->do_code}}</p>
-            <p><b>Date: </b>  {{ date('d-m-Y', strtotime($deliveryOrder->date)) }}</p>
-            @if($deliveryOrder->po_no != '')
-                <p><b>PO No: </b> - {{ $deliveryOrder->po_no}}</p>
-            @endif
+            <table class="table table-no-border">
+                <tbody>
+                    <tr>
+                        <td style="min-width: 150px">D.O No.</td>
+                        <td>:</td>
+                        <td>{{ $deliveryOrder->do_code}}</td>
+                    </tr>
+                    <tr>
+                        <td>Date</td>
+                        <td>:</td>
+                        <td>{{ date('d-m-Y', strtotime($deliveryOrder->date)) }}</td>
+                    </tr>
+                    @if($deliveryOrder->quo_id != '')
+                    <tr>
+                        <td>Ref Quotation No.</td>
+                        <td>:</td>
+                        <td>{{ $deliveryOrder->quo_id}}</td>
+                    </tr>
+                    @endif
+                    @if($deliveryOrder->inv_id != '')
+                    <tr>
+                        <td>Ref Invoice No.</td>
+                        <td>:</td>
+                        <td>{{ $deliveryOrder->inv_id}}</td>
+                    </tr>
+                    @endif
+                    @if($deliveryOrder->po_no != '')
+                    <tr>
+                        <td>PO No.</td>
+                        <td>:</td>
+                        <td>{{ $deliveryOrder->po_no}}</td>
+                    </tr>
+                    @endif
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -65,18 +117,18 @@
             </div>
         @endcan
     @endif
-    <div class="table-responsive bg-white p-30">
-        <table class="table table-bordered">
+    <div class="table-responsive bg-white p-10">
+        <table class="table table-bordered m-0">
             <thead>
                 <tr class="text-center">
-                    <th>No</th>
+                    <th width="50">No</th>
                     <th style="min-width:300px">Description</th>
                     <th width="50">Qty</th>
 
                     {{-- for quo/inv refer --}}
                     @if($deliveryOrder->quo_id != '' || $deliveryOrder->inv_id != '')
-                        <th>Delivered Qty</th>
-                        <th>Delivered Date</th>
+                        <th width="50">Delivered Qty</th>
+                        <th width="120">Delivered Date</th>
                     @endif
 
                     @if($deliveryOrder->submit_status != '1')
@@ -111,7 +163,7 @@
                     }
                 ?>
                 <tr>
-                    <td width="50px">{{ $i++ }}</td>
+                    <td>{{ $i++ }}</td>
                     <td>{!! $row->name !!}</td>
                     <td class="text-right">{{ $row->qty }}</td>
 

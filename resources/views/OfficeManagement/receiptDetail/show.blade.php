@@ -1,6 +1,6 @@
 @extends('layouts.setting')
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid detail-table">
     <div class="row quotation page-titles">
         <div class="col-md-5 align-self-center">
             <h4 class="text-themecolor">{{ $receipt->Receipt_No}} 's Detail</h4>
@@ -128,11 +128,11 @@
     </div>
 
     <!-- start detail -->
-    <div class="table-responsive bg-white p-30">
-        <table class="table table-bordered">
+    <div class="table-responsive bg-white p-10">
+        <table class="table table-bordered m-0">
             <thead>
                 <tr class="text-center">
-                    <th width="130">Description</th>
+                    <th style="min-width: 300px;">Description</th>
                     <th>Unit Price</th>
                     <th>Percent</th>
                     <th>Unit Price (With %)</th>
@@ -154,7 +154,7 @@
                 ?>
 
                 <tr>
-                    <td style="min-width: 200px;">{!! $row->Description !!}</td>
+                    <td>{!! $row->Description !!}</td>
                     <td class="text-right">{{ $row->Unit_Price }} {{$currency->Currency_name}}</td>
                     <td class="text-right">{{ $row->percent }}%</td>
                     <td class="text-right">{{number_format(percent_price($row->Unit_Price, $row->percent),2)}} {{$currency->Currency_name}}</td>

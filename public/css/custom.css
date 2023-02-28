@@ -3,8 +3,8 @@ body{
 }
 
 .table-responsive::-webkit-scrollbar {
-width: 0.5em;
-height: 0.5em;   
+    width: 0.5em;
+    height: 0.5em;   
 }
 
 ul.pagination {
@@ -30,6 +30,9 @@ h4.text-themecolor {
     font-weight: 600;
 }
 
+.m-0{
+    margin: 0px !important;
+}
 .m-30{
     margin: 30px;
 }
@@ -81,9 +84,14 @@ h4.text-themecolor {
 .p-30 {
     padding: 30px;
 }
-
 .p-20 {
     padding: 20px;
+}
+.p-10 {
+    padding: 10px;
+}
+.tbl-p-rlt-10{
+    padding: 10px;
 }
 
 .font-14{

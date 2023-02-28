@@ -165,12 +165,12 @@
     </div>
 
     <!-- start detail -->
-    <div class="table-responsive bg-white p-30">
-        <table class="table table-bordered">
+    <div class="table-responsive bg-white p-10">
+        <table class="table table-bordered m-0">
             <thead>
                 <tr class="text-center">
-                    <th>No.</th>
-                    <th style="min-width: 130px">Description</th>
+                    <th width="50">No.</th>
+                    <th style="min-width: 300px">Description</th>
                     <th>Unit Price</th>
                     <th>Percent</th>
                     <th>Unit Price (With %)</th>

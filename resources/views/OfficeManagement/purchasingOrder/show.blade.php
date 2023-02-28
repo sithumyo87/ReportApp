@@ -13,11 +13,11 @@
                         <i class="fa fa-back"></i>
                         Print
                     </a>
-                    <a href="{{ route('OfficeManagement.poPrint', ['id'=>$po->id, 'pdf' => 'js']) }}"
+                    {{-- <a href="{{ route('OfficeManagement.poPrint', ['id'=>$po->id, 'pdf' => 'js']) }}"
                     class="btn btn-success btn-sm d-none d-lg-block m-l-15 mr-3" target="_blank">
                         <i class="fa fa-back"></i>
                         Print2
-                    </a>
+                    </a> --}}
                 @endif
 
                 <div class="d-flex justify-content-end">
@@ -38,7 +38,7 @@
 
     <div class="row">
         <div class="col-md-7">
-            <table class="table table-no-border detail-table">
+            <table class="table table-no-border">
                 <tbody>
                     <tr>
                         <td style="min-width: 150px">Sub</td>
@@ -69,7 +69,7 @@
             </table>
         </div>
         <div class="col-md-5">
-            <table class="table table-no-border detail-table">
+            <table class="table table-no-border">
                 <tbody>
                     <tr>
                         <td style="min-width: 150px">Order No</td>
@@ -94,11 +94,11 @@
     </div>
 
     <!-- start detail -->
-    <div class="table-responsive bg-white m-t-10">
-        <table class="table table-bordered detail-table">
+    <div class="table-responsive bg-white p-10">
+        <table class="table table-bordered m-0">
             <thead>
                 <tr class="text-center">
-                    <th style="min-width:130px;">Description</th>
+                    <th style="min-width:300px;">Description</th>
                     <th>Unit Price</th>
                     <th>Qty</th>
                     <th>SubTotal</th>
@@ -172,7 +172,7 @@
             <!-- start total -->
             <div class="col-md-5 float-right">
                 <div class="float-right">
-                    <table class="table table-no-border detail-table fit-content">
+                    <table class="table table-no-border fit-content">
                         <tr>
                             <td class='text-right'><strong>Total</strong></td>
                             <td>{{number_format($subTotal,2)}} {{$currency->Currency_name}}</td>

@@ -1,4 +1,4 @@
-@extends('layouts.pdf')
+@extends('layouts.mpdf')
 @section('content')
 
 <div class="description-wrap">
@@ -7,9 +7,9 @@
             <table class="table">
                 <tbody>
                     <tr>
-                        <td width="70">D.O No:</td>
-                        <td>:</td>
-                        <td width="100">{{ $deliveryOrder->do_code }}</td>
+                        <td width="100">D.O No:</td>
+                        <td width="10">:</td>
+                        <td>{{ $deliveryOrder->do_code }}</td>
                     </tr>
                     <tr>
                         <td>Date</td>
@@ -23,8 +23,8 @@
             <table class="table">
                 <tbody>
                     <tr>
-                        <td width="70">Attn</td>
-                        <td>:</td>
+                        <td width="100">Attn</td>
+                        <td width="10">:</td>
                         <td>{{ $deliveryOrder->Attn }}</td>
                     </tr>
                     <tr>
@@ -59,12 +59,12 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th width="20">No</th>
-                <th>Description</th>
-                <th>QTY</th>
+                <th width="50">No</th>
+                <th style="min-width: 300px;">Description</th>
+                <th width="50">QTY</th>
                 @if($date != '')
-                    <th width="50">Delivered Qty</th>
-                    <th width="50">Left Qty</th>
+                    <th width="100">Delivered Qty</th>
+                    <th width="100">Left Qty</th>
                 @endif
             </tr>
         </thead>
@@ -86,9 +86,9 @@
                     }
                 ?>
                 <tr>
-                    <td width="10%"  class="text-center">{{ ++$i }}</td>
-                    <td width="40%" width="40%" >{!! $row->name !!}</td>
-                    <td width="10%" class="text-right">{{ $row->qty }}</td>
+                    <td class="text-center">{{ ++$i }}</td>
+                    <td>{!! $row->name !!}</td>
+                    <td class="text-right">{{ $row->qty }}</td>
                     @if($date != '')
                         <td class="text-right">{{ $delivered_amt }}</td>
                         <td class="text-center">{{ $balance }}</td>
