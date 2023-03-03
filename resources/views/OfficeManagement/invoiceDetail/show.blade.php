@@ -12,6 +12,10 @@
                         class="btn btn-success d-none d-lg-block m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
                         Print
                     </a>
+                    <a href="{{ route('OfficeManagement.invoicePrint', ['id' => $invoice->id, 'type' => $type, 'pdf' => 'kinzi']) }}"
+                        class="btn btn-success d-none d-lg-block m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
+                        Print-2
+                    </a>
                 @endif
                 <a href="{{ route('OfficeManagement.invoice.index') }}"
                     class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-back"></i>
@@ -100,72 +104,74 @@
     @endcan
     {{-- get invoice end --}}
 
-    <div class="row">
-        <div class="col-md-7">
-            <table class="table table-no-border">
-                <tbody>
-                    <tr>
-                        <td style="min-width: 150px">Attn</td>
-                        <td>:</td>
-                        <td>{{ $invoice->Attn}}</td>
-                    </tr>
-                    <tr>
-                        <td>Sub</td>
-                        <td>:</td>
-                        <td>{{ $invoice->Sub}}</td>
-                    </tr>
-                    <tr>
-                        <td>Company Name</td>
-                        <td>:</td>
-                        <td>{{ $invoice->Company_name}}</td>
-                    </tr>
-                    <tr>
-                        <td>Contact Phone</td>
-                        <td>:</td>
-                        <td>{{ $invoice->Contact_phone}}</td>
-                    </tr>
-                    <tr>
-                        <td>Address</td>
-                        <td>:</td>
-                        <td>{{ $invoice->Address}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-md-5">
-            <table class="table table-no-border">
-                <tbody>
-                    <tr>
-                        <td style="min-width: 150px">Invoice No</td>
-                        <td>:</td>
-                        <td>{{ $invoice->Invoice_No}} </td>
-                    </tr>
-                    <tr>
-                        <td>Invoice Date</td>
-                        <td>:</td>
-                        <td>{{ getInvoiceDate($invoice, $type, $advance_data) }}</td>
-                    </tr>
-                    @if($invoice->po_no != '')
-                    <tr>
-                        <td>PO No</td>
-                        <td>:</td>
-                        <td>{{ $invoice->po_no}}</td>
-                    </tr>
-                    @endif
-                    @if($invoice->vender_id != '')
-                    <tr>
-                        <td>Vender ID</td>
-                        <td>:</td>
-                        <td>{{ $invoice->vender_id}}</td>
-                    </tr>
-                    @endif
-                </tbody>
-            </table>
+    <div class="description-wrap">
+        <div class="row flex-division bold-font">
+            <div class="col-md-7 flex-item2">
+                <table class="table table-no-border">
+                    <tbody>
+                        <tr>
+                            <td style="min-width: 150px">Attn</td>
+                            <td>:</td>
+                            <td>{{ $invoice->Attn}}</td>
+                        </tr>
+                        <tr>
+                            <td>Sub</td>
+                            <td>:</td>
+                            <td>{{ $invoice->Sub}}</td>
+                        </tr>
+                        <tr>
+                            <td>Company Name</td>
+                            <td>:</td>
+                            <td>{{ $invoice->Company_name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Phone</td>
+                            <td>:</td>
+                            <td>{{ $invoice->Contact_phone}}</td>
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td>:</td>
+                            <td>{{ $invoice->Address}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-5 flex-item1">
+                <table class="table table-no-border">
+                    <tbody>
+                        <tr>
+                            <td style="min-width: 150px">Invoice No</td>
+                            <td>:</td>
+                            <td>{{ $invoice->Invoice_No}} </td>
+                        </tr>
+                        <tr>
+                            <td>Invoice Date</td>
+                            <td>:</td>
+                            <td>{{ getInvoiceDate($invoice, $type, $advance_data) }}</td>
+                        </tr>
+                        @if($invoice->po_no != '')
+                        <tr>
+                            <td>PO No</td>
+                            <td>:</td>
+                            <td>{{ $invoice->po_no}}</td>
+                        </tr>
+                        @endif
+                        @if($invoice->vender_id != '')
+                        <tr>
+                            <td>Vender ID</td>
+                            <td>:</td>
+                            <td>{{ $invoice->vender_id}}</td>
+                        </tr>
+                        @endif
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <!-- start detail -->
-    <div class="table-responsive bg-white p-10">
+    <div class="table-responsive bg-white p-10 table-wrap">
         <table class="table table-bordered m-0">
             <thead>
                 <tr class="text-center">
@@ -410,8 +416,8 @@
                         {{-- edit note  --}}
                         <a class="float-right me-2 edit-note" data-id="{{$row->id}}" data-note="{{$row->Note}}"><i class="fa fa-edit text-warning"></i></a>
                     @endif
-                    {!! Form::close() !!}
                 </p>
+                {!! Form::close() !!}
                 @endforeach
 
                 @if($invoice->submit_status == 0)

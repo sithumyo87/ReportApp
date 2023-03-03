@@ -1,6 +1,8 @@
-@extends('layouts.mpdf')
+@extends($layout)
 @section('content')
 
+
+@if($layout == 'layouts.mpdf')
 <div class="description-wrap">
     <div class="flex-division bold-font">
         <div class="flex-item1">
@@ -67,6 +69,73 @@
         
     </div>
 </div>
+@else
+    <div class="description-wrap">
+        <div class="flex-division bold-font">
+            <div class="flex-item2">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td width="120">Attn</td>
+                            <td width="10">:</td>
+                            <td>{{ $invoice->Attn}}</td>
+                        </tr>
+                        <tr>
+                            <td>Sub</td>
+                            <td>:</td>
+                            <td>{{ $invoice->Sub}}</td>
+                        </tr>
+                        <tr>
+                            <td>Company Name</td>
+                            <td>:</td>
+                            <td>{{ $invoice->Company_name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Contact Phone</td>
+                            <td>:</td>
+                            <td>{{ $invoice->Contact_phone}}</td>
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td>:</td>
+                            <td>{{ $invoice->Address}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="flex-item1">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td width="120">Invoice No</td>
+                            <td width="10">:</td>
+                            <td>{{ $invoice->Invoice_No}} </td>
+                        </tr>
+                        <tr>
+                            <td>Invoice Date</td>
+                            <td>:</td>
+                            <td>{{ getInvoiceDate($invoice, $type, $advance_data) }}</td>
+                        </tr>
+                        @if($invoice->po_no != '')
+                        <tr>
+                            <td>PO No</td>
+                            <td>:</td>
+                            <td>{{ $invoice->po_no}}</td>
+                        </tr>
+                        @endif
+                        @if($invoice->vender_id != '')
+                        <tr>
+                            <td>Vender ID</td>
+                            <td>:</td>
+                            <td>{{ $invoice->vender_id}}</td>
+                        </tr>
+                        @endif
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+@endif
 
 <!-- start detail -->
 <div class="table-wrap">
@@ -204,7 +273,7 @@
 
     <div class="sign text-center">
         @if($invoice->file_name != "")
-            <img src="{{ public_path($invoice->file_name)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
+            <img src="{{ $layout == 'layouts.mpdf' ? public_path($invoice->file_name) : asset($invoice->file_name)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
             <b>{{ $invoice->sign_name }}</b>  <br>
             Next Hop Co.,Ltd.
         @endif

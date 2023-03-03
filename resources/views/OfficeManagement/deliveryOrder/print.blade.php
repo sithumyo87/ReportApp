@@ -1,6 +1,7 @@
-@extends('layouts.mpdf')
+@extends($layout)
 @section('content')
 
+@if($layout == 'layouts.mpdf')
 <div class="description-wrap">
     <div class="flex-division bold-font">
         <div class="flex-item1">
@@ -53,6 +54,59 @@
         
     </div>
 </div>
+@else
+<div class="description-wrap">
+    <div class="flex-division bold-font">
+        <div class="flex-item2">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td width="120">Attn</td>
+                        <td width="10">:</td>
+                        <td>{{ $deliveryOrder->Attn }}</td>
+                    </tr>
+                    <tr>
+                        <td>Sub</td>
+                        <td>:</td>
+                        <td>{{ $deliveryOrder->sub }} </td>
+                    </tr>
+                    <tr>
+                        <td>Company Name</td>
+                        <td>:</td>
+                        <td>{{ $deliveryOrder->Company_name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Contact Phone</td>
+                        <td>:</td>
+                        <td>{{ $deliveryOrder->Contact_phone }}</td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>:</td>
+                        <td>{{ $deliveryOrder->Address }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="flex-item1">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td width="120">D.O No:</td>
+                        <td width="10">:</td>
+                        <td>{{ $deliveryOrder->do_code }}</td>
+                    </tr>
+                    <tr>
+                        <td>Date</td>
+                        <td>:</td>
+                        <td>{{ $date != '' ? dateformat($date) : dateformat($deliveryOrder->date) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@endif
 
 <!-- start detail -->
 <div class="table-wrap">
@@ -104,11 +158,11 @@
 <div class="deliver_receiver">
     <div class="deliver text-center">
         @if($deliveryOrder->received_sign != "")
-            <img src="{{ public_path($deliveryOrder->received_sign)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
+            <img src="{{ $layout == 'layouts.mpdf' ? public_path($deliveryOrder->received_sign) : asset($deliveryOrder->received_sign)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
             Received By<br>
             <b>{{ $deliveryOrder->received_name }}</b>
         @else
-            <img src="{{ public_path('signature/blank.png')}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
+            <img src="{{ $layout == 'layouts.mpdf' ? public_path('signature/blank.png') : asset('signature/blank.png')}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
             Received By<br>
             <b></b>
         @endif
@@ -116,11 +170,11 @@
 
     <div class="receiver text-center">
         @if($deliveryOrder->delivered_sign != "")
-            <img src="{{ public_path($deliveryOrder->delivered_sign)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
+            <img src="{{ $layout == 'layouts.mpdf' ? public_path($deliveryOrder->delivered_sign) : asset($deliveryOrder->delivered_sign)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
             Delivered By<br>
             <b>{{ $deliveryOrder->delivered_name }}</b>
         @else
-            <img src="{{ public_path('signature/blank.png')}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
+            <img src="{{ $layout == 'layouts.mpdf' ? public_path('signature/blank.png')  : asset('signature/blank.png') }}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
             Delivered By<br>
             <b></b>
         @endif

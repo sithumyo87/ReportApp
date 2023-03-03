@@ -94,7 +94,7 @@
                                                     <small>{{ advanceFormat($adv->nth_time) }}</small>
                                                     <i class="fa fa-get-pocket"></i>
                                                 </a>
-                                                <?php ?>
+                                                <?php break;?>
                                             @endif
                                         @endforeach
                                     @elseif($row->Advance == '4' || $row->Advance == '5')
@@ -114,7 +114,7 @@
                                             @if($row->second_received_date != '')
                                                 <strong>{{ dateformat($row->second_received_date)}}</strong>
                                             @else
-                                                <a class="btn btn-sm btn-success receivedButton flex-block" data-bs-toggle="modal" data-bs-target="#receivedModel" 
+                                                <a class="btn btn-sm btn-success receivedButton" data-bs-toggle="modal" data-bs-target="#receivedModel" 
                                                 data-id="{{ $row->id }}"
                                                 data-type="2">
                                                     <small>2nd</small>
@@ -122,7 +122,7 @@
                                                 </a>
                                             @endif
                                         @else
-                                            <a class="btn btn-sm btn-success receivedButton flex-block" data-bs-toggle="modal" data-bs-target="#receivedModel" 
+                                            <a class="btn btn-sm btn-success receivedButton" data-bs-toggle="modal" data-bs-target="#receivedModel" 
                                             data-id="{{ $row->id }}"
                                             data-type="1">
                                                 <small>1st</small>

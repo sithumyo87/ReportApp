@@ -1,6 +1,7 @@
-@extends('layouts.mpdf')
+@extends($layout)
 @section('content')
 
+@if($layout == 'layouts.mpdf')
 <div class="description-wrap">
     <div class="flex-division bold-font">
         <div class="flex-item1">
@@ -53,6 +54,59 @@
         
     </div>
 </div>
+@else
+<div class="description-wrap">
+    <div class="flex-division bold-font">
+        <div class="flex-item2">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td width="120">Attn</td>
+                        <td width="10">:</td>
+                        <td>{{ $receipt->Attn }}</td>
+                    </tr>
+                    <tr>
+                        <td>Company Name</td>
+                        <td>:</td>
+                        <td>{{ $receipt->Company_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Contact Phone</td>
+                        <td>:</td>
+                        <td>{{ $receipt->Contact_phone }}</td>
+                    </tr>
+                    <tr>
+                        <td>Sub</td>
+                        <td>:</td>
+                        <td>{{ $receipt->Sub }}</td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>:</td>
+                        <td>{{ $receipt->Address }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="flex-item1">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td width="120">Receipt No </td>
+                        <td width="10">:</td>
+                        <td>{{ $receipt->Receipt_No }}</td>
+                    </tr>
+                    <tr>
+                        <td>Receipt Date</td>
+                        <td>:</td>
+                        <td>{{ getReceiptDate($receipt, $type, $advance_data) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@endif
 
 <!-- start detail -->
 <div class="table-wrap">
@@ -167,7 +221,7 @@
 
     <div class="sign text-center">
         @if($receipt->file_name != "")
-            <img src="{{ public_path($receipt->file_name)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
+            <img src="{{ $layout == 'layouts.mpdf' ? public_path($receipt->file_name) : asset($receipt->file_name)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
             <b>{{ $receipt->sign_name }}</b>  <br>
             Next Hop Co.,Ltd.
         @endif

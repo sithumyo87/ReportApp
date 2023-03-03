@@ -1,5 +1,7 @@
 @extends($layout)
 @section('content')
+
+@if($layout == 'layouts.mpdf')
 <div class="description-wrap">
     <div class="flex-division bold-font">
         <div class="flex-item1">
@@ -52,9 +54,62 @@
         
     </div>
 </div>
+@else
+<div class="description-wrap">
+    <div class="flex-division bold-font">
+        <div class="flex-item2">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td width="120">Sub</td>
+                        <td width="10">:</td>
+                        <td> {{ $po->sub}}</td>
+                    </tr>
+                    <tr>
+                        <td>Attn</td>
+                        <td>:</td>
+                        <td>{{ $po->Attn}}</td>
+                    </tr>
+                    <tr>
+                        <td>Company Name</td>
+                        <td>:</td>
+                        <td>{{ $po->Company_name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Contact Phone</td>
+                        <td>:</td>
+                        <td>{{ $po->Contact_phone}}</td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>:</td>
+                        <td>{{ $po->Address}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="flex-item1">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td width="100">Order No</td>
+                        <td width="10">:</td>
+                        <td>{{ $po->po_code }}</td>
+                    </tr>
+                    <tr>
+                        <td>Date</td>
+                        <td>:</td>
+                        <td>{{ dateformat($po->date) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@endif
 
 <!-- start detail -->
-<div class="table-wrap" style="page-break-inside: always;" autosize="0">
+<div class="table-wrap">
     <table class="table table-bordered table-break">
         <thead>
             <tr>
@@ -129,7 +184,7 @@
 
     <div class="sign text-center">
         @if($po->file_name != "")
-            <img src="{{ public_path($po->file_name)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
+            <img src="{{ $layout == 'layouts.mpdf' ? public_path($po->file_name) : asset($po->file_name)}}" alt="" width=100 height=100 class="text-center" id="authorizer-img"> <br>
             <b>{{ $po->sign_name }}</b>  <br>
             Next Hop Co.,Ltd.
         @endif

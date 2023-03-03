@@ -13,7 +13,6 @@ use App\Models\QuotationNote;
 use App\Models\PurchasingOrderNote;
 use App\Models\Authorizer;
 use PDF;
-use MPDF;
 
 class PurchasingOrderController extends Controller
 {
@@ -187,19 +186,14 @@ class PurchasingOrderController extends Controller
             'authorizers'       => $authorizers,
         ]; 
 
-        if($request->pdf == 'js'){
-            $data['layout'] = 'layouts.pdfjs';
-            $pdf = MPDF::chunkLoadView('<html-separator/>','OfficeManagement.purchasingOrder.printjs', $data);
-            // $pdf->use_kwt = true;
-            $pdf->shrink_tables_to_fit=1;
-            $pdf->keep_table_proportions = true;
-            return view('OfficeManagement.purchasingOrder.printjs2')->with($data);
+        if($request->pdf == 'kinzi'){
+            $data['layout'] = 'layouts.kinzi_print';
+            return view('OfficeManagement.purchasingOrder.print')->with($data);
         }else{
             $data['layout'] = 'layouts.mpdf';
-            $pdf = MPDF::chunkLoadView('<html-separator/>','OfficeManagement.purchasingOrder.print', $data);
+            $pdf = PDF::chunkLoadView('<html-separator/>','OfficeManagement.purchasingOrder.print', $data);
             // $pdf->use_kwt = true;
             $pdf->shrink_tables_to_fit=1;
-            $pdf->keep_table_proportions = true;
         }
 
         

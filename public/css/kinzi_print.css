@@ -1,0 +1,173 @@
+body {
+    max-width: 800px;
+    margin: auto;
+    font-family: 'Pyidaungsu';
+    font-size: 14px;
+}
+
+@font-face {
+	font-family: "Pyidaungsu";
+	src: url("../fonts/pyidaungsu/Pyidaungsu.eot?#iefix") format("embedded-opentype"),
+		url("../fonts/pyidaungsu/Pyidaungsu.woff") format("woff"),
+		url("../fonts/pyidaungsu/Pyidaungsu.ttf") format("truetype"),
+		url("../fonts/pyidaungsu/Pyidaungsu.svg#Pyidaungsu") format("svg");
+	font-weight: normal;
+	font-style: normal;
+}
+
+table {
+    width: 100%;
+}
+
+.table-wrap{
+    margin-top: 10px;
+}
+
+.btn-block {
+    text-align: right;
+}
+
+.btn-print {
+    background: cornflowerblue;
+    padding: 10px;
+    color: #fff;
+    border: 0px;
+    margin-top: 10px;
+}
+
+.example{
+    margin: 10px;
+}
+
+.header-div{
+    display: block;
+    width: 100%;
+    color: #483D8B;
+    font-weight: bold;
+    font-size: 13px;
+    padding-top: 30px;
+    padding-bottom: 10px;
+}
+.right-div{
+    float:right;
+    width: 50%;
+    text-align: right;
+}
+.left-div{
+    float:left;
+    width: 50%;
+}
+
+.footer-div{
+    font-size: 12px;
+    color: #483D8B;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.footer-link{
+    text-decoration: none;
+}
+
+.flex-division{
+    width: 100%;
+    display:flex;
+}
+.flex-item1{
+    width: 40%;
+    float: right;
+}
+.flex-item2{
+    flex-grow: 1;
+    width: 60%;
+}
+
+table{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table-bordered thead tr th, .table-bordered tbody tr td {
+    border: 1px solid #333333;
+    padding: 5px 10px;
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+.note_and_sign{
+    display: flex;
+    width: 100%;
+}
+
+.note_and_sign .note{
+    width: 70%;
+    float: left;
+    margin-top: 10px;
+}
+
+.note_and_sign .sign {
+    width: 30%;
+    float: right;
+    font-size: 13px;
+    text-align: right;
+    padding-top: 20px;
+}
+
+.note-title{
+    font-size: 13px !important;
+}
+
+.note-body{
+    font-size: 12px;
+    color: #333333;
+}
+
+.bank-info-title{
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.bank-info-body{
+    font-size: 12px;
+}
+
+.bank-info-body tr td:first-child{
+    font-weight: 800;
+}
+
+.deliver_receiver{
+    font-size: 13px;
+    display: flex;
+    width: 100%;
+    padding-top: 20px;
+}
+
+.deliver{
+    width: 50%;
+    float: left;
+    text-align: center;
+}
+
+.receiver{
+    width: 50%;
+    float: right;
+    text-align: center;
+}
+
+#authorizer-img{
+    padding-top: 20px;
+    width: 100px;
+    height: 100px;
+}
+
+td.text-right {
+    text-align: right;
+}
+
+@media print {
+    @page { margin-top: 0; margin-bottom: 0px;}
+
+    tr{
+        vertical-align: top !important;
+    }
+   
+}

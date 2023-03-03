@@ -210,7 +210,7 @@ class InvoiceController extends Controller
         }
     }
     
-    public function invoicePrint($id, $type=null){
+    public function invoicePrint(Request $request, $id, $type=null){
         $invoice    = Invoice::find($id);
         $currency   = Currency::where('id',$invoice->Currency_type)->first();
         $invDetails = QuotationDetail::where('Invoice_Id',$id)->get();
@@ -252,7 +252,15 @@ class InvoiceController extends Controller
             'advance_data'      => $advance_data,
         ]; 
 
-        $pdf = PDF::loadView('OfficeManagement.invoice.print', $data);
-        return $pdf->stream($invoice->Invoice_No.'.pdf');
+        
+
+        if($request->pdf == 'kinzi'){
+            $data['layout'] = 'layouts.kinzi_print';
+            return view('OfficeManagement.invoice.print')->with($data);
+        }else{
+            $data['layout'] = 'layouts.mpdf';
+            $pdf = PDF::loadView('OfficeManagement.invoice.print', $data);
+            return $pdf->stream($invoice->Invoice_No.'.pdf');
+        }
     }
 }

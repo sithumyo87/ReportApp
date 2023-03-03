@@ -212,7 +212,7 @@ class QuotationController extends Controller
         }
     }
 
-    public function print($id){
+    public function print(Request $request, $id){
         $quotation = Quotation::find($id);
         $currency = Currency::where('id',$quotation->Currency_type)->first();
         $quoDetails = QuotationDetail::where('Quotation_Id',$id)->get();
@@ -227,12 +227,16 @@ class QuotationController extends Controller
             'authorizers'   => $authorizers,
         ]; 
 
-        // return view('OfficeManagement.quotation.print')->with($data);
-            
-        $pdf = PDF::loadView('OfficeManagement.quotation.print', $data);
-        return $pdf->stream($quotation->Serial_No.'.pdf');
 
-        // return view('OfficeManagement.quotation.print')->with($data);
+        if($request->pdf == 'kinzi'){
+            $data['layout'] = 'layouts.kinzi_print';
+            return view('OfficeManagement.quotation.print')->with($data);
+        }else{
+            $data['layout'] = 'layouts.mpdf';
+            $pdf = PDF::loadView('OfficeManagement.quotation.print', $data);
+            return $pdf->stream($quotation->Serial_No.'.pdf');
+        }
+
     }
 
 }

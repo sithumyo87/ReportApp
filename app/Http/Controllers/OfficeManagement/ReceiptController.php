@@ -228,7 +228,7 @@ class ReceiptController extends Controller
         return view('OfficeManagement.receipt.attn_form',compact('invoice','currency', 'payments'));
     }
 
-    public function receiptPrint($id, $type=null) {
+    public function receiptPrint(Request $request, $id, $type=null) {
         $receipt    = Receipt::findOrFail($id);
         $invoice    = Invoice::findOrFail($receipt->Invoice_Id);
         $currency   = Currency::where('id', $receipt->Currency_type)->first();
@@ -260,8 +260,16 @@ class ReceiptController extends Controller
             'inv_advances'      => $inv_advances,
         ]; 
 
-        $pdf = PDF::loadView('OfficeManagement.receipt.print', $data);
-        return $pdf->stream($receipt->Receipt_No.'.pdf');
+        if($request->pdf == 'kinzi'){
+            $data['layout'] = 'layouts.kinzi_print';
+            return view('OfficeManagement.receipt.print')->with($data);
+        }else{
+            $data['layout'] = 'layouts.mpdf';
+            $pdf = PDF::loadView('OfficeManagement.receipt.print', $data);
+            return $pdf->stream($receipt->Receipt_No.'.pdf');
+        }
+
+        
     }
 
     public function receive(Request $request){

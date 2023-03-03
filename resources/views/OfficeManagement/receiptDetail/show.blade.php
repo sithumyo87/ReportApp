@@ -12,6 +12,10 @@
                         class="btn btn-success btn-sm d-none d-lg-block m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
                         Print
                     </a>
+                    <a href="{{ route('OfficeManagement.receiptPrint', ['id' => $receipt->id, 'type' => $type, 'pdf' =>'kinzi']) }}"
+                        class="btn btn-success btn-sm d-none d-lg-block m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
+                        Print-2
+                    </a>
                 @endif
                 <a href="{{ route('OfficeManagement.receipt.index') }}"
                     class="btn btn-info btn-sm d-none d-lg-block m-l-15"><i class="fa fa-back"></i>

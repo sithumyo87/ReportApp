@@ -13,6 +13,10 @@
                         class="btn btn-success btn-sm d-none d-lg-block m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
                         Print
                     </a>
+                    <a href="{{ route('OfficeManagement.doPrint', ['id' =>$deliveryOrder->id, 'pdf' =>'kinzi']) }}"
+                        class="btn btn-success btn-sm d-none d-lg-block m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
+                        Print-2
+                    </a>
                 @endif
                 <a href="{{ route('OfficeManagement.deliveryOrder.index') }}"
                     class="btn btn-info d-none btn-sm d-lg-block m-l-15"><i class="fa fa-back"></i>
@@ -324,6 +328,9 @@
                                         </table>
                                         <a href="{{ route('OfficeManagement.doPrint', ['id' => $deliveryOrder->id, 'date' => $history['date']]) }}" class="btn btn-success btn-sm m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
                                             Print
+                                        </a>
+                                        <a href="{{ route('OfficeManagement.doPrint', ['id' => $deliveryOrder->id, 'date' => $history['date'] , 'pdf' => 'kinzi']) }}" class="btn btn-success btn-sm m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
+                                            Print-2
                                         </a>
                                     </div>
                                 </div>

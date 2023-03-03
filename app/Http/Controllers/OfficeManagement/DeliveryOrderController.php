@@ -297,7 +297,7 @@ class DeliveryOrderController extends Controller
                 ->with('success','Signature deleted done successfully');
     }
 
-    public function doPrint($id, $date=null){
+    public function doPrint(Request $request, $id, $date=null){
         $deliveryOrder = DeliveryOrder::findOrFail($id);
 
         $details = DeliveryOrderDetail::where('do_id', $id)->get();
@@ -318,7 +318,15 @@ class DeliveryOrderController extends Controller
             'date'           => $date
         ]; 
 
-        $pdf = PDF::loadView('OfficeManagement.deliveryOrder.print', $data);
-        return $pdf->stream($deliveryOrder->do_code.'.pdf');
+        if($request->pdf == 'kinzi'){
+            $data['layout'] = 'layouts.kinzi_print';
+            return view('OfficeManagement.deliveryOrder.print')->with($data);
+        }else{
+            $data['layout'] = 'layouts.mpdf';
+            $pdf = PDF::loadView('OfficeManagement.deliveryOrder.print', $data);
+            return $pdf->stream($deliveryOrder->do_code.'.pdf');
+        }
+
+        
     }
 }

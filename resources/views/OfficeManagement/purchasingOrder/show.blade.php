@@ -13,11 +13,11 @@
                         <i class="fa fa-back"></i>
                         Print
                     </a>
-                    {{-- <a href="{{ route('OfficeManagement.poPrint', ['id'=>$po->id, 'pdf' => 'js']) }}"
+                    <a href="{{ route('OfficeManagement.poPrint', ['id'=>$po->id, 'pdf' => 'kinzi']) }}"
                     class="btn btn-success btn-sm d-none d-lg-block m-l-15 mr-3" target="_blank">
                         <i class="fa fa-back"></i>
-                        Print2
-                    </a> --}}
+                        Print-2
+                    </a>
                 @endif
 
                 <div class="d-flex justify-content-end">
@@ -35,7 +35,6 @@
         <div class="alert alert-success">{{ $message }}</div>
     @endif
     
-
     <div class="row">
         <div class="col-md-7">
             <table class="table table-no-border">
@@ -227,8 +226,8 @@
                                 {{-- edit note  --}}
                                 <a class="float-right me-2 edit-note" data-id="{{$row->id}}" data-note="{{ $row->note }}"><i class="fa fa-edit text-warning"></i></a>
                             @endif
-                            {!! Form::close() !!}
                         </p>
+                        {!! Form::close() !!}
                     @endforeach
                 @endif
 
