@@ -68,18 +68,18 @@
                         <td>:</td>
                         <td>{{ $quotation->Serial_No}}</td>
                     </tr>
-                    @if($quotation->Refer_No != '')
-                    <tr>
-                        <td>Refer No</td>
-                        <td>:</td>
-                        <td>{{ $quotation->Refer_No }}</td>
-                    </tr>
-                    @endif
                     <tr>
                         <td>Quotation Date</td>
                         <td>:</td>
                         <td>{{ date('d-m-Y', strtotime($quotation->Date)) }}</td>
                     </tr>
+                    @if($quotation->Refer_No != '')
+                    <tr>
+                        <td>Refer No</td>
+                        <td>:</td>
+                        <td>{{ $quotation->refer }}</td>
+                    </tr>
+                    @endif
                 </tbody>
             </table>
         </div>

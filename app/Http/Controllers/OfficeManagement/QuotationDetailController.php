@@ -88,11 +88,11 @@ class QuotationDetailController extends Controller
      */
     public function show(Request $request,$id)
     {
-        $quotation = Quotation::find($id);
-        $currency = Currency::where('id',$quotation->Currency_type)->first();
+        $quotation  = Quotation::select('quotations.*', 't2.Serial_No as refer')->leftJoin('quotations as t2', 't2.id','quotations.Refer_No')->find($id);
+        $currency   = Currency::where('id',$quotation->Currency_type)->first();
         $quoDetails = QuotationDetail::where('Quotation_Id',$id)->get();
-        $quoNotes = QuotationNote::where('QuotationId',$quotation->id)->where('Note','!=',"")->get();
-        $quoFiles = QuotationNote::where('QuotationId',$quotation->id)->where('list_file','!=',"")->get();
+        $quoNotes   = QuotationNote::where('QuotationId',$quotation->id)->where('Note','!=',"")->get();
+        $quoFiles   = QuotationNote::where('QuotationId',$quotation->id)->where('list_file','!=',"")->get();
         $authorizers = Authorizer::get();
         return view('OfficeManagement.quotationDetail.index',compact('quotation','quoNotes','quoFiles','quoDetails','currency','authorizers'));
     }
