@@ -75,7 +75,7 @@
                     </tr>
                     @if($quotation->Refer_No != '')
                     <tr>
-                        <td>Refer No</td>
+                        <td>Ref Quotation No.</td>
                         <td>:</td>
                         <td>{{ $quotation->refer }}</td>
                     </tr>

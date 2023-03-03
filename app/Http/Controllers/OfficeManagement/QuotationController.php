@@ -162,15 +162,15 @@ class QuotationController extends Controller
 
         $quotation = Quotation::find($id);
         $quotation->update([
-            'customer_id'=>$request->customer_id,
-            'Attn'=>$customerName->name,
-	        'Company_name' => $request->Company_name,
+            'customer_id'   => $request->customer_id,
+            'Attn'          => $customerName->name,
+	        'Company_name'  => $request->Company_name,
 	        'Contact_phone' => $request->Contact_phone,
-	        'Address' => $request->Address,
-	        'Sub'=>$request->Sub,
-	        'Date'=>$Date,
-	        'Refer_No'=>$refer_no,
-	        'Refer_status' => false,
+	        'Address'       => $request->Address,
+	        'Sub'           => $request->Sub,
+	        'Date'          => $Date,
+	        'Refer_No'      => $refer_no,
+	        'Refer_status'  => false,
 	        'Currency_type' => $request->Currency_type,
         ]);
     
