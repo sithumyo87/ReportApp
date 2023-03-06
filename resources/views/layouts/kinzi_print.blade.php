@@ -34,16 +34,13 @@
         <div class="example">
             @yield('content')
         </div>
-
-        <div class="footer">
-            <div class="footer-div">
-                <div class="pagenum" style="float: right"></div>
+        <div class=" report-footer">
+        <footer class=" report-footer"><div class="pagenum" style="float: right"></div>
                 <div>Building 371, Room 302, Yar Zar Dirit Housing, Botataung Township, Yangon, Myanmar</div>
                 <div>Tel: 09-5012101, 09-73129351, 09-5033257, Email : info@thenexthop.net , Website :
                     <a href="https://www.thenexthop.net/" class="footer-link">www.thenexthop.net</a>
-                </div>
-            </div>
-        </div>
+                </div></footer>
+                    </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
@@ -64,7 +61,7 @@
                 loadCSS: "{{ asset('css/kinzi_print.css') }}",
                 debug: false,
                 header: $('.header').html(),
-                footer: $('.footer').html(),
+                footer: $('.report-footer').html(),
                 printDelay: 0,
             });
         }
@@ -79,7 +76,7 @@
                 loadCSS: "{{ asset('css/kinzi_print.css') }}",
                 debug: false,
                 header: $('.header').html(),
-                footer: $('.footer').html(),
+                footer: $('.report-footer').html(),
                 printDelay: 0,
             });
         });

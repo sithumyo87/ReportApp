@@ -112,7 +112,7 @@ class DeliveryOrderController extends Controller
         }
 
         $histories = [];
-        $recordDates = DeliveryOrderDetailRecord::select('date', 'do_id')->where('do_id', $id)->orderBy('id', 'asc')->orderBy('date', 'asc')->groupBy('date')->get();
+        $recordDates = DeliveryOrderDetailRecord::select('date', 'do_id')->where('do_id', $id)->where('submit_status', 1)->orderBy('id', 'asc')->orderBy('date', 'asc')->groupBy('date')->get();
         foreach($recordDates as $row){
             $data = DeliveryOrderDetailRecord::join('delivery_order_details', 
             'delivery_order_details.id', '=', 'delivery_order_detail_records.do_detail_id')->where('delivery_order_detail_records.do_id', $id)

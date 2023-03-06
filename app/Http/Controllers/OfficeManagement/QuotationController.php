@@ -100,7 +100,7 @@ class QuotationController extends Controller
 	        'Currency_type' => $request->Currency_type,
 	        'SubmitStatus' => false
         ]);
-        return redirect()->route('OfficeManagement.quotation.index')
+        return redirect()->route('OfficeManagement.quotationDetail.show', $input->id)
                         ->with('success','Quotation created successfully');
     }
 

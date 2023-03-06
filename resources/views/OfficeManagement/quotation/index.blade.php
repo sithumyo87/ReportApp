@@ -70,7 +70,7 @@
                             <td>{{ $row->Attn }}</td>
                             <td>{{ $row->Company_name }}</td>
                             <td>{{ $row->Sub }}</td>
-                            <td>{{ $row->Refer_No }}</td>
+                            <td>{{ $row->refer }}</td>
                             <td class="text-center">
                             @if($row->SubmitStatus != '1')
                                 @can('quotation-edit')

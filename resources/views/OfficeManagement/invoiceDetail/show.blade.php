@@ -55,7 +55,7 @@
                     @endif
                 @else
                     @if($invoice->FirstInvoice == 1 && $invoice->SecondInvoice == 1)
-                        <a class="btn btn-info invoice-button">{{ getInvRecName($invoice) }}</a>
+                        {{-- <a class="btn btn-info invoice-button">{{ getInvRecName($invoice) }}</a> --}}
                     @endif
                 @endif
             @else
@@ -150,6 +150,13 @@
                             <td>:</td>
                             <td>{{ getInvoiceDate($invoice, $type, $advance_data) }}</td>
                         </tr>
+                        @if($invoice->Quotation_Id != '')
+                        <tr>
+                            <td>Ref Quotation No.</td>
+                            <td>:</td>
+                            <td>{{ $invoice->refer}}</td>
+                        </tr>
+                        @endif
                         @if($invoice->po_no != '')
                         <tr>
                             <td>PO No</td>

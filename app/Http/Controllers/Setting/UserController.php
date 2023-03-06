@@ -60,6 +60,7 @@ class UserController extends Controller
     
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
+        $input['email_verified_at'] = date('Y-m-d H:i:s');
     
         $user = User::create($input);
         $user->assignRole($request->input('roles'));

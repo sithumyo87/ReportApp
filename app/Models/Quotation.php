@@ -30,17 +30,17 @@ class Quotation extends Model
     ];
 
     protected function searchDataPaginate(Request $request){
-        $data = $this->where('id','>',0);
+        $data = $this->select('quotations.*', 't2.Serial_No as refer')->leftJoin('quotations as t2', 't2.id','quotations.Refer_No');
         if($request->quo_no != ''){
-            $data = $data->where('Serial_No', $request->quo_no);
+            $data = $data->where('quotations.Serial_No', $request->quo_no);
         } 
         if($request->company_name != ''){
-            $data = $data->where('Company_name', $request->company_name);
+            $data = $data->where('quotations.Company_name', $request->company_name);
         }
         if($request->customer_name != ''){
-            $data = $data->where('Attn', $request->customer_name);
+            $data = $data->where('quotations.Attn', $request->customer_name);
         }
-        return $data->orderBy('Date','DESC')->paginate(pagination());
+        return $data->orderBy('quotations.Date','DESC')->paginate(pagination());
     }
 
     protected function quoNoDropDown(){

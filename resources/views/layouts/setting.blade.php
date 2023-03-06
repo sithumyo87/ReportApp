@@ -57,9 +57,9 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <!-- tiny mce editor 2 -->
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdn.tiny.cloud/1/q6nf9jbmbdkxf8pufv8oz647y54gt4vywqoeyygxwdppga5w/tinymce/6/tinymce.min.js" referrerpolicy="origin">
 
-    <!-- signature -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> 
     <link type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/south-street/jquery-ui.css" rel="stylesheet"> 
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script type="text/javascript" src="{{ asset('js/jquery.signature.js') }}"></script>
@@ -109,40 +109,51 @@
                     Office Management
                 </div>
 
+
+                @can('quotation-index')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('OfficeManagement.quotation.index')}}">
                         <i class="fas fa-fw fa-file"></i>
                         <span>Quotation</span>
                     </a>
                 </li>
+                @endif
 
+                @can('po-index')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('OfficeManagement.purchasingOrder.index')}}">
                         <i class="fas fa-fw fa-list"></i>
                         <span>Purchasing Order</span>
                     </a>
                 </li>
+                @endif
 
+                @can('invoice-index')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('OfficeManagement.invoice.index')}}">
                         <i class="fas fa-fw fa-file-invoice-dollar"></i>
                         <span>Invoice</span>
                     </a>
                 </li>
+                @endif
 
+                @can('receipt-index')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('OfficeManagement.receipt.index')}}">
                         <i class="fas fa-fw fa-receipt"></i>
                         <span>Receipt</span>
                     </a>
                 </li>
+                @endif
 
+                @can('do-index')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('OfficeManagement.deliveryOrder.index')}}">
                         <i class="fas fa-fw fa-truck"></i>
                         <span>Delivery Order</span>
                     </a>
                 </li>
+                @endif
 
                 <!-- Divider -->
                 <hr class="sidebar-divider">
@@ -162,19 +173,23 @@
                 </li>
                 @endcan
 
+                @can('role-index')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('setting.role.index') }}">
                         <i class="fas fa-fw fa-users"></i>
                         <span>Roles</span>
                     </a>
                 </li>
+                @endcan
 
+                @can('permission-index')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('setting.permission.index') }}">
                         <i class="fas fa-fw fa-users"></i>
                         <span>Permissions</span>
                     </a>
                 </li>
+                @endcan
 
                 <!-- Divider -->
                 <hr class="sidebar-divider">
@@ -184,35 +199,46 @@
                     Interface
                 </div>
 
+                @can('customer-index')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('OfficeManagement.customer.index')}}">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Customer</span></a>
                 </li>
+                @endcan
 
+                @can('dealer-index')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('OfficeManagement.dealer.index')}}">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Dealer</span></a>
                 </li>
+                @endcan
 
+                @can('currency-index')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('OfficeManagement.currency.index')}}">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Currency</span></a>
                 </li>
+                @endcan
 
+                @can('bank-index')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('OfficeManagement.bankInfo.index')}}">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Bank Info</span></a>
                 </li>
+                @endcan
 
+                @can('authorizer-index')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('setting.authorizer.index')}}">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Authorizer</span></a>
                 </li>
+                @endcan
+
 
                 <!-- Divider -->
                 <hr class="sidebar-divider">

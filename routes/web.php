@@ -16,10 +16,15 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
+// verify email
+Route::get('/email/notice', [App\Http\Controllers\Auth\VerificationController::class, 'noticeView'])->middleware(['auth', 'unVerify'])->name('verification.notice');
+Route::get('/email/verify/{id}/{hash}', [App\Http\Controllers\Auth\VerificationController::class, 'checkVerify'])->middleware(['auth', 'signed', 'unVerify'])->name('verification.verify');
+Route::post('/email/verification-notification', [App\Http\Controllers\Auth\VerificationController::class, 'sendVerify'])->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::group(['middleware' => ['auth'], 'prefix' => 'OfficeManagement', 'namespace' => 'App\Http\Controllers\OfficeManagement', 'as' => 'OfficeManagement.'], function() {
+Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'OfficeManagement', 'namespace' => 'App\Http\Controllers\OfficeManagement', 'as' => 'OfficeManagement.'], function() {
     // customers ----------------------------------------
     Route::resource('customer', CustomerController::class);
     Route::get('/attnOnChange','CustomerController@attnOnChange');
@@ -61,7 +66,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'OfficeManagement', 'namespa
     Route::get('/quoAttnOnChange', 'InvoiceController@quoAttnOnChange');
     
     // Invoice Detail
-    Route::resource('invoiceDetail', InvoiceDetailController::class, );
+    Route::resource('invoiceDetail', InvoiceDetailController::class);
     Route::get('invoiceDetail/{invoiceDetail}/{type?}', 'InvoiceDetailController@show')->name('invoiceDetail.show');
     Route::get('invoiceDetailCreate/{invId}', 'InvoiceDetailController@invoiceDetailCreate')->name('invoiceDetailCreate');
     
@@ -119,7 +124,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'OfficeManagement', 'namespa
 
 });
 
-Route::group(['middleware' => ['auth'], 'prefix' => 'setting', 'namespace' => 'App\Http\Controllers\Setting', 'as' => 'setting.'], function() {
+Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'setting', 'namespace' => 'App\Http\Controllers\Setting', 'as' => 'setting.'], function() {
     Route::resource('permission', PermissionController::class);
     Route::resource('role', RoleController::class);
     Route::resource('user', UserController::class);

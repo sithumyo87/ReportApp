@@ -9,13 +9,13 @@
         <div class="col-md-7">
             <div class="d-flex justify-content-end">
                 @if($deliveryOrder->submit_status == true || count($histories) > 0)
-                    <a href="{{ route('OfficeManagement.doPrint', $deliveryOrder->id) }}"
+                    {{-- <a href="{{ route('OfficeManagement.doPrint', $deliveryOrder->id) }}"
                         class="btn btn-success btn-sm d-none d-lg-block m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
                         Print
-                    </a>
+                    </a> --}}
                     <a href="{{ route('OfficeManagement.doPrint', ['id' =>$deliveryOrder->id, 'pdf' =>'kinzi']) }}"
                         class="btn btn-success btn-sm d-none d-lg-block m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
-                        Print-2
+                        Print
                     </a>
                 @endif
                 <a href="{{ route('OfficeManagement.deliveryOrder.index') }}"
@@ -326,11 +326,11 @@
                                                 @endforeach
                                             </tbody>
                                         </table>
-                                        <a href="{{ route('OfficeManagement.doPrint', ['id' => $deliveryOrder->id, 'date' => $history['date']]) }}" class="btn btn-success btn-sm m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
+                                        {{-- <a href="{{ route('OfficeManagement.doPrint', ['id' => $deliveryOrder->id, 'date' => $history['date']]) }}" class="btn btn-success btn-sm m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
                                             Print
-                                        </a>
+                                        </a> --}}
                                         <a href="{{ route('OfficeManagement.doPrint', ['id' => $deliveryOrder->id, 'date' => $history['date'] , 'pdf' => 'kinzi']) }}" class="btn btn-success btn-sm m-l-15 mr-3" target="_blank"><i class="fa fa-print"></i>
-                                            Print-2
+                                            Print
                                         </a>
                                     </div>
                                 </div>
@@ -367,8 +367,8 @@
                 </div>
                 <div class="form-group">
                     <label class="" for="">Signature:</label>
-                    <button id="clear" class="btn btn-warning btn-sm float-right m-b-10">Clear</button> <br/>
-                    <div  style="width: 500px; height: 300px;">
+                    <button class="btn btn-warning btn-sm float-right m-b-10 clear">Clear</button> <br/>
+                    <div style="width: 500px; height: 300px;">
                         <div class="sig" style="width: 500px; height: 300px;"></div>
                         <textarea class="signature64" name="received_sign" style="display: none" required></textarea> 
                     </div>
@@ -404,7 +404,7 @@
                 </div>
                 <div class="form-group">
                     <label class="" for="">Signature:</label>
-                    <button id="clear" class="btn btn-warning btn-sm float-right m-b-10">Clear</button> <br/>
+                    <button class="btn btn-warning btn-sm float-right m-b-10 clear">Clear</button> <br/>
                     <div  style="width: 500px; height: 300px;">
                         <div class="sig" style="width: 500px; height: 300px;"></div>
                         <textarea class="signature64" name="delivered_sign" style="display: none" required></textarea> 

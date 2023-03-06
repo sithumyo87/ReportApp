@@ -84,7 +84,7 @@ class InvoiceDetailController extends Controller
      */
     public function show($id, $type=null)
     {
-        $invoice    = Invoice::find($id);
+        $invoice    = Invoice::select('invoices.*', 't2.Serial_No as refer')->leftJoin('quotations as t2', 't2.id','invoices.Quotation_Id')->find($id);
         $currency   = Currency::where('id',$invoice->Currency_type)->first();
         $invDetails = QuotationDetail::where('Invoice_Id',$id)->get();
         $invNotes       = QuotationNote::where('InvoiceId', $id)->where('Note','!=',"")->get();

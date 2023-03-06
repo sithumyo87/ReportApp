@@ -164,10 +164,39 @@ td.text-right {
 }
 
 @media print {
-    @page { margin-top: 0; margin-bottom: 0px;}
+    @page { 
+        margin-top: 0; 
+        margin-bottom: 0px;
+    }
 
+    tbody.kinzi-print-body{ 
+        padding-top: 72px; 
+        padding-bottom: 72px; 
+    } 
+  
     tr{
         vertical-align: top !important;
     }
-   
+    
+    .table-breaked {
+        page-break-before: auto;
+        overflow: hidden;
+    }
+
+    .footer-repeat {
+        display: table-footer-group;
+        overflow: hidden;
+    }
+
+    .report-footer {
+        position: fixed;
+        bottom: 0px;
+        height: 90px;
+        display: block;
+        width: 100%;
+        /* border-top: solid 1px #ccc; */
+        overflow: hidden;
+        overflow: visible; 
+    }
+
 }

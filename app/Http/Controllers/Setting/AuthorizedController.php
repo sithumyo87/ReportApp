@@ -20,7 +20,7 @@ class AuthorizedController extends Controller
     public function index(Request $request)
     {
         $data = Authorizer::where('id','>',0)->orderBy('id','DESC')->paginate(5);
-        return view('Setting.authorizer.index',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5);
+        return view('setting.authorizer.index',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5);
     }
 
     /**

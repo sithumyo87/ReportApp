@@ -59,17 +59,26 @@ $(document).ready(function() {
         content_css: '//www.tiny.cloud/css/codepen.min.css'
     });
 
-    var sig = $('.sig').signature({syncField: $(this).find('.signature64'), syncFormat: 'PNG'});
-    $('#clear').click(function(e) {
-        e.preventDefault();
-        sig.signature('clear');
-        $(".signature64", this).val('');
-    });
-    $('.sign-button').click(function(e) {
-        e.preventDefault();
-        sig.signature('clear');
-        $(".signature64", this).val('');
-    });
+
+    if($('.sig').length > 0){
+        // signature
+        var sig = $('.sig').signature({
+            syncField: $(this).find('.signature64'), 
+            syncFormat: 'PNG',
+            color: '#00008B'
+        });
+        $('.clear').click(function(e) {
+            e.preventDefault();
+            sig.signature('clear');
+            $(".signature64", this).val('');
+        });
+        $('.sign-button').click(function(e) {
+            e.preventDefault();
+            sig.signature('clear');
+            $(".signature64", this).val('');
+        }); 
+    }
+
 });
 
 //Quotation 

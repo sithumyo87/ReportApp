@@ -277,8 +277,12 @@
                     @if($quotation->SubmitStatus == 0)
                     {!! Form::open(['route' => 'OfficeManagement.quotationFile.store', 'method' => 'POST', 'files' => true]) !!}
                         {{ Form::hidden('quoId', $quotation->id) }}
-                        <input type="text" name="list_name" id="" placeholder="Add File Name(optional)" class="form-control"><br>
-                        <input type="file" name="file" class="form-control" accept="image/jpeg,image/png,application/pdf," required>
+                        <div class="form-group">
+                            <input type="text" name="list_name" id="" placeholder="Add File Name(optional)" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="file" name="file" class="form-control" accept="image/jpeg,image/png,application/pdf," required>
+                        </div>
                         <div class="text-right mt-3">
                             <button class="btn btn-sm btn-grey" type="reset">Reset</button>
                             <button class="btn btn-sm btn-primary" type="submit">Add</button>
