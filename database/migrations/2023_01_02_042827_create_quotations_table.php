@@ -15,20 +15,20 @@ return new class extends Migration
     {
         Schema::create('quotations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('customer_id')->nullable();
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
-            $table->string('Attn');
-            $table->string('Company_name');
-            $table->string('Contact_phone',50);
-            $table->text('Address')->nullable();
-            $table->string('Sub');
-            $table->string('Serial_No');
-            $table->date('Date');
+            $table->string('Attn')->nullable();
+            $table->string('Company_name')->nullable();
+            $table->string('Contact_phone',50)->nullable();
+            $table->text('Address')->nullable()->nullable();
+            $table->string('Sub')->nullable();
+            $table->string('Serial_No')->nullable();
+            $table->date('Date')->nullable();
             $table->float('Discount')->nullable()->unsigned();
             $table->string('Refer_No')->nullable();
             $table->integer('Refer_status')->nullable()->unsigned();
-            $table->string('Currency_type'); 
-            $table->integer('Tax')->default(0)->unsigned();
+            $table->string('Currency_type')->nullable();
+            $table->integer('Tax')->default(0)->unsigned()->nullable();
             $table->integer('SubmitStatus')->nullable()->unsigned();
             $table->string('sign_name',100)->nullable();
             $table->string('file_name',100)->nullable();

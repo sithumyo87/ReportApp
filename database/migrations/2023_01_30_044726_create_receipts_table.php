@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('receipts', function (Blueprint $table) {
             $table->id();
-            $table->integer('Invoice_Id');
+            $table->integer('Invoice_Id')->nullable();
             $table->integer('Quotation_Id')->nullable();
-            $table->string('Attn');
-            $table->string('Sub');
-            $table->string('Receipt_No');
-            $table->date('Date');
+            $table->string('Attn')->nullable();
+            $table->string('Sub')->nullable();
+            $table->string('Receipt_No')->nullable();
+            $table->date('Date')->nullable();
             $table->date('frec_date')->nullable();
             $table->date('srec_date')->nullable();
             $table->float('Discount')->nullable()->unsigned();
@@ -29,13 +29,13 @@ return new class extends Migration
             $table->integer('First_Receipt')->nullable();
             $table->integer('Second_Receipt')->nullable();
             $table->integer('Refer_status')->nullable()->unsigned();
-            $table->string('Company_name');
+            $table->string('Company_name')->nullable();
             $table->string('Contact_phone',50);
             $table->text('Address')->nullable();
             $table->string('sign_name')->nullable();
             $table->string('file_name')->nullable();
             $table->string('Date_INT')->nullable();
-            $table->string('Currency_type');
+            $table->string('Currency_type')->nullable();
             $table->date('first_received_date')->nullable();
             $table->date('second_received_date')->nullable();
             $table->timestamps();

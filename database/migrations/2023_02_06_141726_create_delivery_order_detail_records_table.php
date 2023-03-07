@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('delivery_order_detail_records', function (Blueprint $table) {
             $table->id();
-            $table->integer('do_id');
-            $table->integer('do_detail_id');
+            $table->integer('do_id')->nullable();
+            $table->integer('do_detail_id')->nullable();
             $table->integer('qty')->nullable();
             $table->integer('amount')->nullable();
             $table->integer('balance')->nullable();
             $table->date('date')->nullable();
-            $table->integer('submit_status')->default(0);
+            $table->integer('submit_status')->default(0)->nullable();
             $table->timestamps();
         });
     }

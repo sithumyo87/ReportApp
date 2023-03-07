@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Auth::routes();
+Auth::routes(['register' => false,]);
 
 // verify email
 Route::get('/email/notice', [App\Http\Controllers\Auth\VerificationController::class, 'noticeView'])->middleware(['auth', 'unVerify'])->name('verification.notice');

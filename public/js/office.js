@@ -456,9 +456,11 @@ $(document).on('click', '#info-cancel', function (){
 
 $(document).on('click', '#psw-gear', function (){
     $('.psw-form').removeClass('hidden');
+    $('.psw-data').addClass('hidden');
 });
 $(document).on('click', '#psw-cancel', function (){
     $('.psw-form').addClass('hidden');
+    $('.psw-data').removeClass('hidden');
 });
 
 $(document).on('click', '#email-gear', function (){
@@ -469,6 +471,3 @@ $(document).on('click', '#email-cancel', function (){
     $('.email-data').removeClass('hidden');
     $('.email-form').addClass('hidden');
 });
-
-
-

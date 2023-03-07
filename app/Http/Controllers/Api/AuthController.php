@@ -28,17 +28,32 @@ class AuthController extends Controller
 
             if($validateUser->fails()){
                 return response()->json([
-                    'status'    => false,
-                    'message'   => 'validation error',
-                    'errors'    => $validateUser->errors()
+                    'status'        => false,
+                    'message'       => 'validation error',
+                    'errors'        => $validateUser->errors(),
+                    'error_type'    => 'validation'
                 ], 401);
+            }
+
+            // check verify
+            $chkUser = User::where('email', $request->email)->first();
+            if(isset($chkUser) && Hash::check($request->password, $chkUser->password)){
+                if(!($chkUser->email_verified_at !='')){
+                    return response()->json([
+                        'status'        => false,
+                        'title'         => 'Verify Your Account',
+                        'error_type'    => 'verify',
+                        'message'       => 'Please, verify Your email address first. Check your email and then click the verification link in the mail. If you don\'t receive any mail, click Send Verify.',
+                    ], 401);
+                }
             }
 
             if(!Auth::attempt($request->only(['email', 'password']))){
                 return response()->json([
-                    'status' => false,
-                    'title'  => 'Login Invalid',
-                    'message' => 'Email & Password does not match with our record.',
+                    'status'    => false,
+                    'title'     => 'Login Invalid',
+                    'error_type'=> 'invaild',
+                    'message'   => 'Email & Password does not match with our records.',
                 ], 401);
             }
 

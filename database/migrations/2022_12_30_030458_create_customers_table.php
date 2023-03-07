@@ -15,15 +15,15 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->integer('type')->default(1);
-            $table->string('name',100);
+            $table->integer('type')->default(1)->nullable();
+            $table->string('name',100)->nullable();
             $table->string('position',100)->nullable();
-            $table->string('phone',100);
+            $table->string('phone',100)->nullable();
             $table->string('phone_other',100)->nullable();
-            $table->string('company');
-            $table->string('email',100);
-            $table->text('address');
-            $table->tinyInteger('action')->default(1);
+            $table->string('company')->nullable();
+            $table->string('email',100)->nullable();
+            $table->text('address')->nullable();
+            $table->tinyInteger('action')->default(1)->nullable();
             $table->timestamps();
         });
     }

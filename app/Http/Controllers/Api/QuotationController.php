@@ -219,9 +219,11 @@ class QuotationController extends Controller
     public function detail_edit($id){
         $quoDetail = QuotationDetail::find($id);
         $dealers = Dealer::where('action',true)->get(); 
+        $selectedDealer = Dealer::find($quoDetail->dealer_id);
         return response()->json([
             'status'    => true,
             'quoDetail' => $quoDetail,
+            'selectedDealer' => $selectedDealer,
             'dealers'   => $dealers,
         ], 200); 
     }
@@ -300,6 +302,13 @@ class QuotationController extends Controller
             'note'      => $note,
         ], 200);
     }
+    public function note_delete($id){
+        $note = QuotationNote::find($id);
+        $note->delete();
+        return response()->json([
+            'status'    => true,
+        ], 200);
+    }
 
     public function file_store(Request $request, $id){
         if($request->hasFile('file')){
@@ -312,7 +321,7 @@ class QuotationController extends Controller
 
             $datetime = strtotime(date('Y-m-d H:i:s'));
 
-            $fileNameToStore = $fileName.$datetime.$fileExtension;
+            $fileNameToStore = $fileName.$datetime.'.'.$fileExtension;
             $request->file->move(public_path('attachments/'), $fileNameToStore);
             $storedFileName= 'attachments/'.$fileNameToStore;
         }else{
@@ -338,8 +347,8 @@ class QuotationController extends Controller
     }
 
     public function sign_store(Request $request, $id){
-        $quotation = Quotation::find($id);
-        $authorizer = Authorizer::find($request->authorizer);
+        $quotation  = Quotation::find($id);
+        $authorizer = Authorizer::where('file_name', $request->authorizer)->first();
         $quotation->update([
             'sign_name' =>  $authorizer->authorized_name,
             'file_name' =>  $authorizer->file_name,

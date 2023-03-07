@@ -34,6 +34,7 @@ Route::group(['middleware' =>  ['cors', 'auth:sanctum'], 'prefix' => 'office', '
     Route::post('/quotation/note/store/{id}', [App\Http\Controllers\Api\QuotationController::class, 'note_store'])->middleware('permission:quotation-create');
     Route::get('/quotation/note/edit/{id}', [App\Http\Controllers\Api\QuotationController::class, 'note_edit'])->middleware('permission:quotation-edit');
     Route::post('/quotation/note/update/{id}', [App\Http\Controllers\Api\QuotationController::class, 'note_update'])->middleware('permission:quotation-edit');
+    Route::post('/quotation/note/delete/{id}', [App\Http\Controllers\Api\QuotationController::class, 'note_delete'])->middleware('permission:quotation-edit');
     // file
     Route::post('/quotation/file/{id}', [App\Http\Controllers\Api\QuotationController::class, 'file_store'])->middleware('permission:quotation-edit');
     Route::post('/quotation/file/delete/{id}', [App\Http\Controllers\Api\QuotationController::class, 'file_delete'])->middleware('permission:quotation-edit');

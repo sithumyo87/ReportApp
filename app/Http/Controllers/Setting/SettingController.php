@@ -34,7 +34,10 @@ class SettingController extends Controller
         $user = Auth::user();
         if (Hash::check($request->password, $user->password)) {
             $user->email = $request->email;
+            $user->email_verified_at = null;
             $user->save();
+
+            $user->sendEmailVerificationNotification();
             return redirect()->route('setting.setting.index')->with('success', 'Email is successfully changed.');
         }else{
             return redirect()->route('setting.setting.index')->with('success', 'Password is invalid.');

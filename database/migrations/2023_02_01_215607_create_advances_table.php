@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('advances', function (Blueprint $table) {
             $table->id();
-            $table->integer('Invoice_Id');
-            $table->float('Advance_value');
-            $table->float('Balance');
-            $table->date('Date');
+            $table->integer('Invoice_Id')->nullable();
+            $table->float('Advance_value')->nullable();
+            $table->float('Balance')->nullable();
+            $table->date('Date')->nullable();
             $table->date('receipt_date')->nullable()->default(null);
             $table->date('received_date')->nullable();
-            $table->integer('nth_time');
+            $table->integer('nth_time')->nullable();
             $table->timestamps();
         });
     }

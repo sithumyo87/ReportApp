@@ -48,10 +48,18 @@ class Handler extends ExceptionHandler
     {
         $this->renderable(function (\Illuminate\Auth\AuthenticationException $e, $request) {
             if ($request->is('api/*')) {
-                if($request->token_id != null){
-                    DB::table('personal_access_tokens')->where('id',$request->token_id)->delete();
+
+                $loginToken = DB::table('personal_access_tokens')->where('id',$request->token_id)->first();
+
+                // if($request->token_id != null){
+                //     DB::table('personal_access_tokens')->where('id',$request->token_id)->delete();
+                // }
+
+                if(isset($loginToken)){
+                    return response()->json(['success' => false, 'title'=> 'Unauthorized','message'=>'You don\'t have the permission to access.', 'exception' => 'AuthenticationException'], 404);
+                }else{
+                    return response()->json(['success' => false, 'title'=> 'Unauthorized','message'=>'Your login time is expired. Please login again.', 'exception' => 'UnauthorizedHttpException'], 404);
                 }
-                return response()->json(['success' => false, 'title'=> 'Unauthorized','message'=>'You don\'t have the permission to access.', 'exception' => 'AuthenticationException'], 404);
             }
         });
         

@@ -24,14 +24,14 @@ return new class extends Migration
             $table->string('sub')->nullable();
             $table->string('po_code')->nullable();
             $table->integer('currency')->nullable();
-            $table->integer('tax')->default(0);
+            $table->integer('tax')->default(0)->nullable();
             $table->date('date')->nullable();
             $table->string('sign_name')->nullable();
             $table->string('file_name')->nullable();
             $table->integer('refer_no')->nullable();
             $table->integer('submit_status')->default(0);
             $table->date('received_date')->nullable();
-            $table->integer('action')->default(1);
+            $table->integer('action')->default(1)->nullable();
             $table->timestamps();
         });
     }
