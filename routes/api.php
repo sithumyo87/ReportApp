@@ -97,6 +97,8 @@ Route::group(['middleware' =>  ['cors', 'auth:sanctum'], 'prefix' => 'office', '
     //Invoice Start-----------------------------------------------------
     Route::get('/invoice', [App\Http\Controllers\Api\InvoiceController::class, 'index'])->middleware('permission:invoice-index');
     Route::get('/invoice/create', [App\Http\Controllers\Api\InvoiceController::class, 'create'])->middleware('permission:invoice-create');
+    
+    Route::get('/invoice/get_quo_data/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'getQuoData'])->middleware('permission:invoice-create');
     Route::post('/invoice/store', [App\Http\Controllers\Api\InvoiceController::class, 'store'])->middleware('permission:invoice-create');
     // detail
     Route::get('/invoice/detail/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'detail'])->middleware('permission:invoice-show');

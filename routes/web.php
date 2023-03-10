@@ -14,7 +14,28 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/invoice/test', [App\Http\Controllers\Api\InvoiceController::class, 'test']);
+
 Auth::routes(['register' => false,]);
+
+
+Route::get('random', function(){
+    $n = 10;
+    function getRandomString($n)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$#@!&';
+        $randomString = '';
+
+        for ($i = 0; $i < $n; $i++) {
+            $index = rand(0, strlen($characters) - 1);
+            $randomString .= $characters[$index];
+        }
+
+        return $randomString;
+    }
+
+    echo getRandomString($n);
+});
 
 // verify email
 Route::get('/email/notice', [App\Http\Controllers\Auth\VerificationController::class, 'noticeView'])->middleware(['auth', 'unVerify'])->name('verification.notice');
