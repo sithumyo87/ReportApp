@@ -194,9 +194,9 @@ class InvoiceController extends Controller
         $invoice = Invoice::find($id);
         $dealers = Dealer::where('action',true)->get(); 
         return response()->json([
-            'status'            => true,
-            'invoice'         => $invoice,
-            'dealers'           => $dealers,
+            'status'       => true,
+            'invoice'      => $invoice,
+            'dealers'      => $dealers,
         ], 200);   
     }
     public function detail_store(Request $request, $id){
