@@ -41,8 +41,12 @@ class PurchasingOrderController extends Controller
         $customer_names = Customer::customerDropDown();
         $search         = $request;
         $data = PurchasingOrder::searchDataPaginate($request);
+        $total = $data->total();
+        $limit = pagination();
         return response()->json([
             'status'    => true,
+            'total'             => $total,
+            'limit'             => $limit,
             'data'      => $data,
             'attachs'   => $attachs,
             'po_codes'  => $po_codes,
@@ -131,6 +135,7 @@ class PurchasingOrderController extends Controller
         $currency   = Currency::findOrFail($po->currency);
         $notes = PurchasingOrderNote::where('po_id', $id)->get();
         $authorizers = Authorizer::get();
+        $dealers = Dealer::where('action',true)->get(); 
         return response()->json([
             'status'            => true,
             'po'         => $po,
@@ -138,6 +143,7 @@ class PurchasingOrderController extends Controller
             'currency'          => $currency,
             'notes'        => $notes,
             'authorizers'       => $authorizers,
+            'dealers'           => $dealers,
         ], 200);
     }
 
@@ -250,13 +256,14 @@ class PurchasingOrderController extends Controller
     }
     public function note_update(Request $request,$id){
         $note = PurchasingOrderNote::find($id);
+        $poId = $request->poId;
         $note->update([
-            'po_id'     => $id,
+            'po_id'     => $poId,
             'note'          => $request->Note,
         ]);
         return response()->json([
             'status'    => true,
-            'po_id'     => $id,
+            'po_id'     => $poId,
             'note'      => $note,
         ], 200);
     }
@@ -272,7 +279,7 @@ class PurchasingOrderController extends Controller
     }
 
     public function sign_store(Request $request, $id){
-        $authorizer = Authorizer::find($request->authorizer);
+        $authorizer = Authorizer::where('file_name', $request->authorizer)->first();
         $po = PurchasingOrder::find($id);
         $po->update([
             'sign_name' =>  $authorizer->authorized_name,
