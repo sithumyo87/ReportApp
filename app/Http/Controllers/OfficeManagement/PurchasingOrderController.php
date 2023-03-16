@@ -80,7 +80,11 @@ class PurchasingOrderController extends Controller
     public function show($id)
     {
         $po = PurchasingOrder::select('purchasing_orders.*', 'quotations.Serial_No', 'quotations.Refer_No')->leftJoin('quotations', 'quotations.id','=', 'purchasing_orders.quo_id')->where('purchasing_orders.id', $id)->first();
+        // dd($po);
+        // echo "<pre>";
+        // var_dump($po);
         $poDetails = PurchasingOrderDetail::where('po_id', $id)->get();
+        // dd($poDetails);
         $currency   = Currency::findOrFail($po->currency);
         $notes = PurchasingOrderNote::where('po_id', $id)->get();
         $authorizers = Authorizer::get();
