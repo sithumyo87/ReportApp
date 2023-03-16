@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Receipt;
 use App\Models\Customer;
+use App\Models\PersonInvoice;
 use App\Models\Currency;
 use App\Models\Invoice;
 use App\Models\PaymentTerm;
@@ -29,16 +30,20 @@ class ReceiptController extends Controller
     public function index(Request $request)
     {
         $data = Receipt::searchDataPaginate($request);
+        $total              = $data->total();
+        $limit              = pagination();
         $rec_codes          = Receipt::receiptNoDropDown();
         $company_names      = Customer::companyDropDown();
         $customer_names     = Customer::customerDropDown();
         $search             = $request;
         return response()->json([
-            'status'     => true,
-            'data'      => $data,
-            'company_names' => $company_names,
-            'customer_names' => $customer_names,
-            'search' => $request,
+            'status'            => true,
+            'total'             => $total,
+            'limit'             => $limit,
+            'receipts'          => $data,
+            'company_names'     => $company_names,
+            'customer_names'    => $customer_names,
+            'search'            => $request,
         ], 200);
     }
 
@@ -50,15 +55,17 @@ class ReceiptController extends Controller
     public function create()
     {
         $customers  = Customer::where('action',true)->get(); 
+        $personInvoices = PersonInvoice::get();
         $currency   = Currency::all();
         $invoices   = Invoice::where('submit_status', true)->get();
-        $payments   = payments();
+        $payments   = paymentsForApi();
         return response()->json([
             'status'            => true,
             'customers'         => $customers,
+            'person_invoices'   => $personInvoices,
             'currency'          => $currency,
-            'invoices'        => $invoices,
-            'payments'         => $payments
+            'invoices'          => $invoices,
+            'payments'          => $payments
         ], 200);
     }
 
@@ -162,7 +169,7 @@ class ReceiptController extends Controller
 	}
 
     public function sign_store(Request $request, $id){
-        $authorizer = Authorizer::find($request->authorizer);
+        $authorizer = Authorizer::where('file_name', $request->authorizer)->first();
         $rec = Receipt::find($id);
         $rec->update([
             'sign_name' =>  $authorizer->authorized_name,
@@ -187,7 +194,7 @@ class ReceiptController extends Controller
             'status'    => true,
             'invoice'   => $invoice,
             'currency'  => $currency,
-            'payments'  => $payments
+            'payments'  => $payments,
         ], 200);
     }
 

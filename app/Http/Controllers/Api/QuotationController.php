@@ -12,6 +12,7 @@ use App\Models\QuotationNote;
 use App\Models\Dealer;
 use App\Models\Authorizer;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class QuotationController extends Controller
 {
@@ -312,9 +313,20 @@ class QuotationController extends Controller
 
     public function file_store(Request $request, $id){
         if($request->hasFile('file')){
-            $request->validate([
+            $validate = Validator::make($request->all(),[
                 'file' => 'required|mimes:png,jpg,jpeg,pdf|max:10240'
             ]);
+
+            if($validate->fails()){
+                return response()->json([
+                    'status'        => false,
+                    'title'         => 'File Error!',
+                    'message'       => 'Your file must be a png, jpng, jpeg, or pdf file that is not larger than 1GB.',
+                    'errors'        => $validate->errors(),
+                    'error_type'    => 'validation'
+                ], 401);
+            }
+
             $fileNameWithExtension = $request->file->getClientOriginalName();
             $fileName = pathinfo($fileNameWithExtension, PATHINFO_FILENAME);
             $fileExtension = $request->file->getClientOriginalExtension();
@@ -323,7 +335,7 @@ class QuotationController extends Controller
 
             $fileNameToStore = $fileName.$datetime.'.'.$fileExtension;
             $request->file->move(public_path('attachments/'), $fileNameToStore);
-            $storedFileName= 'attachments/'.$fileNameToStore;
+            $storedFileName = 'attachments/'.$fileNameToStore;
         }else{
             $storedFileName = null;
         }

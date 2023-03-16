@@ -29,17 +29,21 @@ class DeliveryOrderController extends Controller
     public function index(Request $request)
     {
         $data               = DeliveryOrder::searchDataPaginate($request);
+        $total              = $data->total();
+        $limit              = pagination();
         $do_codes           = DeliveryOrder::doNoDropDown();
         $company_names      = Customer::companyDropDown();
         $customer_names     = Customer::customerDropDown();
         $search             = $request;
         $data = DeliveryOrder::searchDataPaginate($request);
         return response()->json([
-            'status'    => true,
-            'data'      => $data,
-            'company_names' => $company_names,
-            'customer_names' => $customer_names,
-            'search' => $search
+            'status'            => true,
+            'total'             => $total,
+            'limit'             => $limit,
+            'do'                => $data,
+            'company_names'     => $company_names,
+            'customer_names'    => $customer_names,
+            'search'            => $search
         ], 200);
     }
     public function create()
@@ -204,25 +208,35 @@ class DeliveryOrderController extends Controller
         $deliveryOrder = DeliveryOrder::findOrFail($id);
 
         $details = DeliveryOrderDetail::where('do_id', $id)->get();
-        $detail_records = [];
+        $detail_records = null;
         foreach($details as $detail){
-            $last = DeliveryOrderDetailRecord::where('do_id', $id)->where('do_detail_id', $detail->id)->orderBy('id', 'desc')->first();
+            $last = DeliveryOrderDetailRecord::where('do_id', $id)->where('do_detail_id', $detail->id)->orderBy('date', 'desc')->orderBy('id', 'desc')->first();
+            if(isset($last)){
+                $amount_sum = DeliveryOrderDetailRecord::where('date', $last->date)->where('do_id', $id)->where('do_detail_id', $detail->id)->sum('amount');
+                $last->amount = $amount_sum != '' ? $amount_sum : 0;
+            }
             $detail_records[$detail->id] = $last;
         }
 
         $histories = [];
-        $recordDates = DeliveryOrderDetailRecord::select('date', 'do_id')->where('do_id', $id)->orderBy('id', 'asc')->orderBy('date', 'asc')->groupBy('date')->get();
+        $recordDates = DeliveryOrderDetailRecord::select('date', 'do_id')->where('do_id', $id)->where('submit_status', true)->orderBy('id', 'asc')->orderBy('date', 'asc')->groupBy('date')->get();
         foreach($recordDates as $row){
-            $data = DeliveryOrderDetailRecord::join('delivery_order_details', 
-            'delivery_order_details.id', '=', 'delivery_order_detail_records.do_detail_id')->where('delivery_order_detail_records.do_id', $id)
-            ->where('delivery_order_detail_records.date', $row->date)
-            ->orderBy('delivery_order_detail_records.id', 'asc')
-            ->select('delivery_order_detail_records.*', 'delivery_order_details.name')
-            ->get();
+            $ds = DeliveryOrderDetail::where('do_id', $id)->get();
+            $d_records = [];
+            foreach($ds as $d){
+                $record = DeliveryOrderDetailRecord::where('do_id', $id)->where('do_detail_id', $d->id)->where('date', $row->date)->orderBy('id', 'desc')->where('submit_status', true)->first();
+                $amount_sum = DeliveryOrderDetailRecord::where('do_id', $id)->where('do_detail_id', $d->id)->where('submit_status', true)->where('date', $row->date)->sum('amount');
+                if(isset($record)){
+                    $record->amount = $amount_sum != '' ? $amount_sum : 0;
+                }
+                array_push($d_records, $record);
+            }
             $result['date'] = $row->date;
-            $result['data'] = $data;
+            $result['data'] = $d_records;
+
             array_push($histories, $result);
         }
+
         return response()->json([
             'status'           => true,
             'deliveryOrder'    => $deliveryOrder,
@@ -271,9 +285,9 @@ class DeliveryOrderController extends Controller
         $do             = DeliveryOrder::findOrFail($detail->do_id);
         $last_record    = DeliveryOrderDetailRecord::where('do_id', $do->id)->where('do_detail_id', $detail->id)->orderBy('id', 'desc')->first();
         return response()->json([
-            'status'    => true,
-            'do_detail' => $detail,
-            'do' => $do,
+            'status'        => true,
+            'do_detail'     => $detail,
+            'do'            => $do,
             'last_record'   => $last_record,
         ], 200); 
     }
@@ -312,6 +326,15 @@ class DeliveryOrderController extends Controller
             'status'    => true,
             'do_detail' => $input,
             'do' => $do
+        ], 200);
+    }
+
+    public function detail_cancel(Request $request, $id){
+        $date = date('Y-m-d', strtotime($request->dDate));
+        DeliveryOrderDetailRecord::where('date', $date)->where('do_detail_id', $id)->delete();
+        return response()->json([
+            'status'    => true,
+            'msg'       => 'successsfully Cancel'
         ], 200);
     }
 

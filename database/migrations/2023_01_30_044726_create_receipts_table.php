@@ -30,7 +30,7 @@ return new class extends Migration
             $table->integer('Second_Receipt')->nullable();
             $table->integer('Refer_status')->nullable()->unsigned();
             $table->string('Company_name')->nullable();
-            $table->string('Contact_phone',50);
+            $table->string('Contact_phone',50)->nullable();
             $table->text('Address')->nullable();
             $table->string('sign_name')->nullable();
             $table->string('file_name')->nullable();

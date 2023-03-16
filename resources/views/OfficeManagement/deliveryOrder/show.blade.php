@@ -150,7 +150,7 @@
                 @foreach($details as $row)
                 <?php 
                     $showDeliverButton      = $refer_state;
-                    $editState          = true; 
+                    $editState              = true; 
                     if(isset($detail_records[$row->id])){
                         $last_record        = $detail_records[$row->id];
                         $delivered_amt      = $last_record->amount;

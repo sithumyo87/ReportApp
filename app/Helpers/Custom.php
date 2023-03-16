@@ -46,6 +46,16 @@ function payments(){
         '6' => 'Other'
     ];
 }
+function paymentsForApi(){
+    return [
+        ['value' => '1', 'name' => '50/50'],
+        ['value' => '2', 'name' => '60/40'],
+        ['value' => '3', 'name' => '80/20'],
+        ['value' => '4', 'name' => 'Cash'],
+        ['value' => '5', 'name' => 'Credit'],
+        ['value' => '6', 'name' => 'Other'],
+    ]; 
+}
 function get_payment($type) {
     switch ($type) {
         case '1':

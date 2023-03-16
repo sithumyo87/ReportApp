@@ -83,6 +83,7 @@ Route::group(['middleware' =>  ['cors', 'auth:sanctum'], 'prefix' => 'office', '
     Route::post('/do/detail/store/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'detail_store'])->middleware('permission:do-create');
     Route::get('/do/detail/edit/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'detail_edit'])->middleware('permission:do-edit');
     Route::post('/do/detail/update/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'detail_update'])->middleware('permission:do-edit');
+    Route::post('/do/detail/cancel/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'detail_cancel'])->middleware('permission:do-delete');
     Route::post('/do/detail/delete/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'detail_delete'])->middleware('permission:do-delete');
     //DO Invoice Quotation Check
     Route::post('/do/quo_inv_check', [App\Http\Controllers\Api\DeliveryOrderController::class, 'quo_inv_check'])->middleware('permission:do-edit');

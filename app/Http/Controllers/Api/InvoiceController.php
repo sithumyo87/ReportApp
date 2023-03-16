@@ -65,18 +65,18 @@ class InvoiceController extends Controller
      */
     public function create()
     {
-        $customers = Customer::where('action',true)->get(); 
+        $customers      = Customer::where('action', true)->get(); 
         $personInvoices = PersonInvoice::get();
-        $currency = Currency::all();
-        $quotations = Quotation::where('SubmitStatus',true)->get();
-        $payments = payments();
+        $currency       = Currency::all();
+        $quotations     = Quotation::where('SubmitStatus', true)->get();
+        $payments       = paymentsForApi();
         return response()->json([
             'status'            => true,
             'customers'         => $customers,
-            'person_invoices'    => $personInvoices,
+            'person_invoices'   => $personInvoices,
             'currency'          => $currency,
             'quotations'        => $quotations,
-            'payments'      => $payments
+            'payments'          => $payments
         ], 200);
     }
 
@@ -116,6 +116,10 @@ class InvoiceController extends Controller
             $storedFileName= 'attachments/officeManagement/'.$fileNameToStore;
         }else{
             $storedFileName = null;
+        }
+
+        if($input['customer_id']  != ''){
+            $input['Attn'] = Customer::find($input['customer_id'])['name'];
         }
 
         $input['Invoice_No'] = 'IV-'.strtotime($input['Date'].' '.date('H:i:s'));
@@ -174,19 +178,23 @@ class InvoiceController extends Controller
         $advance_last = Advance::where('Invoice_Id', $invoice->id)->orderBy('id', 'desc')->first();
         $advances = Advance::where('Invoice_Id', $invoice->id)->orderBy('id', 'asc')->get();
 
+        // selected bank info
+        $selected_bank_info = explode(',', $invoice->bank_info);
+
         return response()->json([
             'status'            => true,
-            'invoice'         => $invoice,
+            'invoice'           => $invoice,
             'currency'          => $currency,
             'invDetails'        => $invDetails,
             'invNotes'          => $invNotes,
-            'bankInfos'          => $bankInfos,
+            'bankInfos'         => $bankInfos,
+            'selected_bank_info'=> $selected_bank_info,
             'authorizers'       => $authorizers,
-            'bankInfoDetails'       => $bankInfoDetails,
-            'advance_last'       => $advance_last,
-            'advances'       => $advances,
-            'advance_data'       => $advance_data,
-            'type'       => $type,
+            'bankInfoDetails'   => $bankInfoDetails,
+            'advance_last'      => $advance_last,
+            'advances'          => $advances,
+            'advance_data'      => $advance_data,
+            'type'              => $type,
         ], 200);   
     }
 
@@ -230,12 +238,18 @@ class InvoiceController extends Controller
         ], 200);  
     }
     public function detail_edit($id){
-        $invDetail = QuotationDetail::find($id);
-        $dealers = Dealer::where('action',true)->get(); 
+        $invDetail      = QuotationDetail::find($id);
+        $dealers        = Dealer::where('action',true)->get();
+        
+        $selectedDealer = null;
+        if($invDetail->dealer_id != ''){
+            $selectedDealer = Dealer::find($invDetail->dealer_id);
+        }
         return response()->json([
-            'status'    => true,
-            'invDetail' => $invDetail,
-            'dealers'   => $dealers,
+            'status'            => true,
+            'invDetail'         => $invDetail,
+            'dealers'           => $dealers,
+            'selectedDealer'    => $selectedDealer,
         ], 200); 
     }
     public function detail_update(Request $request, $id){
@@ -271,45 +285,45 @@ class InvoiceController extends Controller
     }
 
     public function tax_check(Request $request, $id){
-            $tax = $request->tax;
-            $total = $request->total;
+        $tax = $request->tax;
+        $total = $request->total;
 
-            $inv = Invoice::find($id);
-            $inv->tax_id = $tax;
-            $inv->save();
+        $inv = Invoice::find($id);
+        $inv->tax_id = $tax;
+        $inv->save();
 
-            $tax_amount     = ($inv->tax_id * $total)/100;
-            $grand_total    = $total + $tax_amount;
-            return response()->json([
-                'status'    => true,
-                'tax_amount' => number_format($tax_amount,2),
-                'grand_total' => number_format($grand_total,2),
-            ]);
+        $tax_amount     = ($inv->tax_id * $total)/100;
+        $grand_total    = $total + $tax_amount;
+        return response()->json([
+            'status'    => true,
+            'tax_amount' => number_format($tax_amount,2),
+            'grand_total' => number_format($grand_total,2),
+        ]);
     }
 
     public function bank_check(Request $request, $id){
-            $bankId = $request->bankId;
-            $check = $request->check;
+        $bankId = $request->bankId;
+        $check = $request->check;
 
-            $bankInfo = [];
+        $bankInfo = [];
 
-            $inv = Invoice::find($id);
-            if($inv->bank_info != ''){
-                $bankInfo = explode(',', $inv->bank_info);
+        $inv = Invoice::find($id);
+        if($inv->bank_info != ''){
+            $bankInfo = explode(',', $inv->bank_info);
+        }
+        if($check == '1'){ // add 
+            if (array_search($bankId, $bankInfo) === false) {
+                array_push($bankInfo, $bankId);
             }
-            if($check == '1'){ // add 
-                if (array_search($bankId, $bankInfo) === false) {
-                    array_push($bankInfo, $bankId);
-                }
-            }else if($check == '0'){ // remove
-                if (($key = array_search($bankId, $bankInfo)) !== false) {
-                    unset($bankInfo[$key]);
-                }
+        }else if($check == '0'){ // remove
+            if (($key = array_search($bankId, $bankInfo)) !== false) {
+                unset($bankInfo[$key]);
             }
+        }
 
-            $inv->bank_info = implode(',', $bankInfo);
-            $inv->save();
-             return response()->json([
+        $inv->bank_info = implode(',', $bankInfo);
+        $inv->save();
+        return response()->json([
             'status'    => true,
             'invoice'  => $inv,
         ]);
@@ -327,15 +341,15 @@ class InvoiceController extends Controller
     }
 
     public function sign_store(Request $request, $id){
-        $authorizer = Authorizer::find($request->authorizer);
         $inv = Invoice::find($id);
+        $authorizer = Authorizer::where('file_name', $request->authorizer)->first();
         $inv->update([
             'sign_name' =>  $authorizer->authorized_name,
             'file_name' =>  $authorizer->file_name,
         ]);
         return response()->json([
-        'status'    => true,
-        'invoice'  => $inv,
+            'status'    => true,
+            'invoice'  => $inv,
         ]);
     }
 

@@ -75,6 +75,12 @@ class Handler extends ExceptionHandler
             }
         });
 
+        $this->renderable(function (UnauthorizedHttpException $e, $request) {
+            if ($request->is('api/*')) {
+                return response()->json(['success' => false,'title'=>'Unauthorized', 'message' => 'Your login time is expired. Please login again', 'exception' => 'UnauthorizedHttpException'], 403);
+            }
+        });
+
         $this->reportable(function (Throwable $e) {
             
         });
