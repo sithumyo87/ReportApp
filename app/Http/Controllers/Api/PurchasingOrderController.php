@@ -132,7 +132,7 @@ class PurchasingOrderController extends Controller
     public function detail($id){
         $po = PurchasingOrder::select('purchasing_orders.*', 'quotations.Serial_No', 'quotations.Refer_No')->leftJoin('quotations', 'quotations.id','=', 'purchasing_orders.quo_id')->where('purchasing_orders.id', $id)->first();
         $poDetails = PurchasingOrderDetail::where('po_id', $id)->get();
-        $currency   = Currency::findOrFail($po->currency);
+        $currency   = Currency::find($po->currency);
         $notes = PurchasingOrderNote::where('po_id', $id)->get();
         $authorizers = Authorizer::get();
         $dealers = Dealer::where('action',true)->get(); 
