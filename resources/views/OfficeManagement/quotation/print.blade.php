@@ -147,7 +147,7 @@
             $subTotal += $row->Unit_Price * $row->Qty;
             $subTotalWithPer += percent_price($row->Unit_Price, $row->percent) * $row->Qty;
         ?>
-        <tr>
+        <tr style="page-break-inside: avoid">
             <td class="text-center">{{ ++$i }}</td>
             <td>{!! $row->Description !!}</td>
             <td class="text-right">{{number_format(percent_price($row->Unit_Price, $row->percent),2)}} {{$currency->Currency_name}}</td>

@@ -115,7 +115,7 @@
                 ?>
                 <tr>
                     <td style="min-width: 200px;">{!! $row->Description !!}</td>
-                    <td class="text-right">{{ $row->Unit_Price }} {{$currency->Currency_name}}</td>
+                    <td class="text-right">{{ $row->Unit_Price }} {{ $currency->Currency_name}}</td>
                     <td class="text-right">{{ $row->percent }}%</td>
                     <td class="text-right">{{number_format(percent_price($row->Unit_Price, $row->percent),2)}} {{$currency->Currency_name}}</td>
                     <td class="text-right">{{ $row->Qty }}</td>

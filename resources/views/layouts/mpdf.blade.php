@@ -32,20 +32,7 @@
             footer: page-footer;
         }
 
-        table{
-           border-collapse: collapse;
-           width: 100% !important;
-           font-size: 14px;
-           page-break-inside: auto !important;
-           overflow: wrap;
-        }
-
-        tbody, thead, tr{
-            page-break-inside: auto !important;
-           break-inside: auto !important;
-           overflow: wrap;
-        }
-
+       
         .header{
             display: block;
             width: 100%;
@@ -83,7 +70,6 @@
         table{
             border-collapse: collapse;
             width:100% !important;
-            overflow: wrap;
         }
 
         .table-bordered{

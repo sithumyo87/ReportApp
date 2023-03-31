@@ -18,6 +18,10 @@ Route::get('/invoice/test', [App\Http\Controllers\Api\InvoiceController::class, 
 
 Auth::routes(['register' => false,]);
 
+Route::get('/test', function(){
+    return view('layouts.jsPDF');
+});
+
 
 Route::get('random', function(){
     $n = 10;
