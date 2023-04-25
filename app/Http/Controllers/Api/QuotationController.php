@@ -13,6 +13,8 @@ use App\Models\Dealer;
 use App\Models\Authorizer;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Sanctum\PersonalAccessToken; 
+use Laravel\Sanctum\Sanctum;
 
 class QuotationController extends Controller
 {
@@ -203,14 +205,14 @@ class QuotationController extends Controller
         $detail = QuotationDetail::create([
             'Quotation_Id'  => $id,
             'Description'   => $request->Description,
-	        'Unit_Price'    => $request->Unit_Price,
-	        'Qty'           => $request->Qty,
-	        'percent'       => $request->percent,
+	        'Unit_Price'    => (double) $request->Unit_Price,
+	        'Qty'           => (int) $request->Qty,
+	        'percent'       => (double) $request->percent,
 	        'dealer_id'     => $request->dealer_id,
 	        'form31_no'     => $request->form31_no,
             'invoice_no'    => $request->invoice_no,
-	        'tax'           => $request->tax,
-	        'tax_amount'    => $tax_amount,
+	        'tax'           => (int) $request->tax,
+	        'tax_amount'    => (double) $tax_amount,
         ]);
         return response()->json([
             'status'         => true,
@@ -237,14 +239,14 @@ class QuotationController extends Controller
         $quotationDetail = QuotationDetail::find($id);
         $quotationDetail->update([
             'Description'   => $request->Description,
-	        'Unit_Price'    => $request->Unit_Price,
-	        'Qty'           => $request->Qty,
-	        'percent'       => $request->percent,
+	        'Unit_Price'    => (double) $request->Unit_Price,
+	        'Qty'           => (int) $request->Qty,
+	        'percent'       => (double) $request->percent,
 	        'dealer_id'     => $request->dealer_id,
 	        'form31_no'     => $request->form31_no,
             'invoice_no'    => $request->invoice_no,
-	        'tax'           => $request->tax,
-	        'tax_amount'    => $tax_amount,
+	        'tax'           => (int) $request->tax,
+	        'tax_amount'    => (double) $tax_amount,
         ]);
         return response()->json([
             'status'    => true,
@@ -379,7 +381,36 @@ class QuotationController extends Controller
         return response()->json([
             'status'    => true,
         ], 200);
-        
+    }
 
+    public function print(Request $request, $id){
+        $token = $request->token;
+
+        $user = PersonalAccessToken::findToken($request->token);
+
+        if(!(isset($user))){
+            return response()->json([
+                'status'    => false,
+                'error'     => 'The login user is invalid!',
+            ], 200);
+        }
+
+
+        $quotation = Quotation::find($id);
+        $currency = Currency::where('id',$quotation->Currency_type)->first();
+        $quoDetails = QuotationDetail::where('Quotation_Id',$id)->get();
+        $quoNotes = QuotationNote::where('QuotationId',$quotation->id)->where('Note','!=',"")->get();
+        $authorizers = Authorizer::get();
+  
+        $data = [
+            'quotation'     => $quotation,
+            'currency'      => $currency,
+            'quoDetails'    => $quoDetails,
+            'quoNotes'      => $quoNotes,
+            'authorizers'   => $authorizers,
+        ]; 
+
+        $data['layout'] = 'layouts.kinzi_print';
+        return view('OfficeManagement.quotation.print')->with($data);
     }
 }

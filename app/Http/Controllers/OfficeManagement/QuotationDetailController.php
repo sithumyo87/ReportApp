@@ -94,6 +94,9 @@ class QuotationDetailController extends Controller
         $quoNotes   = QuotationNote::where('QuotationId',$quotation->id)->where('Note','!=',"")->get();
         $quoFiles   = QuotationNote::where('QuotationId',$quotation->id)->where('list_file','!=',"")->get();
         $authorizers = Authorizer::get();
+
+        // return $quoDetails;
+
         return view('OfficeManagement.quotationDetail.index',compact('quotation','quoNotes','quoFiles','quoDetails','currency','authorizers'));
     }
 

@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' =>  ['cors', 'auth:sanctum'], 'prefix' => 'office', 'as' => 'office'], function() {
 
+    // dashboard
+    Route::get('/dashboard', [App\Http\Controllers\Api\DashboardController::class, 'index'])->middleware('permission:dashboard-index');
+
     // quotation start ---------------------------
     Route::get('/quotation', [App\Http\Controllers\Api\QuotationController::class, 'index'])->middleware('permission:quotation-index');
     Route::get('/quotation/create', [App\Http\Controllers\Api\QuotationController::class, 'create'])->middleware('permission:quotation-create');
@@ -153,5 +156,11 @@ Route::group(['middleware' =>  ['cors', 'auth:sanctum'], 'prefix' => 'office', '
 Route::group(['middleware' => ['cors']], function () {
     Route::post('/login', [App\Http\Controllers\Api\AuthController::class, 'loginUser']);
 });
+
+// print
+Route::get('/office/quotation/print/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'print']);
+Route::get('/office/po/print/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'print']);
+Route::get('/office/invoice/print/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'print']);
+Route::get('/office/receipt/print/{id}', [App\Http\Controllers\Api\ReceiptController::class, 'print']);
 
 

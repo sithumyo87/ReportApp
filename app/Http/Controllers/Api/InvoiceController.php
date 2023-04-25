@@ -20,6 +20,8 @@ use App\Models\BankInfoDetail;
 use Carbon\Carbon;
 use DB;
 use PDF;
+use Laravel\Sanctum\PersonalAccessToken; 
+use Laravel\Sanctum\Sanctum;
 
 class InvoiceController extends Controller
 {
@@ -521,5 +523,71 @@ class InvoiceController extends Controller
             echo "<br>";
             echo "2 to 1";
             print_r(array_diff($array2, $array1));
+    }
+
+
+    public function print(Request $request, $id, $type=null){
+        $token = $request->token;
+
+        $user = PersonalAccessToken::findToken($request->token);
+
+        if(!(isset($user))){
+            return response()->json([
+                'status'    => false,
+                'error'     => 'The login user is invalid!',
+            ], 200);
+        }
+        $type   =   $request->type;
+        $invoice    = Invoice::find($id);
+        $currency   = Currency::where('id',$invoice->Currency_type)->first();
+        $invDetails = QuotationDetail::where('Invoice_Id',$id)->get();
+        $invNotes       = QuotationNote::where('InvoiceId', $id)->where('Note','!=',"")->get();
+        $authorizers    = Authorizer::get();
+        $bankInfos = BankInfo::get();
+
+        $bankInfoDetails = [];
+        if($invoice->submit_status == 1 && $invoice->bank_info != ''){
+            $banks = explode(',', $invoice->bank_info);
+            foreach($banks as $bank){
+                $banInfo = BankInfo::find($bank);
+                $bInfo['name'] = $banInfo->name;
+                $bInfo['details'] = BankInfoDetail::where('bank_info_id', $bank)->get();
+                array_push($bankInfoDetails, $bInfo);
+            }
+        }
+
+        // data for other payment
+        if(is_numeric($type)){
+            $advance_data = Advance::where('Invoice_Id', $invoice->id)->where('nth_time', $type)->first();
+        }else{
+            $advance_data = null;
+        }
+        $advance_last = Advance::where('Invoice_Id', $invoice->id)->orderBy('id', 'desc')->first();
+        $advances = Advance::where('Invoice_Id', $invoice->id)->orderBy('id', 'asc')->get();
+
+        $data = [
+            'invoice'           => $invoice,
+            'invNotes'          => $invNotes,
+            'invDetails'        => $invDetails,
+            'currency'          => $currency,
+            'authorizers'       => $authorizers,
+            'bankInfos'         => $bankInfos,
+            'bankInfoDetails'   => $bankInfoDetails,
+            'type'              => $type,
+            'advance_last'      => $advance_last,
+            'advances'          => $advances,
+            'advance_data'      => $advance_data,
+        ]; 
+
+        
+
+        // if($request->pdf == 'kinzi'){
+            $data['layout'] = 'layouts.kinzi_print';
+            return view('OfficeManagement.invoice.print')->with($data);
+        // }else{
+        //     $data['layout'] = 'layouts.mpdf';
+        //     $pdf = PDF::loadView('OfficeManagement.invoice.print', $data);
+        //     return $pdf->stream($invoice->Invoice_No.'.pdf');
+        // }
     }
 }

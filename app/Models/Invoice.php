@@ -60,10 +60,15 @@ class Invoice extends Model
             if($request->show == 'received'){
                 $data = $data->leftJoin('receipts', 'receipts.Invoice_Id','=','invoices.id')->where('receipts.first_received_date', '!=', null)->where('receipts.first_received_date', '!=', '');
             }elseif($request->show == 'unreceived'){
-                $data = $data->leftJoin('receipts', 'receipts.Invoice_Id','=','invoices.id')->where('receipts.first_received_date', null);
+                $data = $data->leftJoin('receipts', 'receipts.Invoice_Id','=','invoices.id')->where('receipts.second_received_date', null);
             }
         }
-        return $data->distinct();
+        if($request->search != ''){
+            $data = $data->where('invoices.Invoice_No', 'LIKE', '%'.$request->search.'%')
+            ->orWhere('invoices.Company_name', 'LIKE', '%'.$request->search.'%')
+            ->orWhere('invoices.Attn', 'LIKE', '%'.$request->search.'%');
+        }
+        return $data->groupby('invoices.Invoice_No')->distinct();
     }
 
     protected function searchDataPaginate(Request $request){

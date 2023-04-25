@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Print - 2</title>
+    <title>Print</title>
     <link href="{{ asset('css/kinzi_print.css') }}" rel="stylesheet" type="text/css">
 </head>
 
@@ -13,7 +13,7 @@
 
     <div class="container-fluid">
         <div class="btn-block">
-            <button onclick="Convert_HTML_To_PDF();">Save As PDF</button>
+            {{-- <button onclick="Convert_HTML_To_PDF();">Save As PDF</button> --}}
             <button class="btn btn-danger btn-print" onclick="test();">Print It!</button>
             <button class="btn btn-danger btn-print" onclick="close_it();">Close It!</button>
         </div>

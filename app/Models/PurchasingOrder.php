@@ -31,7 +31,7 @@ class PurchasingOrder extends Model
     ];
 
     protected function searchData(Request $request){
-        $data = $this->select('purchasing_orders.*', 'quotations.Serial_No', 'quotations.Refer_No')->leftJoin('quotations', 'quotations.id','=', 'purchasing_orders.quo_id');
+        $data = $this->select('purchasing_orders.*', 'quotations.Serial_No', 'quotations.Refer_No as rno')->leftJoin('quotations', 'quotations.id','=', 'purchasing_orders.quo_id');
         if($request->po_code != ''){
             $data = $data->where('purchasing_orders.po_code', $request->po_code);
         }
@@ -45,10 +45,17 @@ class PurchasingOrder extends Model
             if($request->show == 'received'){
                 $data = $data->where('purchasing_orders.received_date', '!=', null)->where('purchasing_orders.received_date', '!=', '');
             }elseif($request->show == 'unreceived'){
-                $data = $data->where('purchasing_orders.received_date', null);
+                $data = $data->where('purchasing_orders.received_date', null)->where('purchasing_orders.submit_status', 1);
             }
         }
-        return $data;
+
+        if($request->search != ''){
+            $data = $data->where('purchasing_orders.po_code', 'LIKE', '%'.$request->search.'%')
+            ->orWhere('purchasing_orders.Company_name', 'LIKE', '%'.$request->search.'%')
+            ->orWhere('purchasing_orders.Attn', 'LIKE', '%'.$request->search.'%');
+        }
+
+        return $data->groupby('purchasing_orders.id')->distinct();
     }
 
     protected function searchDataPaginate(Request $request){

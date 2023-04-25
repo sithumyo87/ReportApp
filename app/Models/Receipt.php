@@ -35,7 +35,7 @@ class Receipt extends Model
         'second_received_date'
     ];
 
-    protected function searchDataPaginate(Request $request){
+    protected function searchData(Request $request){
         $data = $this->where('id','>',0);
         if($request->rec_code != ''){
             $data = $data->where('Receipt_No', $request->rec_code);
@@ -53,7 +53,22 @@ class Receipt extends Model
                 $data = $data->where('first_received_date', null);
             }
         }
+        if($request->search != ''){
+            $data = $data->where('Receipt_No', 'LIKE', '%'.$request->search.'%')
+            ->orWhere('Company_name', 'LIKE', '%'.$request->search.'%')
+            ->orWhere('Attn', 'LIKE', '%'.$request->search.'%');
+        }
+        return $data->groupby('id')->distinct();
+    }
+
+    protected function searchDataPaginate(Request $request){
+        $data = $this->searchData($request);
         return $data->orderBy('Date','DESC')->paginate(pagination());
+    }
+
+    protected function searchDataCount(Request $request){
+        $data = $this->searchData($request);
+        return $data->get()->count();
     }
 
     protected function receiptNoDropDown(){

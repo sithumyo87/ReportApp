@@ -15,6 +15,9 @@ use App\Models\QuotationNote;
 use App\Models\Authorizer;
 use App\Models\Advance;
 use PDF;
+use Laravel\Sanctum\PersonalAccessToken; 
+use Laravel\Sanctum\Sanctum;
+
 
 class ReceiptController extends Controller
 {
@@ -256,6 +259,62 @@ class ReceiptController extends Controller
             'invoice' => $invoice,
             'receipt' => $receipt,
         ], 200);
+    }
+
+    public function print(Request $request, $id, $type=null) {
+        $token = $request->token;
+
+        $user = PersonalAccessToken::findToken($request->token);
+
+        if(!(isset($user))){
+            return response()->json([
+                'status'    => false,
+                'error'     => 'The login user is invalid!',
+            ], 200);
+        }
+        $type   =   $request->type;
+
+        $receipt    = Receipt::findOrFail($id);
+        $invoice    = Invoice::findOrFail($receipt->Invoice_Id);
+        $currency   = Currency::where('id', $receipt->Currency_type)->first();
+        $invDetails = QuotationDetail::where('Invoice_Id', $receipt->Invoice_Id)->get();
+        $invNotes       = QuotationNote::where('InvoiceId', $receipt->Invoice_Id)->where('Note','!=',"")->get();
+        $authorizers    = Authorizer::get();
+
+        // data for other payment
+        if(is_numeric($type)){
+            $advance_data = Advance::where('Invoice_Id', $receipt->Invoice_Id)->where('nth_time', $type)->where('receipt_date', '!=', null)->first();
+        }else{
+            $advance_data = null;
+        }
+        $advance_last = Advance::where('Invoice_Id', $receipt->Invoice_Id)->where('receipt_date', '!=', null)->orderBy('id', 'desc')->first();
+        $advances = Advance::where('Invoice_Id', $receipt->Invoice_Id)->where('receipt_date', '!=', null)->orderBy('id', 'asc')->get();
+        $inv_advances = Advance::where('Invoice_Id', $receipt->Invoice_Id)->where('receipt_date', null)->orderBy('id', 'asc')->get();
+
+        $data = [
+            'receipt'           => $receipt,
+            'invoice'           => $invoice,
+            'invNotes'          => $invNotes,
+            'invDetails'        => $invDetails,
+            'currency'          => $currency,
+            'authorizers'       => $authorizers,
+            'type'              => $type,
+            'advance_last'      => $advance_last,
+            'advances'          => $advances,
+            'advance_data'      => $advance_data,
+            'inv_advances'      => $inv_advances,
+        ]; 
+
+        // if($request->pdf == 'kinzi'){
+            $data['layout'] = 'layouts.kinzi_print';
+            return view('OfficeManagement.receipt.print')->with($data);
+        // }else{
+        //     $data['layout'] = 'layouts.mpdf';
+        //     $pdf = PDF::loadView('OfficeManagement.receipt.print', $data);
+        //     return $pdf->stream($receipt->Receipt_No.'.pdf');
+        // }
+
+        
     }
     
 }

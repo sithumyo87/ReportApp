@@ -14,6 +14,8 @@ use App\Models\PurchasingOrderNote;
 use App\Models\Authorizer;
 use App\Models\Dealer;
 use PDF;
+use Laravel\Sanctum\PersonalAccessToken; 
+use Laravel\Sanctum\Sanctum;
 
 class PurchasingOrderController extends Controller
 {
@@ -298,8 +300,46 @@ class PurchasingOrderController extends Controller
         return response()->json([
             'status'    => true,
         ], 200);
-        
+    }
 
+    public function print(Request $request, $id){
+        $token = $request->token;
+
+        $user = PersonalAccessToken::findToken($request->token);
+
+        if(!(isset($user))){
+            return response()->json([
+                'status'    => false,
+                'error'     => 'The login user is invalid!',
+            ], 200);
+        }
+        
+        $po = PurchasingOrder::select('purchasing_orders.*', 'quotations.Serial_No', 'quotations.Refer_No')->leftJoin('quotations', 'quotations.id','=', 'purchasing_orders.quo_id')->where('purchasing_orders.id', $id)->first();
+        $poDetails      = PurchasingOrderDetail::where('po_id', $id)->get();
+        $currency       = Currency::findOrFail($po->currency);
+        $notes          = PurchasingOrderNote::where('po_id', $id)->get();
+        $authorizers    = Authorizer::get();
+        
+        $data = [
+            'po'                => $po,
+            'poDetails'         => $poDetails,
+            'currency'          => $currency,
+            'notes'             => $notes,
+            'authorizers'       => $authorizers,
+        ]; 
+
+        // if($request->pdf == 'kinzi'){
+            $data['layout'] = 'layouts.kinzi_print';
+            return view('OfficeManagement.purchasingOrder.print')->with($data);
+        // }else{
+        //     $data['layout'] = 'layouts.mpdf';
+        //     $pdf = PDF::chunkLoadView('<html-separator/>','OfficeManagement.purchasingOrder.print', $data);
+        //     // $pdf->use_kwt = true;
+        //     $pdf->shrink_tables_to_fit=1;
+        // }
+
+        
+        // return $pdf->stream($po->po_code.'.pdf');
     }
 
     

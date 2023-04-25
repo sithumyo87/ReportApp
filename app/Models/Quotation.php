@@ -28,8 +28,9 @@ class Quotation extends Model
         'file_name',
         'Date_INT',
     ];
+    
 
-    protected function searchDataPaginate(Request $request){
+    protected function searchData(Request $request){
         $data = $this->select('quotations.*', 't2.Serial_No as refer')->leftJoin('quotations as t2', 't2.id','quotations.Refer_No');
         if($request->quo_no != ''){
             $data = $data->where('quotations.Serial_No', $request->quo_no);
@@ -40,7 +41,23 @@ class Quotation extends Model
         if($request->customer_name != ''){
             $data = $data->where('quotations.Attn', $request->customer_name);
         }
+
+        if($request->search != ''){
+            $data = $data->where('quotations.Serial_No', 'LIKE', '%'.$request->search.'%')
+            ->orWhere('quotations.Company_name', 'LIKE', '%'.$request->search.'%')
+            ->orWhere('quotations.Attn', 'LIKE', '%'.$request->search.'%');
+        }
+        return $data->groupby('quotations.Serial_No')->distinct();
+    }
+    
+    protected function searchDataPaginate(Request $request){
+        $data = $this->searchData($request);
         return $data->orderBy('quotations.Date','DESC')->paginate(pagination());
+    }
+
+    protected function searchDataCount(Request $request){
+        $data = $this->searchData($request);
+        return $data->get()->count();
     }
 
     protected function quoNoDropDown(){

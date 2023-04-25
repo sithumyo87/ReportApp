@@ -30,7 +30,7 @@ class DeliveryOrder extends Model
         'disable',
     ];
 
-    protected function searchDataPaginate(Request $request){
+    protected function searchData(Request $request){
         $data = $this->where('id','>',0);
         if($request->do_code != ''){
             $data = $data->where('do_code', $request->do_code);
@@ -41,7 +41,22 @@ class DeliveryOrder extends Model
         if($request->customer_name != ''){
             $data = $data->where('Attn', $request->customer_name);
         }
+        if($request->search != ''){
+            $data = $data->where('do_code', 'LIKE', '%'.$request->search.'%')
+            ->orWhere('Company_name', 'LIKE', '%'.$request->search.'%')
+            ->orWhere('Attn', 'LIKE', '%'.$request->search.'%');
+        }
+        return $data->groupby('id')->distinct();
+    }
+
+    protected function searchDataPaginate(Request $request){
+        $data = $this->searchData($request);
         return $data->orderBy('date','DESC')->paginate(pagination());
+    }
+
+    protected function searchDataCount(Request $request){
+        $data = $this->searchData($request);
+        return $data->get()->count();
     }
 
     protected function doNoDropDown(){
