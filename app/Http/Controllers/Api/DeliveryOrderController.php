@@ -389,24 +389,24 @@ class DeliveryOrderController extends Controller
 
     public function do_sign(Request $request,$id){
         $do = DeliveryOrder::findOrFail($id);
-       
         $input = $request->all();
-        $input['received_sign'] =''.$request->files->get('received_sign')->getClientOriginalName();
-        $input['delivered_sign'] =''.$request->files->get('delivered_sign')->getClientOriginalName();
+        // dd($input);
+
         if($request->received_name != ''){
-            $saveSignature = saveSignature($input['received_sign']);
+            $saveSignature = saveSignatureApi($request->received_sign);
             if($saveSignature['status']){
                 $input['received_sign'] = $saveSignature['file'];
+                // dd($input);
                 $do->update($input);
             }
         }
         if($request->delivered_name != ''){
-            $saveSignature = saveSignature($input['delivered_sign']);
+            $saveSignature = saveSignatureApi($request->delivered_sign);
             if($saveSignature['status']){
                 $input['delivered_sign'] = $saveSignature['file'];
                 $do->update($input);
-            }
         }
+    }
         return response()->json([
             'status'    => true,
             'do'        => $do,
