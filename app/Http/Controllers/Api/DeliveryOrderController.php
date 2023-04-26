@@ -392,7 +392,7 @@ class DeliveryOrderController extends Controller
         $input = $request->all();
         // dd($input);
 
-        if($request->received_name != ''){
+        if($request->received_name != '' && $request->received_sign != 'clearrs'){
             $saveSignature = saveSignatureApi($request->received_sign);
             if($saveSignature['status']){
                 $input['received_sign'] = $saveSignature['file'];
@@ -400,16 +400,47 @@ class DeliveryOrderController extends Controller
                 $do->update($input);
             }
         }
-        if($request->delivered_name != ''){
+        if($request->received_sign == 'clearrs' ){
+            $input['received_sign'] = null;
+            $do->update($input);
+        }
+        if($request->delivered_name != '' && $request->delivered_sign != 'cleards'){
             $saveSignature = saveSignatureApi($request->delivered_sign);
             if($saveSignature['status']){
                 $input['delivered_sign'] = $saveSignature['file'];
                 $do->update($input);
         }
+         }
+        if($request->delivered_sign == 'cleards'){
+            $input['delivered_sign'] = null;
+            $do->update($input);
     }
         return response()->json([
             'status'    => true,
             'do'        => $do,
+            'sign'      => $input,
+        ], 200);
+    }
+
+    public function do_sign_delete(Request $request,$id){
+        $do = DeliveryOrder::findOrFail($id);
+        $input = $request->all();
+    
+        if($request->received_sign == 'clearrs' ){
+            $do->update([
+                'received_sign'=> null,
+                'received_name'=>null,
+            ]);
+        }
+        if($request->delivered_sign == 'cleards'){
+            $do->update([
+                'delivered_sign'=> null,
+                'delivered_name'=>null
+            ]);
+    }
+        return response()->json([
+            'status'    => true,
+            // 'do'        => $do,
             'sign'      => $input,
         ], 200);
     }
