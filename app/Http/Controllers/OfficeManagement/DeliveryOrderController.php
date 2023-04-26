@@ -256,15 +256,14 @@ class DeliveryOrderController extends Controller
     public function deliveryOrderSign(Request $request, $id){
         $do = DeliveryOrder::findOrFail($id);
         $input = $request->all();
+        // dd($input);
 
         if($request->received_name != ''){
             $saveSignature = saveSignature($request->received_sign);
             if($saveSignature['status']){
                 $input['received_sign'] = $saveSignature['file'];
+                // dd($input);
                 $do->update($input);
-            }else{
-                return redirect()->route('OfficeManagement.deliveryOrder.show', $do->id)
-                ->with('success','Please Draw the Signature for receiver!');
             }
         }
         if($request->delivered_name != ''){

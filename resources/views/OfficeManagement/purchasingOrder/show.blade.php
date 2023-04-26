@@ -16,7 +16,7 @@
                     <a href="{{ route('OfficeManagement.poPrint', ['id'=>$po->id, 'pdf' => 'kinzi']) }}"
                     class="btn btn-success btn-sm d-none d-lg-block m-l-15 mr-3" target="_blank">
                         <i class="fa fa-back"></i>
-                        Print-2
+                        Print-2 
                     </a>
                 @endif
 

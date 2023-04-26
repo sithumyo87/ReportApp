@@ -288,3 +288,20 @@ function advanceFormat($number){
         }
     }
 }
+
+function saveSignatureApi($sign_input){
+    $folderPath = public_path('signature/');
+    // $image_parts = explode("cache/", $sign_input);
+    // $image_type_aux = explode("image/", $image_parts[0]);
+    
+    if(isset($sign_input)){
+        // $image_type     = $image_type_aux[1];
+        $image_base64   = base64_decode($sign_input);
+        $fileName       = uniqid() . '.png';
+        $file           = $folderPath . $fileName;
+        file_put_contents($file, $image_base64);
+        return ['status'=> true, 'file' => 'signature/'.$fileName];
+    }else{
+        return ['status'=> false, 'error' => 'Please input the signature'];
+    }
+}

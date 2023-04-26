@@ -198,6 +198,7 @@ class PurchasingOrderController extends Controller
             $pdf = PDF::chunkLoadView('<html-separator/>','OfficeManagement.purchasingOrder.print', $data);
             // $pdf->use_kwt = true;
             $pdf->shrink_tables_to_fit=1;
+            
         }
 
         
