@@ -161,6 +161,7 @@ Route::group(['middleware' => ['cors']], function () {
 Route::get('/office/quotation/print/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'print']);
 Route::get('/office/po/print/{id}', [App\Http\Controllers\Api\PurchasingOrderController::class, 'print']);
 Route::get('/office/invoice/print/{id}', [App\Http\Controllers\Api\InvoiceController::class, 'print']);
-Route::get('/office/receipt/print/{id}', [App\Http\Controllers\Api\ReceiptController::class, 'print']);
+Route::get('/office/receipt/print/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'print']);
+Route::get('/office/do/print/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'print']);
 
 
