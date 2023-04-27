@@ -404,12 +404,12 @@ class DeliveryOrderController extends Controller
             }
         }
         if($request->delivered_name != ''){
-            $saveSignature = saveSignatureApi($request->delivered_sign);
-            if($saveSignature['status']){
-                $input['delivered_sign'] = $saveSignature['file'];
-                $do->update($input);
+                $saveSignature = saveSignatureApi($request->delivered_sign);
+                if($saveSignature['status']){
+                    $input['delivered_sign'] = $saveSignature['file'];
+                    $do->update($input);
+            }
         }
-    }
         return response()->json([
             'status'    => true,
             'do'        => $do,
