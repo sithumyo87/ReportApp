@@ -96,6 +96,8 @@ Route::group(['middleware' =>  ['cors', 'auth:sanctum'], 'prefix' => 'office', '
     Route::post('/do/do_confirm_delivery/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'do_confirm_delivery'])->middleware('permission:do-edit');
     //DO SIgn
     Route::post('/do/do_sign/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'do_sign'])->middleware('permission:do-edit');
+    //DO SIgn Delete
+    Route::post('/do/do_sign_delete/{id}', [App\Http\Controllers\Api\DeliveryOrderController::class, 'do_sign_delete'])->middleware('permission:do-edit');
     //DO End-------------------------------------------------
 
     //Invoice Start-----------------------------------------------------

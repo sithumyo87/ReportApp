@@ -395,7 +395,7 @@ class DeliveryOrderController extends Controller
         $input = $request->all();
         // dd($input);
 
-        if($request->received_name != ''){
+        if($request->received_name != '' && $request->received_sign != 'clearrs'){
             $saveSignature = saveSignatureApi($request->received_sign);
             if($saveSignature['status']){
                 $input['received_sign'] = $saveSignature['file'];
@@ -403,12 +403,20 @@ class DeliveryOrderController extends Controller
                 $do->update($input);
             }
         }
-        if($request->delivered_name != ''){
-                $saveSignature = saveSignatureApi($request->delivered_sign);
-                if($saveSignature['status']){
-                    $input['delivered_sign'] = $saveSignature['file'];
-                    $do->update($input);
-            }
+        if($request->received_sign == 'clearrs' ){
+            $input['received_sign'] = null;
+            $do->update($input);
+        }
+        if($request->delivered_name != '' && $request->delivered_sign != 'cleards'){
+            $saveSignature = saveSignatureApi($request->delivered_sign);
+            if($saveSignature['status']){
+                $input['delivered_sign'] = $saveSignature['file'];
+                $do->update($input);
+        }
+         }
+        if($request->delivered_sign == 'cleards'){
+            $input['delivered_sign'] = null;
+            $do->update($input);
         }
         return response()->json([
             'status'    => true,
@@ -417,49 +425,27 @@ class DeliveryOrderController extends Controller
         ], 200);
     }
 
-    public function print(Request $request, $id, $date=null){
-        $token = $request->token;
-
-        $user = PersonalAccessToken::findToken($request->token);
-
-        if(!(isset($user))){
-            return response()->json([
-                'status'    => false,
-                'error'     => 'The login user is invalid!',
-            ], 200);
-        }
-        
-        $deliveryOrder = DeliveryOrder::findOrFail($id);
-
-        $details = DeliveryOrderDetail::where('do_id', $id)->get();
-        $detail_records = [];
-        foreach($details as $detail){
-            $record = DeliveryOrderDetailRecord::where('do_id', $id)->where('do_detail_id', $detail->id)->where('date', $date)->orderBy('id', 'desc')->first();
-            $amount_sum = DeliveryOrderDetailRecord::where('do_id', $id)->where('do_detail_id', $detail->id)->where('date', $date)->sum('amount');
-            if(isset($record)){
-                $record->amount = $amount_sum != '' ? $amount_sum : 0;
-            }
-            $detail_records[$detail->id] = $record;
-        }
-        
-        $data = [
-            'deliveryOrder'  => $deliveryOrder,
-            'details'        => $details,
-            'detail_records' => $detail_records,
-            'date'           => $date
-        ]; 
-
-        // if($request->pdf == 'kinzi'){
-            $data['layout'] = 'layouts.kinzi_print';
-            return view('OfficeManagement.deliveryOrder.print')->with($data);
-        // }else{
-        //     $data['layout'] = 'layouts.mpdf';
-        //     $pdf = PDF::loadView('OfficeManagement.deliveryOrder.print', $data);
-        //     return $pdf->stream($deliveryOrder->do_code.'.pdf');
-        // }
-
-        
-    }
+    public function do_sign_delete(Request $request,$id){
+        $do = DeliveryOrder::findOrFail($id);
+        $input = $request->all();
     
+        if($request->received_sign == 'clearrs' ){
+            $do->update([
+                'received_sign'=> null,
+                'received_name'=>null,
+            ]);
+        }
+        if($request->delivered_sign == 'cleards'){
+            $do->update([
+                'delivered_sign'=> null,
+                'delivered_name'=>null
+            ]);
+        }
+        return response()->json([
+            'status'    => true,
+            // 'do'        => $do,
+            'sign'      => $input,
+        ], 200);
+    }
     
 }
