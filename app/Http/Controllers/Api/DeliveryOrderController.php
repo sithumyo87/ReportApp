@@ -447,5 +447,50 @@ class DeliveryOrderController extends Controller
             'sign'      => $input,
         ], 200);
     }
+
+
+    public function print(Request $request, $id, $date=null){
+        $token = $request->token;
+
+        $user = PersonalAccessToken::findToken($request->token);
+
+        if(!(isset($user))){
+            return response()->json([
+                'status'    => false,
+                'error'     => 'The login user is invalid!',
+            ], 200);
+        }
+
+        $deliveryOrder = DeliveryOrder::findOrFail($id);
+
+        $details = DeliveryOrderDetail::where('do_id', $id)->get();
+        $detail_records = [];
+        foreach($details as $detail){
+            $record = DeliveryOrderDetailRecord::where('do_id', $id)->where('do_detail_id', $detail->id)->where('date', $date)->orderBy('id', 'desc')->first();
+            $amount_sum = DeliveryOrderDetailRecord::where('do_id', $id)->where('do_detail_id', $detail->id)->where('date', $date)->sum('amount');
+            if(isset($record)){
+                $record->amount = $amount_sum != '' ? $amount_sum : 0;
+            }
+            $detail_records[$detail->id] = $record;
+        }
+        
+        $data = [
+            'deliveryOrder'  => $deliveryOrder,
+            'details'        => $details,
+            'detail_records' => $detail_records,
+            'date'           => $date
+        ]; 
+
+        // if($request->pdf == 'kinzi'){
+            $data['layout'] = 'layouts.kinzi_print';
+            return view('OfficeManagement.deliveryOrder.print')->with($data);
+        // }else{
+        //     $data['layout'] = 'layouts.mpdf';
+        //     $pdf = PDF::loadView('OfficeManagement.deliveryOrder.print', $data);
+        //     return $pdf->stream($deliveryOrder->do_code.'.pdf');
+        // }
+
+        
+    }
     
 }
